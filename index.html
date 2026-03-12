@@ -147,7 +147,13 @@
 <script>
     const folder = "barmenu/";
     const myPhoneNumber = "905XXXXXXXXX"; // NUMARANI YAZ
-    const myIban = "TR000000000000000000000000"; // IBAN'I YAZ (Boşluksuz)
+    const myIban = "TR000000000000000000000000"; // IBAN'INI YAZ (BOŞLUKSUZ)
+
+    // SES EFEKTLERİ
+    const clickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+    const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+    clickSound.volume = 0.3;
+    successSound.volume = 0.4;
 
     const inventory = [
         { id: 'KiNoBi', cat: 'gin', name: 'Ki No Bi Kyoto Gin', shot: 300, bottle: 3800, img: folder + 'KiNoBiGin.png' },
@@ -159,7 +165,7 @@
         { id: 'MalfyOrig', cat: 'gin', name: 'Malfy Originale (1L)', shot: 140, bottle: 2600, img: folder + 'MalfyGin.png' },
         { id: 'Bombay', cat: 'gin', name: 'Bombay Sapphire', shot: 120, bottle: 1600, img: folder + 'BombaySapphireGin.png' },
         { id: 'Beefeater', cat: 'gin', name: 'Beefeater Pink', shot: 90, bottle: 1250, img: folder + 'BeefeaterPinkGin.png' },
-        { id: 'EtsuPacific', cat: 'gin', name: 'Etsu Pacific Ocean Water', shot: 300, bottle: 3700, img: folder + 'EtsuPacific.png' },
+        { id: 'EtsuPacific', cat: 'gin', name: 'Etsu Pacific Ocean Water', shot: 300, bottle: 3700, img: folder + 'EtsuP.png' },
         { id: 'SmirNorth', cat: 'vodka', name: 'Smirnoff North', shot: 100, bottle: 1300, img: folder + 'SmirnoffNorthVotka.png' },
         { id: 'SmirRed', cat: 'vodka', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: folder + 'SmirnoffVotka.png' },
         { id: 'Nemiroff', cat: 'vodka', name: 'Nemiroff De Luxe', shot: 100, bottle: 1100, img: folder + 'Nemiroff.png' },
@@ -190,13 +196,16 @@
 
     function update(id, delta, price) {
         if (!cart[id]) cart[id] = 0; if (cart[id] + delta < 0) return;
+        clickSound.currentTime = 0; clickSound.play();
         cart[id] += delta; total += (delta * price);
         document.getElementById('qty-' + id).innerText = cart[id];
         document.getElementById('total-display').innerText = total + " TL";
     }
 
     function showReceipt() {
-        if (total === 0) return; let content = ""; let waMessage = "🛒 *YENİ SİPARİŞ*%0A%0A";
+        if (total === 0) return;
+        clickSound.play();
+        let content = ""; let waMessage = "🛒 *YENİ SİPARİŞ*%0A%0A";
         for (let id in cart) {
             if (cart[id] > 0) {
                 const item = inventory.find(i => i.id === id);
@@ -208,6 +217,7 @@
         document.getElementById('receipt-content').innerHTML = content;
         document.getElementById('receipt-total-display').innerText = total + " TL";
         document.getElementById('wa-btn').onclick = () => { 
+            successSound.play();
             window.open(`https://wa.me/${myPhoneNumber}?text=${waMessage}`, '_blank');
             document.getElementById('receipt-page').style.display = 'none';
             document.getElementById('payment-page').style.display = 'block';
@@ -217,6 +227,7 @@
     }
 
     function copyIban() {
+        clickSound.play();
         navigator.clipboard.writeText(myIban);
         const btn = document.querySelector('.copy-btn');
         btn.innerText = "KOPYALANDI!";
@@ -224,6 +235,7 @@
     }
 
     function resetMenu() {
+        successSound.play();
         cart = {}; total = 0;
         document.getElementById('total-display').innerText = "0 TL";
         document.querySelectorAll('.qty').forEach(q => q.innerText = "0");
