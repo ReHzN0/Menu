@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuzenler Premium Bar</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --card-bg: #161b22;
+            --accent: #f59e0b;
+            --text: #e6edf3;
+            --border: #30363d;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0; padding: 20px; padding-bottom: 150px;
+        }
+        .container { max-width: 500px; margin: auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: var(--accent); letter-spacing: 2px; margin-bottom: 5px; font-weight: 900; }
+        
+        .cat-title { 
+            font-size: 0.9rem; color: var(--accent); margin-top: 30px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .cat-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+        .item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .bottle-info { display: flex; align-items: center; gap: 12px; }
+        .bottle-img-container {
+            width: 60px; height: 80px;
+            background: #21262d; border-radius: 10px; border: 1px solid #30363d;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .bottle-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .details .name { font-weight: 600; font-size: 0.95rem; display: block; }
+        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
+        .details .shot-hl { color: var(--accent); font-weight: bold; }
+
+        .admin-controls { display: flex; align-items: center; gap: 10px; }
+        .viewer-mode .admin-controls, .viewer-mode .footer { display: none; }
+
+        .btn {
+            background: #30363d; color: white; border: 1px solid #484f58;
+            border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;
+        }
+        .qty { font-weight: bold; min-width: 20px; text-align: center; color: var(--accent); }
+
+        .footer {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 460px;
+            background: rgba(22, 27, 34, 0.98); backdrop-filter: blur(10px);
+            padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent);
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 999;
+        }
+        .total-amount { font-size: 1.6rem; font-weight: 900; color: var(--accent); }
+
+        /* ADİSYON SAYFASI */
+        #receipt-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 2000;
+            display: none; padding: 40px 20px; overflow-y: auto;
+            font-family: inherit; /* Fontu ana sayfadan alır */
+        }
+        .receipt-container { max-width: 450px; margin: auto; }
+        .receipt-item {
+            display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid var(--border); padding: 12px 0;
+        }
+        .receipt-img { width: 45px; height: 60px; border-radius: 6px; object-fit: cover; }
+        .receipt-total { 
+            font-size: 2.2rem; color: var(--accent); text-align: center; 
+            margin-top: 30px; border-top: 2px dashed var(--border); padding-top: 20px;
+            font-weight: 900;
+        }
+
+        .mode-toggle {
+            position: fixed; top: 10px; right: 10px;
+            background: #21262d; color: #8b949e; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem;
+            cursor: pointer; z-index: 1001; border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body class="admin-mode" id="mainBody">
+
+<button class="mode-toggle" onclick="toggleMode()">MODU DEĞİŞTİR</button>
+
+<div class="container" id="menu-container">
+    <header>
+        <h1>KUZENLER BAR</h1>
+        <div id="modeText" style="font-size: 0.7rem; color: #8b949e; text-transform: uppercase;">Yönetici Paneli</div>
+    </header>
+
+    <div class="cat-title">GIN (CİN)</div><div id="gin-list"></div>
+    <div class="cat-title">VOTKA</div><div id="vodka-list"></div>
+    <div class="cat-title">VİSKİ, TEKİLA & ROM</div><div id="spirit-list"></div>
+    <div class="cat-title">LİKÖRLER & DİĞERLERİ</div><div id="liqueur-list"></div>
+</div>
+
+<div class="footer">
+    <div>
+        <div style="font-size: 0.7rem; color: #8b949e; font-weight: bold;">TOPLAM</div>
+        <div class="total-amount" id="total-display">0 TL</div>
+    </div>
+    <button style="background:var(--accent); border:none; padding:12px 20px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="showReceipt()">HESABI KES</button>
+</div>
+
+<div id="receipt-page">
+    <div class="receipt-container">
+        <h2 style="color:var(--accent); text-align:center; letter-spacing:1px;">📋 ADİSYON ÖZETİ</h2>
+        <div id="receipt-content"></div>
+        <div class="receipt-total" id="receipt-total-display">0 TL</div>
+        <button style="width:100%; margin-top:40px; padding:18px; border-radius:15px; background:var(--accent); border:none; font-weight:900; font-size:1rem; cursor:pointer; color:black;" onclick="closeReceipt()">YENİ SİPARİŞ</button>
+    </div>
+</div>
+
+<script>
+    const folder = "barmenu/";
+    const inventory = [
+        { id: 'KiNoBi', cat: 'gin', name: 'Ki No Bi Kyoto Gin', shot: 300, bottle: 4500, img: folder + 'KiNoBiGin.png' },
+        { id: 'Mosaik', cat: 'gin', name: 'Mosaik Gin', shot: 190, bottle: 2400, img: folder + 'MosaikGin.png' },
+        { id: 'Roku', cat: 'gin', name: 'Roku Gin', shot: 180, bottle: 2200, img: folder + 'RokuGin.png' },
+        { id: 'TanquerayLD', cat: 'gin', name: 'Tanqueray London Dry', shot: 130, bottle: 1700, img: folder + 'TanquerayGin.png' },
+        { id: 'MalfyLimone', cat: 'gin', name: 'Malfy Limone', shot: 160, bottle: 2100, img: folder + 'MalfyLimoneGin.png' },
+        { id: 'MalfyRosa', cat: 'gin', name: 'Malfy Rosa', shot: 160, bottle: 2100, img: folder + 'MalfyRosaGin.png' },
+        { id: 'MalfyOrig', cat: 'gin', name: 'Malfy Originale', shot: 140, bottle: 1900, img: folder + 'MalfyGin.png' },
+        { id: 'Bombay', cat: 'gin', name: 'Bombay Sapphire', shot: 120, bottle: 1600, img: folder + 'BombaySapphireGin.png' },
+        { id: 'Beefeater', cat: 'gin', name: 'Beefeater Pink', shot: 90, bottle: 1200, img: folder + 'BeefeaterPinkGin.png' },
+        { id: 'SmirNorth', cat: 'vodka', name: 'Smirnoff North', shot: 100, bottle: 1300, img: folder + 'SmirnoffNorthVotka.png' },
+        { id: 'SmirRed', cat: 'vodka', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: folder + 'SmirnoffVotka.png' },
+        { id: 'Nemiroff', cat: 'vodka', name: 'Nemiroff De Luxe', shot: 70, bottle: 900, img: folder + 'Nemiroff.png' },
+        { id: 'Havana', cat: 'spirit', name: 'Havana Club 7', shot: 120, bottle: 1600, img: folder + 'HavanaClub.png' },
+        { id: 'OlmecaSilv', cat: 'spirit', name: 'Olmeca Silver', shot: 110, bottle: 1500, img: folder + 'OlmecaSilver.png' },
+        { id: 'OlmecaDark', cat: 'spirit', name: 'Olmeca Dark Chocolate', shot: 90, bottle: 1200, img: folder + 'OlmecaDark.png' },
+        { id: 'Ballantines', cat: 'spirit', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: folder + 'Ballentines.png' },
+        { id: 'Malibu', cat: 'spirit', name: 'Malibu Rum', shot: 70, bottle: 950, img: folder + 'Malibu.png' },
+        { id: 'Skinos', cat: 'liqueur', name: 'Skinos Mastic', shot: 140, bottle: 1800, img: folder + 'Skinos.png' },
+        { id: 'JagCB', cat: 'liqueur', name: 'Jägermeister CB', shot: 120, bottle: 1600, img: folder + 'JagermeisterCB.png' },
+        { id: 'JagOrig', cat: 'liqueur', name: 'Jägermeister', shot: 100, bottle: 1300, img: folder + 'Jagermeister.png' },
+        { id: 'BaileysChoc', cat: 'liqueur', name: 'Baileys Chocolate', shot: 110, bottle: 1400, img: folder + 'BaileysChoco.png' },
+        { id: 'BaileysOrig', cat: 'liqueur', name: 'Baileys Original', shot: 80, bottle: 1000, img: folder + 'Baileys.png' },
+        { id: 'TripleSec', cat: 'liqueur', name: 'Jest Triple Sec', shot: 40, bottle: 600, img: folder + 'Jest.png' },
+        { id: 'Mancia', cat: 'liqueur', name: 'Mancia', shot: 40, bottle: 600, img: 'emoji' }
+    ];
+
+    let cart = {}; let total = 0;
+
+    function renderMenu() {
+        ['gin', 'vodka', 'spirit', 'liqueur'].forEach(c => document.getElementById(c + '-list').innerHTML = '');
+        inventory.forEach(item => {
+            let imgTag = item.img === 'emoji' ? `<div class="bottle-img" style="font-size:2.2rem; background:#21262d; display:flex; align-items:center; justify-content:center;">🍷</div>` : `<img src="${item.img}" class="bottle-img" onerror="this.src='https://via.placeholder.com/60x80?text=%3F'">`;
+            const html = `<div class="item"><div class="bottle-info"><div class="bottle-img-container">${imgTag}</div><div class="details"><span class="name">${item.name}</span><span class="prices">Shot: <span class="shot-hl">${item.shot} TL</span> | Şişe: ${item.bottle} TL</span></div></div><div class="admin-controls"><button class="btn" onclick="update('${item.id}', -1, ${item.shot})">-</button><span class="qty" id="qty-${item.id}">0</span><button class="btn" onclick="update('${item.id}', 1, ${item.shot})">+</button></div></div>`;
+            document.getElementById(item.cat + '-list').innerHTML += html;
+        });
+    }
+
+    function update(id, delta, price) {
+        if (!cart[id]) cart[id] = 0; if (cart[id] + delta < 0) return;
+        cart[id] += delta; total += (delta * price);
+        document.getElementById('qty-' + id).innerText = cart[id];
+        document.getElementById('total-display').innerText = total + " TL";
+    }
+
+    function showReceipt() {
+        if (total === 0) return; let content = "";
+        for (let id in cart) {
+            if (cart[id] > 0) {
+                const item = inventory.find(i => i.id === id);
+                let imgTag = item.img === 'emoji' ? `<div style="font-size:1.5rem; width:45px; text-align:center;">🍷</div>` : `<img src="${item.img}" class="receipt-img">`;
+                content += `<div class="receipt-item">${imgTag}<div><div style="font-weight:900; font-size:1rem;">${cart[id]} x ${item.name}</div><div style="color:#8b949e; font-size:0.8rem;">${cart[id] * item.shot} TL</div></div></div>`;
+            }
+        }
+        document.getElementById('receipt-content').innerHTML = content;
+        document.getElementById('receipt-total-display').innerText = total + " TL";
+        document.getElementById('receipt-page').style.display = 'block';
+    }
+
+    function closeReceipt() {
+        cart = {}; total = 0; document.getElementById('total-display').innerText = "0 TL";
+        document.querySelectorAll('.qty').forEach(q => q.innerText = "0");
+        document.getElementById('receipt-page').style.display = 'none';
+    }
+
+    function toggleMode() {
+        document.getElementById('mainBody').classList.toggle('viewer-mode');
+        document.getElementById('modeText').innerText = document.getElementById('mainBody').classList.contains('viewer-mode') ? "Müşteri Menüsü" : "Yönetici Paneli";
+    }
+    renderMenu();
+</script>
+</body>
+</html>
