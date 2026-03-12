@@ -23,14 +23,12 @@
         header { text-align: center; margin-bottom: 20px; }
         h1 { color: var(--accent); letter-spacing: 4px; margin-bottom: 5px; font-weight: 900; }
         
-        /* Kategoriler */
         .cat-title { 
             font-size: 0.85rem; color: var(--accent); margin-top: 25px; margin-bottom: 12px;
             display: flex; align-items: center; gap: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1.5px;
         }
         .cat-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
-        /* Ürün Kartları */
         .item {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -49,7 +47,6 @@
         .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
         .shot-hl { color: var(--accent); font-weight: bold; }
 
-        /* Kontroller */
         .admin-controls { display: flex; align-items: center; gap: 12px; }
         .btn {
             background: #30363d; color: white; border: 1px solid #484f58;
@@ -58,18 +55,16 @@
         }
         .qty { font-weight: bold; min-width: 20px; text-align: center; color: var(--accent); }
 
-        /* Alt Bar */
         .footer {
             position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
             width: 92%; max-width: 460px;
             background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(12px);
             padding: 12px 20px; border-radius: 20px; border: 1px solid var(--accent);
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
         }
         .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
 
-        /* Sayfalar (Adisyon & Ödeme) */
         .full-page {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg); z-index: 2000; display: none; padding: 20px; overflow-y: auto;
@@ -78,7 +73,6 @@
         .receipt-item { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 0.95rem; }
         .receipt-total { font-size: 2.2rem; color: var(--accent); text-align: center; margin: 20px 0; font-weight: 900; }
         
-        /* IBAN Kutusu */
         .iban-box {
             background: #0d1117; border: 1px solid var(--accent);
             padding: 20px; border-radius: 16px; margin: 20px 0; position: relative;
@@ -88,8 +82,6 @@
             border-radius: 8px; font-weight: bold; font-size: 0.65rem; cursor: pointer;
             position: absolute; top: 12px; right: 12px;
         }
-
-        /* Mod Değiştirici (Gizli tutulabilir) */
         .mode-toggle {
             position: fixed; top: 10px; right: 10px; background: #21262d; color: #8b949e; 
             padding: 6px 12px; border-radius: 8px; font-size: 0.6rem; cursor: pointer; border: 1px solid var(--border);
@@ -99,14 +91,13 @@
 </head>
 <body class="admin-mode" id="mainBody">
 
-<button class="mode-toggle" onclick="toggleMode()">YÖNETİCİ/MÜŞTERİ</button>
+<button class="mode-toggle" onclick="toggleMode()">MOD DEĞİŞTİR</button>
 
-<div class="container" id="menu-container">
+<div class="container">
     <header>
         <h1>MENU</h1>
         <div id="modeText" style="font-size: 0.7rem; color: #8b949e; text-transform: uppercase;">Yönetici Paneli</div>
     </header>
-
     <div id="dynamic-menu"></div>
 </div>
 
@@ -131,47 +122,29 @@
 <div id="payment-page" class="full-page">
     <div class="receipt-card">
         <h2 style="color:var(--accent); text-align:center; margin-bottom:5px;">ÖDEME</h2>
-        <p style="text-align:center; font-size: 0.8rem; color: #8b949e;">Siparişiniz WhatsApp üzerinden iletildi.</p>
-        
+        <p style="text-align:center; font-size: 0.8rem; color: #8b949e;">Lütfen IBAN'a transfer yapın.</p>
         <div class="iban-box">
             <button class="copy-btn" onclick="copyIban()">KOPYALA</button>
             <div style="font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 8px;">TRANSFER (IBAN)</div>
             <div id="iban-display" style="font-size: 0.9rem; word-break: break-all; color: white; padding-right: 65px;"></div>
             <div id="account-name" style="font-size: 0.8rem; color: #8b949e; margin-top: 10px;"></div>
         </div>
-
         <div style="text-align:center; margin: 25px 0;">
             <div style="font-size: 0.8rem; color: #8b949e;">Ödenecek Tutar</div>
             <div style="font-size: 2.2rem; font-weight: 900; color: var(--accent);" id="final-total">0 TL</div>
         </div>
-        
         <button style="width:100%; padding:18px; border-radius:15px; background:var(--accent); border:none; font-weight:900; font-size: 1rem; cursor:pointer; color:black;" onclick="resetMenu()">YENİ SİPARİŞ BAŞLAT</button>
     </div>
 </div>
 
 <script>
-    // --- MERKEZİ AYARLAR ---
     const CONFIG = {
-        phone: "905XXXXXXXXX", // Numaranı buraya yaz
-        iban: "TR000000000000000000000000", // IBAN'ını buraya yaz
-        owner: "ADINIZ SOYADINIZ", // İsmini buraya yaz
+        phone: "905XXXXXXXXX",
+        iban: "TR000000000000000000000000",
+        owner: "ADINIZ SOYADINIZ",
         folder: "barmenu/"
     };
 
-    // --- SESLER ---
-    const sfx = {
-        click: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'),
-        success: new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3')
-    };
-    sfx.click.volume = 0.3;
-    sfx.success.volume = 0.4;
-
-    function playSfx(type) {
-        sfx[type].currentTime = 0;
-        sfx[type].play().catch(()=>{}); // Browser kısıtlaması için boş catch
-    }
-
-    // --- ÜRÜN LİSTESİ ---
     const inventory = [
         { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 300, bottle: 3800, img: 'KiNoBiGin.png' },
         { id: 'Mosaik', cat: 'GIN (CİN)', name: 'Mosaik Gin', shot: 300, bottle: 2575, img: 'MosaikGin.png' },
@@ -186,51 +159,33 @@
         { id: 'SmirNorth', cat: 'VOTKA', name: 'Smirnoff North', shot: 100, bottle: 1300, img: 'SmirnoffNorthVotka.png' },
         { id: 'SmirRed', cat: 'VOTKA', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: 'SmirnoffVotka.png' },
         { id: 'Nemiroff', cat: 'VOTKA', name: 'Nemiroff De Luxe', shot: 100, bottle: 1100, img: 'Nemiroff.png' },
-        { id: 'Havana', cat: 'VİSKİ, TEKİLA & ROM', name: 'Havana Club 7', shot: 120, bottle: 1600, img: 'HavanaClub.png' },
-        { id: 'OlmecaSilv', cat: 'VİSKİ, TEKİLA & ROM', name: 'Olmeca Silver', shot: 110, bottle: 1100, img: 'OlmecaSilver.png' },
-        { id: 'OlmecaDark', cat: 'VİSKİ, TEKİLA & ROM', name: 'Olmeca Dark Chocolate', shot: 100, bottle: 1250, img: 'OlmecaDark.png' },
-        { id: 'Ballantines', cat: 'VİSKİ, TEKİLA & ROM', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
-        { id: 'Malibu', cat: 'VİSKİ, TEKİLA & ROM', name: 'Malibu Rum', shot: 70, bottle: 950, img: 'Malibu.png' },
-        { id: 'Skinos', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Skinos Mastic', shot: 150, bottle: 1900, img: 'Skinos.png' },
-        { id: 'JagCB', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Jägermeister Cold Brew', shot: 120, bottle: 1600, img: 'JagermeisterCB.png' },
-        { id: 'JagOrig', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Jägermeister', shot: 100, bottle: 1350, img: 'Jagermeister.png' },
-        { id: 'BaileysChoc', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Baileys Chocolate', shot: 110, bottle: 1100, img: 'BaileysChoco.png' },
-        { id: 'BaileysOrig', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Baileys Original', shot: 100, bottle: 1050, img: 'Baileys.png' },
-        { id: 'TripleSec', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Jest Triple Sec', shot: 40, bottle: 600, img: 'Jest.png' },
-        { id: 'Mancia', cat: 'LİKÖRLER & DİĞERLERİ', name: 'Mancia', shot: 40, bottle: 600, img: 'emoji' }
+        { id: 'Havana', cat: 'DİĞERLERİ', name: 'Havana Club 7', shot: 120, bottle: 1600, img: 'HavanaClub.png' },
+        { id: 'OlmecaSilv', cat: 'DİĞERLERİ', name: 'Olmeca Silver', shot: 110, bottle: 1100, img: 'OlmecaSilver.png' },
+        { id: 'OlmecaDark', cat: 'DİĞERLERİ', name: 'Olmeca Dark Chocolate', shot: 100, bottle: 1250, img: 'OlmecaDark.png' },
+        { id: 'Ballantines', cat: 'DİĞERLERİ', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
+        { id: 'Malibu', cat: 'DİĞERLERİ', name: 'Malibu Rum', shot: 70, bottle: 950, img: 'Malibu.png' },
+        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 150, bottle: 1900, img: 'Skinos.png' },
+        { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 120, bottle: 1600, img: 'JagermeisterCB.png' },
+        { id: 'JagOrig', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 100, bottle: 1350, img: 'Jagermeister.png' },
+        { id: 'BaileysChoc', cat: 'LİKÖRLER', name: 'Baileys Chocolate', shot: 110, bottle: 1100, img: 'BaileysChoco.png' },
+        { id: 'BaileysOrig', cat: 'LİKÖRLER', name: 'Baileys Original', shot: 100, bottle: 1050, img: 'Baileys.png' },
+        { id: 'TripleSec', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 600, img: 'Jest.png' },
+        { id: 'Mancia', cat: 'LİKÖRLER', name: 'Mancia', shot: 40, bottle: 600, img: 'emoji' }
     ];
 
     let cart = {}; let total = 0;
 
-    // --- MENÜYÜ OLUŞTUR ---
     function initMenu() {
         const menuDiv = document.getElementById('dynamic-menu');
         let lastCat = "";
         let html = "";
-
         inventory.forEach(item => {
             if (item.cat !== lastCat) {
                 html += `<div class="cat-title">${item.cat}</div>`;
                 lastCat = item.cat;
             }
-            const imgSrc = item.img === 'emoji' ? '🍷' : CONFIG.folder + item.img;
-            const imgDisplay = item.img === 'emoji' ? `<span style="font-size:2rem;">🍷</span>` : `<img src="${imgSrc}" onerror="this.style.opacity='0.2'">`;
-
-            html += `
-                <div class="item">
-                    <div class="bottle-info">
-                        <div class="img-box">${imgDisplay}</div>
-                        <div class="details">
-                            <span class="name">${item.name}</span>
-                            <span class="prices">Shot: <span class="shot-hl">${item.shot} TL</span> | Şişe: ${item.bottle} TL</span>
-                        </div>
-                    </div>
-                    <div class="admin-controls">
-                        <button class="btn" onclick="updateQty('${item.id}', -1)">-</button>
-                        <span class="qty" id="qty-${item.id}">0</span>
-                        <button class="btn" onclick="updateQty('${item.id}', 1)">+</button>
-                    </div>
-                </div>`;
+            const imgDisplay = item.img === 'emoji' ? `<span style="font-size:2rem;">🍷</span>` : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.2'">`;
+            html += `<div class="item"><div class="bottle-info"><div class="img-box">${imgDisplay}</div><div class="details"><span class="name">${item.name}</span><span class="prices">Shot: <span class="shot-hl">${item.shot} TL</span> | Şişe: ${item.bottle} TL</span></div></div><div class="admin-controls"><button class="btn" onclick="updateQty('${item.id}', -1)">-</button><span class="qty" id="qty-${item.id}">0</span><button class="btn" onclick="updateQty('${item.id}', 1)">+</button></div></div>`;
         });
         menuDiv.innerHTML = html;
         document.getElementById('iban-display').innerText = CONFIG.iban;
@@ -240,38 +195,28 @@
     function updateQty(id, delta) {
         if (!cart[id]) cart[id] = 0;
         if (cart[id] + delta < 0) return;
-
-        playSfx('click');
         const item = inventory.find(i => i.id === id);
         cart[id] += delta;
         total += (delta * item.shot);
-
         document.getElementById(`qty-${id}`).innerText = cart[id];
         document.getElementById('total-display').innerText = total + " TL";
     }
 
     function showReceipt() {
         if (total === 0) return;
-        playSfx('click');
         let content = "";
-        let msg = "🛒 *YENİ SİPARİŞ*%0A%0A";
-
+        let msg = "🛒 *SİPARİŞ*%0A%0A";
         inventory.forEach(item => {
             if (cart[item.id] > 0) {
-                const subTotal = cart[item.id] * item.shot;
-                content += `<div class="receipt-item"><span><b>${cart[item.id]} x</b> ${item.name}</span><span>${subTotal} TL</span></div>`;
-                msg += `• ${cart[item.id]} x ${item.name} (${subTotal} TL)%0A`;
+                content += `<div class="receipt-item"><span><b>${cart[item.id]}x</b> ${item.name}</span><span>${cart[item.id] * item.shot} TL</span></div>`;
+                msg += `• ${cart[item.id]}x ${item.name}%0A`;
             }
         });
-
-        msg += `%0A*TOPLAM: ${total} TL*%0A✅ _Sipariş Onaylandı._`;
-        
+        msg += `%0A*TOPLAM: ${total} TL*`;
         document.getElementById('receipt-content').innerHTML = content;
         document.getElementById('receipt-total-display').innerText = total + " TL";
         document.getElementById('receipt-page').style.display = 'block';
-
         document.getElementById('wa-btn').onclick = () => {
-            playSfx('success');
             window.open(`https://wa.me/${CONFIG.phone}?text=${msg}`, '_blank');
             document.getElementById('receipt-page').style.display = 'none';
             document.getElementById('final-total').innerText = total + " TL";
@@ -280,7 +225,6 @@
     }
 
     function copyIban() {
-        playSfx('click');
         navigator.clipboard.writeText(CONFIG.iban);
         const btn = document.querySelector('.copy-btn');
         btn.innerText = "KOPYALANDI!";
@@ -288,7 +232,6 @@
     }
 
     function resetMenu() {
-        playSfx('success');
         cart = {}; total = 0;
         document.getElementById('total-display').innerText = "0 TL";
         document.querySelectorAll('.qty').forEach(el => el.innerText = "0");
@@ -297,14 +240,10 @@
     }
 
     function closePage(id) { document.getElementById(id).style.display = 'none'; }
-
     function toggleMode() {
         document.getElementById('mainBody').classList.toggle('viewer-mode');
-        const isClient = document.getElementById('mainBody').classList.contains('viewer-mode');
-        document.getElementById('modeText').innerText = isClient ? "Müşteri Menüsü" : "Yönetici Paneli";
+        document.getElementById('modeText').innerText = document.getElementById('mainBody').classList.contains('viewer-mode') ? "Müşteri Menüsü" : "Yönetici Paneli";
     }
-
-    // Başlat
     initMenu();
 </script>
 </body>
