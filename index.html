@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -169,4 +168,85 @@
     { id: 'Malibu', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Malibu Rum', shot: 70, bottle: 950, img: 'Malibu.png' },
     { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 140, bottle: 1900, img: 'Skinos.png' },
     { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 120, bottle: 1600, img: 'JagermeisterCB.png' },
-    { id: 'JagOrig', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 100
+    { id: 'JagOrig', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 100, bottle: 1350, img: 'Jagermeister.png' },
+    { id: 'BaileysChoc', cat: 'LİKÖRLER', name: 'Baileys Chocolate (50cl)', shot: 120, bottle: 1100, img: 'BaileysChoco.png' },
+    { id: 'BaileysOrig', cat: 'LİKÖRLER', name: 'Baileys Original', shot: 85, bottle: 1050, img: 'Baileys.png' },
+    { id: 'TripleSec', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 600, img: 'Jest.png' },
+    { id: 'Mancia', cat: 'LİKÖRLER', name: 'Mancia', shot: 40, bottle: 600, img: 'emoji' }
+];
+
+    let cart = {}; let total = 0;
+
+    function initMenu() {
+        const menuDiv = document.getElementById('dynamic-menu');
+        let lastCat = "";
+        let html = "";
+        inventory.forEach(item => {
+            if (item.cat !== lastCat) {
+                html += `<div class="cat-title">${item.cat}</div>`;
+                lastCat = item.cat;
+            }
+            const imgDisplay = item.img === 'emoji' ? `<span style="font-size:2rem;">🍷</span>` : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.2'">`;
+            html += `<div class="item"><div class="bottle-info"><div class="img-box">${imgDisplay}</div><div class="details"><span class="name">${item.name}</span><span class="prices">Shot: <span class="shot-hl">${item.shot} TL</span> | Şişe: ${item.bottle} TL</span></div></div><div class="admin-controls"><button class="btn" onclick="updateQty('${item.id}', -1)">-</button><span class="qty" id="qty-${item.id}">0</span><button class="btn" onclick="updateQty('${item.id}', 1)">+</button></div></div>`;
+        });
+        menuDiv.innerHTML = html;
+        document.getElementById('iban-display').innerText = CONFIG.iban;
+        document.getElementById('account-name').innerText = CONFIG.owner;
+    }
+
+    function updateQty(id, delta) {
+        if (!cart[id]) cart[id] = 0;
+        if (cart[id] + delta < 0) return;
+        const item = inventory.find(i => i.id === id);
+        cart[id] += delta;
+        total += (delta * item.shot);
+        document.getElementById(`qty-${id}`).innerText = cart[id];
+        document.getElementById('total-display').innerText = total + " TL";
+    }
+
+    function showReceipt() {
+        if (total === 0) return;
+        let content = "";
+        let msg = "🛒 *SİPARİŞ*%0A%0A";
+        inventory.forEach(item => {
+            if (cart[item.id] > 0) {
+                content += `<div class="receipt-item"><span><b>${cart[item.id]}x</b> ${item.name}</span><span>${cart[item.id] * item.shot} TL</span></div>`;
+                msg += `• ${cart[item.id]}x ${item.name}%0A`;
+            }
+        });
+        msg += `%0A*TOPLAM: ${total} TL*`;
+        document.getElementById('receipt-content').innerHTML = content;
+        document.getElementById('receipt-total-display').innerText = total + " TL";
+        document.getElementById('receipt-page').style.display = 'block';
+        document.getElementById('wa-btn').onclick = () => {
+            window.open(`https://wa.me/${CONFIG.phone}?text=${msg}`, '_blank');
+            document.getElementById('receipt-page').style.display = 'none';
+            document.getElementById('final-total').innerText = total + " TL";
+            document.getElementById('payment-page').style.display = 'block';
+        };
+    }
+
+    function copyIban() {
+        navigator.clipboard.writeText(CONFIG.iban);
+        const btn = document.querySelector('.copy-btn');
+        btn.innerText = "KOPYALANDI!";
+        setTimeout(() => btn.innerText = "KOPYALA", 2000);
+    }
+
+    function resetMenu() {
+        cart = {}; total = 0;
+        document.getElementById('total-display').innerText = "0 TL";
+        document.querySelectorAll('.qty').forEach(el => el.innerText = "0");
+        document.getElementById('payment-page').style.display = 'none';
+        window.scrollTo(0,0);
+    }
+
+    function closePage(id) { document.getElementById(id).style.display = 'none'; }
+    function toggleMode() {
+        document.getElementById('mainBody').classList.toggle('viewer-mode');
+        document.getElementById('modeText').innerText = document.getElementById('mainBody').classList.contains('viewer-mode') ? "Müşteri Menüsü" : "Yönetici Paneli";
+    }
+    initMenu();
+</script>
+</body>
+</html>
