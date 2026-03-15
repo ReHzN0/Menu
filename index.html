@@ -4,369 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUEST MENU</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍸</text></svg>">
-    
     <style>
-        :root {
-            --bg: #0a0a0c;
-            --card-bg: #161b22;
-            --accent: #f59e0b;
-            --text: #e6edf3;
-            --border: #30363d;
-            --error: #f44336;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg); color: var(--text);
-            margin: 0; padding: 20px; padding-bottom: 120px;
-        }
+        :root { --bg: #0a0a0c; --card-bg: #161b22; --accent: #f59e0b; --text: #e6edf3; --border: #30363d; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; }
         .container { max-width: 500px; margin: auto; }
         header { text-align: center; margin-bottom: 20px; }
-        h1 { color: var(--accent); letter-spacing: 4px; margin-bottom: 5px; font-weight: 900; cursor: pointer; }
-        
-        .cat-title { 
-            font-size: 0.85rem; color: var(--accent); margin-top: 25px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1.5px;
-        }
+        h1 { color: var(--accent); letter-spacing: 4px; cursor: pointer; font-weight: 900; }
+        .mode-btn { position: fixed; top: 10px; right: 10px; background: #21262d; color: #8b949e; padding: 8px 12px; border-radius: 8px; font-size: 0.65rem; border: 1px solid var(--border); z-index: 3000; cursor: pointer; }
+        .cat-title { font-size: 0.85rem; color: var(--accent); margin: 25px 0 12px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
         .cat-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-
-        .item {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 16px; padding: 12px; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .bottle-info { display: flex; align-items: center; gap: 12px; }
-        .img-box {
-            width: 55px; height: 75px; background: #21262d; 
-            border-radius: 10px; border: 1px solid #30363d;
-            overflow: hidden; display: flex; align-items: center; justify-content: center;
-        }
+        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .img-box { width: 55px; height: 75px; background: #21262d; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         .details .name { font-weight: 600; font-size: 0.9rem; display: block; }
         .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
-        .shot-hl { color: var(--accent); font-weight: bold; }
-
-        .controls { display: flex; align-items: center; gap: 12px; }
-        
-        .btn {
-            background: #30363d; color: white; border: 1px solid #484f58;
-            border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1.2rem;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .btn:active { transform: scale(0.9); background: var(--accent); }
+        .controls { display: flex; align-items: center; gap: 10px; }
+        .btn { background: #30363d; color: white; border: 1px solid #484f58; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
         .qty { font-weight: bold; min-width: 20px; text-align: center; color: var(--accent); }
-
-        .footer {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 460px;
-            background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(12px);
-            padding: 12px 20px; border-radius: 20px; border: 1px solid var(--accent);
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-        }
+        #pass-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
+        .modal-card { background: var(--card-bg); padding: 30px; border-radius: 25px; border: 1px solid var(--accent); text-align: center; width: 280px; }
+        .modal-card input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; text-align: center; font-size: 1.5rem; letter-spacing: 5px; }
+        .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
-
-        /* Custom Password Modal */
-        #pass-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 4000;
-        }
-        .modal-content {
-            background: var(--card-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--accent);
-            text-align: center; width: 80%; max-width: 300px;
-        }
-        .modal-content input {
-            width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border);
-            background: #0d1117; color: white; text-align: center; font-size: 1.2rem;
-        }
-        .modal-content button {
-            width: 100%; padding: 12px; border-radius: 10px; background: var(--accent); color: black;
-            border: none; font-weight: 900; cursor: pointer;
-        }
-
-        .full-page {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 2000; display: none; padding: 20px; overflow-y: auto;
-        }
+        #admin-panel { margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent); display: none; }
+        .full-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; padding: 20px; overflow-y: auto; }
         .receipt-card { max-width: 450px; margin: 40px auto; background: #161b22; padding: 25px; border-radius: 24px; border: 1px solid var(--border); }
-        .receipt-item { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 0.95rem; }
-        .receipt-total { font-size: 2.2rem; color: var(--accent); text-align: center; margin: 20px 0; font-weight: 900; }
-        
-        .mode-status {
-            position: fixed; top: 10px; right: 10px; background: #21262d; color: #8b949e; 
-            padding: 6px 12px; border-radius: 8px; font-size: 0.6rem; border: 1px solid var(--border); z-index: 3000;
-        }
-
-        #admin-dashboard {
-            margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent);
-            display: none;
-        }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-<div class="mode-status" id="modeIndicator">GUEST MODE</div>
+<div class="mode-btn" onclick="openAuth()">MOD DEĞİŞTİR</div>
 
 <div id="pass-modal">
-    <div class="modal-content">
-        <div style="color:var(--accent); font-weight:900; letter-spacing:1px;">ADMIN GİRİŞİ</div>
-        <input type="password" id="passInput" placeholder="Şifre" maxlength="4">
-        <button onclick="checkPass()">GİRİŞ YAP</button>
-        <div style="margin-top:15px; font-size:0.7rem; color:#8b949e; cursor:pointer;" onclick="closeModal()">İptal</div>
+    <div class="modal-card">
+        <div style="color:var(--accent); font-weight:900;">YÖNETİCİ GİRİŞİ</div>
+        <input type="password" id="passInput" placeholder="••••" maxlength="4" inputmode="numeric">
+        <button onclick="verifyPass()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">ONAYLA</button>
+        <p style="margin-top:15px; font-size:0.7rem; color:#8b949e; cursor:pointer;" onclick="closeModal()">Vazgeç</p>
     </div>
 </div>
 
 <div class="container">
-    <header>
-        <h1 onclick="openModal()">MENU</h1>
-        <div style="font-size: 0.7rem; color: #8b949e; text-transform: uppercase;">İçkini seç ve siparişini ver</div>
-    </header>
-
-    <div id="dynamic-menu"></div>
-
-    <div id="admin-dashboard">
-        <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK ÖZET</h3>
-        <div id="daily-log" style="font-size: 0.85rem; line-height: 1.6;">Henüz sipariş yok.</div>
-        <hr style="border:0; border-top:1px solid #30363d; margin:15px 0;">
-        <div style="display:flex; justify-content:space-between; font-weight:bold;">
-            <span>TOPLAM CİRO:</span>
-            <span id="daily-total-sum" style="color:var(--accent);">0 TL</span>
-        </div>
-        <button onclick="clearLogs()" style="margin-top:15px; background:transparent; border:1px solid #f44336; color:#f44336; padding:5px 10px; border-radius:5px; font-size:0.7rem; cursor:pointer;">Günü Sıfırla</button>
+    <header><h1 onclick="openAuth()">MENU</h1><p style="font-size: 0.7rem; color: #8b949e;">Premium Koleksiyon</p></header>
+    <div id="menu-list"></div>
+    <div id="admin-panel">
+        <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK KASA</h3>
+        <div id="order-log" style="font-size: 0.8rem; line-height: 1.6; color:#8b949e;">Satış yok.</div>
+        <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+        <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOPLAM:</span><span id="total-revenue" style="color:var(--accent);">0 TL</span></div>
     </div>
 </div>
 
 <div class="footer">
-    <div>
-        <div style="font-size: 0.65rem; color: #8b949e; font-weight: bold;">SİPARİŞ TOPLAMI</div>
-        <div class="total-amount" id="total-display">0 TL</div>
-    </div>
-    <button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="showReceipt()">HESABI KES</button>
+    <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
+    <button style="background:var(--accent); border:none; padding:12px 20px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="showOrder()">SİPARİŞ VER</button>
 </div>
 
 <div id="receipt-page" class="full-page">
     <div class="receipt-card">
-        <h2 style="color:var(--accent); text-align:center;">SİPARİŞ ÖZETİ</h2>
-        <div id="receipt-content"></div>
-        <div class="receipt-total" id="receipt-total-display">0 TL</div>
-        <button id="wa-btn" style="width:100%; padding:20px; border-radius:15px; background:#25D366; border:none; font-weight:900; font-size: 1.1rem; cursor:pointer; color:white;">WhatsApp ile Gönder</button>
-        <button style="width:100%; margin-top:15px; padding:10px; background:transparent; border:none; color:#8b949e; cursor:pointer;" onclick="closePage('receipt-page')">Vazgeç</button>
-    </div>
-</div>
-
-<div id="payment-page" class="full-page">
-    <div class="receipt-card">
-        <h2 style="color:var(--accent); text-align:center; margin-bottom:5px;">ÖDEME</h2>
-        <div style="text-align:center; margin: 25px 0;">
-            <div style="font-size: 0.8rem; color: #8b949e;">Ödenecek Tutar</div>
-            <div style="font-size: 2.2rem; font-weight: 900; color: var(--accent);" id="final-total">0 TL</div>
-        </div>
-        <button style="width:100%; padding:18px; border-radius:15px; background:var(--accent); border:none; font-weight:900; font-size: 1rem; cursor:pointer; color:black;" onclick="completeOrder()">ÖDEMEYİ ALDIM</button>
+        <h2 style="color:var(--accent); text-align:center;">ÖZET</h2>
+        <div id="receipt-list"></div>
+        <div style="font-size: 2rem; color: var(--accent); text-align: center; margin: 20px 0; font-weight: 900;" id="receipt-sum">0 TL</div>
+        <button id="wa-send" style="width:100%; padding:18px; border-radius:15px; background:#25D366; border:none; color:white; font-weight:bold; cursor:pointer;">WHATSAPP'A GÖNDER</button>
+        <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e; cursor:pointer;" onclick="closePage('receipt-page')">Geri Dön</button>
     </div>
 </div>
 
 <script>
-    const CONFIG = {
-        phone: "905333875829",
-        // '2606' şifresinin SHA-256 hali:
-        masterHash: "a9634e94a500b336e76878b20757754f9a0d843818e6900224a984a9e578c78c",
-        folder: "barmenu/"
+    const CONFIG = { 
+        phone: "905333875829", 
+        m: "MjYwNg==", // '2606' şifresinin Base64 hali
+        folder: "barmenu/" 
     };
 
     const inventory = [
         { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400, bottle: 3800, img: 'KiNoBiGin.png' },
-        { id: 'EtsuPacific', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean Water', shot: 320, bottle: 3800, img: 'EtsuP.png' },
+        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 320, bottle: 3800, img: 'EtsuP.png' },
         { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 270, bottle: 3200, img: 'nikka.png' },
-        { id: 'Gunpowder', cat: 'GIN (CİN)', name: 'Gunpowder Gin', shot: 250, bottle: 3000, img: 'gunpowder.png' },
-        { id: 'Skagerrak', cat: 'GIN (CİN)', name: 'Skagerrak Gin', shot: 220, bottle: 2600, img: 'skagerrak.png' },
+        { id: 'Gunp', cat: 'GIN (CİN)', name: 'Gunpowder Gin', shot: 250, bottle: 3000, img: 'gunpowder.png' },
+        { id: 'Skag', cat: 'GIN (CİN)', name: 'Skagerrak Gin', shot: 220, bottle: 2600, img: 'skagerrak.png' },
         { id: 'Mosaik', cat: 'GIN (CİN)', name: 'Mosaik Gin', shot: 200, bottle: 2575, img: 'MosaikGin.png' },
         { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 190, bottle: 2400, img: 'RokuGin.png' },
         { id: 'NoTen', cat: 'GIN (CİN)', name: 'Tanqueray No. Ten', shot: 180, bottle: 2000, img: 'noten.png' },
-        { id: 'MalfyLimone', cat: 'GIN (CİN)', name: 'Malfy Limone (70cl)', shot: 160, bottle: 2200, img: 'MalfyLimoneGin.png' },
-        { id: 'MalfyRosa', cat: 'GIN (CİN)', name: 'Malfy Rosa (70cl)', shot: 160, bottle: 2200, img: 'MalfyRosaGin.png' },
-        { id: 'MalfyOrig', cat: 'GIN (CİN)', name: 'Malfy Originale (1L)', shot: 140, bottle: 2600, img: 'MalfyGin.png' },
-        { id: 'TanquerayLD', cat: 'GIN (CİN)', name: 'Tanqueray London Dry', shot: 130, bottle: 1700, img: 'TanquerayGin.png' },
-        { id: 'Bombay', cat: 'GIN (CİN)', name: 'Bombay Sapphire', shot: 120, bottle: 1600, img: 'BombaySapphireGin.png' },
-        { id: 'Beefeater', cat: 'GIN (CİN)', name: 'Beefeater Pink', shot: 100, bottle: 1250, img: 'BeefeaterPinkGin.png' },
-        
-        { id: '1800Silver', cat: 'TEKİLA, ROM VE VİSKİ', name: '1800 Silver Tequila', shot: 250, bottle: 3000, img: '1800.png' },
-        { id: 'Havana', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Havana Club 7', shot: 120, bottle: 1600, img: 'HavanaClub.png' },
-        { id: 'OlmecaSilv', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Olmeca Silver', shot: 80, bottle: 1100, img: 'OlmecaSilver.png' },
-        { id: 'OlmecaDark', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Olmeca Dark Chocolate', shot: 100, bottle: 1250, img: 'OlmecaDark.png' },
-        { id: 'Ballantines', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
-        { id: 'Malibu', cat: 'TEKİLA, ROM VE VİSKİ', name: 'Malibu Rum', shot: 70, bottle: 950, img: 'Malibu.png' },
-
-        { id: 'SmirNorth', cat: 'VOTKA', name: 'Smirnoff North', shot: 100, bottle: 1300, img: 'SmirnoffNorthVotka.png' },
-        { id: 'SmirRed', cat: 'VOTKA', name: 'Smirnoff Red', shot: 80, bottle: 1100, img: 'SmirnoffVotka.png' },
-        { id: 'Nemiroff', cat: 'VOTKA', name: 'Nemiroff De Luxe', shot: 80, bottle: 1100, img: 'Nemiroff.png' },
-
+        { id: 'MalfyL', cat: 'GIN (CİN)', name: 'Malfy Limone', shot: 160, bottle: 2200, img: 'MalfyLimoneGin.png' },
+        { id: '1800S', cat: 'TEKİLA, ROM & VİSKİ', name: '1800 Silver Tequila', shot: 250, bottle: 3000, img: '1800.png' },
         { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 140, bottle: 1900, img: 'Skinos.png' },
-        { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 120, bottle: 1600, img: 'JagermeisterCB.png' },
-        { id: 'JagOrig', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 100, bottle: 1350, img: 'Jagermeister.png' },
-        { id: 'BaileysChoc', cat: 'LİKÖRLER', name: 'Baileys Chocolate (50cl)', shot: 120, bottle: 1100, img: 'BaileysChoco.png' },
-        { id: 'BaileysOrig', cat: 'LİKÖRLER', name: 'Baileys Original', shot: 85, bottle: 1050, img: 'Baileys.png' },
-        { id: 'TripleSec', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 1025, img: 'Jest.png' },
+        { id: 'Triple', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 1025, img: 'Jest.png' },
         { id: 'Mancia', cat: 'LİKÖRLER', name: 'Mancia', shot: 40, bottle: 800, img: 'emoji' }
     ];
 
     let cart = {}; let total = 0; let isAdmin = false;
 
-    async function hashPassword(string) {
-        const utf8 = new TextEncoder().encode(string);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    function initMenu() {
-        const menuDiv = document.getElementById('dynamic-menu');
-        let lastCat = "";
-        let html = "";
+    function render() {
+        let html = ''; let lastCat = '';
+        const sortedItems = [...inventory].sort((a,b) => (a.cat === b.cat) ? b.shot - a.shot : 0);
         
-        const sortedInventory = [...inventory].sort((a, b) => {
-            if (a.cat !== b.cat) return 0;
-            return b.shot - a.shot;
+        sortedItems.forEach(item => {
+            if (item.cat !== lastCat) { html += `<div class="cat-title">${item.cat}</div>`; lastCat = item.cat; }
+            const img = item.img === 'emoji' ? '🍷' : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.1'">`;
+            const bPrice = isAdmin ? `<span style="color:#666"> | Şişe: ${item.bottle} TL</span>` : '';
+            html += `<div class="item"><div class="bottle-info"><div class="img-box">${img}</div><div class="details"><span class="name">${item.name}</span><span class="prices">Shot: <b style="color:var(--accent)">${item.shot} TL</b>${bPrice}</span></div></div><div class="controls"><button class="btn" onclick="qty('${item.id}',-1)">-</button><span class="qty" id="q-${item.id}">${cart[item.id]||0}</span><button class="btn" onclick="qty('${item.id}',1)">+</button></div></div>`;
         });
-
-        sortedInventory.forEach(item => {
-            if (item.cat !== lastCat) {
-                html += `<div class="cat-title">${item.cat}</div>`;
-                lastCat = item.cat;
-            }
-            const imgDisplay = item.img === 'emoji' ? `<span style="font-size:2rem;">🍷</span>` : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.2'">`;
-            const bottlePriceHtml = isAdmin ? `<span style="color:#8b949e"> | Şişe: ${item.bottle} TL</span>` : "";
-
-            html += `
-                <div class="item">
-                    <div class="bottle-info">
-                        <div class="img-box">${imgDisplay}</div>
-                        <div class="details">
-                            <span class="name">${item.name}</span>
-                            <span class="prices">Shot: <span class="shot-hl">${item.shot} TL</span> ${bottlePriceHtml}</span>
-                        </div>
-                    </div>
-                    <div class="controls">
-                        <button class="btn" onclick="updateQty('${item.id}', -1)">-</button>
-                        <span class="qty" id="qty-${item.id}">${cart[item.id] || 0}</span>
-                        <button class="btn" onclick="updateQty('${item.id}', 1)">+</button>
-                    </div>
-                </div>`;
-        });
-        menuDiv.innerHTML = html;
-        updateDashboard();
+        document.getElementById('menu-list').innerHTML = html;
+        updateKasa();
     }
 
-    // Modal Functions
-    function openModal() { document.getElementById('pass-modal').style.display = 'flex'; document.getElementById('passInput').focus(); }
+    function qty(id, d) {
+        cart[id] = (cart[id] || 0) + d; if (cart[id] < 0) cart[id] = 0;
+        total = Object.keys(cart).reduce((sum, k) => sum + (cart[k] * inventory.find(i => i.id === k).shot), 0);
+        document.getElementById(`q-${id}`).innerText = cart[id];
+        document.getElementById('cart-total').innerText = total + " TL";
+    }
+
+    function openAuth() { 
+        if(isAdmin) { 
+            isAdmin=false; document.getElementById('admin-panel').style.display='none'; render(); 
+        } else { 
+            document.getElementById('pass-modal').style.display='flex'; 
+            document.getElementById('passInput').focus(); 
+        } 
+    }
     function closeModal() { document.getElementById('pass-modal').style.display = 'none'; document.getElementById('passInput').value = ''; }
 
-    async function checkPass() {
-        const entry = document.getElementById('passInput').value;
-        const entryHash = await hashPassword(entry);
-        
-        if (entryHash === CONFIG.masterHash) {
-            isAdmin = !isAdmin;
-            document.getElementById('modeIndicator').innerText = isAdmin ? "ADMIN MODE" : "GUEST MODE";
-            document.getElementById('modeIndicator').style.color = isAdmin ? "#f59e0b" : "#8b949e";
-            document.getElementById('admin-dashboard').style.display = isAdmin ? "block" : "none";
-            closeModal();
-            initMenu();
-        } else {
-            alert("Şifre Yanlış!");
-            document.getElementById('passInput').value = '';
+    function verifyPass() {
+        const input = document.getElementById('passInput').value;
+        if (btoa(input) === CONFIG.m) {
+            isAdmin = true; document.getElementById('admin-panel').style.display = 'block'; closeModal(); render();
+        } else { 
+            alert("Şifre Yanlış!"); 
+            document.getElementById('passInput').value = ''; 
         }
     }
 
-    function updateQty(id, delta) {
-        if (!cart[id]) cart[id] = 0;
-        if (cart[id] + delta < 0) return;
-        const item = inventory.find(i => i.id === id);
-        cart[id] += delta;
-        total += (delta * item.shot);
-        document.getElementById(`qty-${id}`).innerText = cart[id];
-        document.getElementById('total-display').innerText = total + " TL";
-    }
-
-    function showReceipt() {
+    function showOrder() {
         if (total === 0) return;
-        let content = "";
-        let msg = "🛒 *YENİ SİPARİŞ*%0A%0A";
-        inventory.forEach(item => {
-            if (cart[item.id] > 0) {
-                content += `<div class="receipt-item"><span><b>${cart[item.id]}x</b> ${item.name}</span><span>${cart[item.id] * item.shot} TL</span></div>`;
-                msg += `• ${cart[item.id]}x ${item.name}%0A`;
-            }
-        });
-        msg += `%0A*TOPLAM: ${total} TL*`;
-        document.getElementById('receipt-content').innerHTML = content;
-        document.getElementById('receipt-total-display').innerText = total + " TL";
+        let listHtml = ''; let msg = '🍸 *YENİ SİPARİŞ*%0A';
+        inventory.forEach(i => { if(cart[i.id]>0) { listHtml += `<div class="receipt-item"><span>${cart[i.id]}x ${i.name}</span><span>${cart[i.id]*i.shot} TL</span></div>`; msg += `• ${cart[i.id]}x ${i.name}%0A`; }});
+        document.getElementById('receipt-list').innerHTML = listHtml;
+        document.getElementById('receipt-sum').innerText = total + " TL";
         document.getElementById('receipt-page').style.display = 'block';
-        
-        document.getElementById('wa-btn').onclick = () => {
-            window.open(`https://wa.me/${CONFIG.phone}?text=${msg}`, '_blank');
-            saveToHistory();
-            document.getElementById('receipt-page').style.display = 'none';
-            document.getElementById('final-total').innerText = total + " TL";
-            document.getElementById('payment-page').style.display = 'block';
+        document.getElementById('wa-send').onclick = () => {
+            window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${total} TL*`);
+            logOrder(); closePage('receipt-page'); cart = {}; total = 0; render();
+            document.getElementById('cart-total').innerText = "0 TL";
         };
     }
 
-    function saveToHistory() {
-        const history = JSON.parse(localStorage.getItem('barHistory') || '[]');
-        const newOrder = {
-            date: new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'}),
-            items: [],
-            total: total
-        };
-        inventory.forEach(item => {
-            if (cart[item.id] > 0) newOrder.items.push(`${cart[item.id]}x ${item.name}`);
-        });
-        history.push(newOrder);
-        localStorage.setItem('barHistory', JSON.stringify(history));
+    function logOrder() {
+        const history = JSON.parse(localStorage.getItem('barLog') || '[]');
+        history.push({ time: new Date().toLocaleTimeString('tr-TR'), total: total });
+        localStorage.setItem('barLog', JSON.stringify(history));
     }
 
-    function updateDashboard() {
-        const history = JSON.parse(localStorage.getItem('barHistory') || '[]');
-        const logDiv = document.getElementById('daily-log');
-        const sumEl = document.getElementById('daily-total-sum');
-        
-        if (history.length === 0) {
-            logDiv.innerHTML = "Henüz sipariş yok.";
-            sumEl.innerText = "0 TL";
-            return;
-        }
-
-        let html = ""; let daySum = 0;
-        history.forEach(order => {
-            html += `<div><b>[${order.date}]</b> ${order.items.join(', ')} - <span style="color:var(--accent)">${order.total} TL</span></div>`;
-            daySum += order.total;
-        });
-        logDiv.innerHTML = html;
-        sumEl.innerText = daySum + " TL";
-    }
-
-    function clearLogs() {
-        if(confirm("Günü sıfırlamak istiyor musun?")) {
-            localStorage.removeItem('barHistory');
-            updateDashboard();
-        }
-    }
-
-    function completeOrder() {
-        cart = {}; total = 0;
-        document.getElementById('total-display').innerText = "0 TL";
-        initMenu();
-        document.getElementById('payment-page').style.display = 'none';
-        window.scrollTo(0,0);
+    function updateKasa() {
+        const history = JSON.parse(localStorage.getItem('barLog') || '[]');
+        const logDiv = document.getElementById('order-log');
+        if(history.length === 0) { logDiv.innerText = "Satış yok."; return; }
+        let sum = 0; logDiv.innerHTML = history.map(o => { sum += o.total; return `<div>[${o.time}] Satış: ${o.total} TL</div>`; }).join('');
+        document.getElementById('total-revenue').innerText = sum + " TL";
     }
 
     function closePage(id) { document.getElementById(id).style.display = 'none'; }
     
-    // Enter tuşu ile şifre girme
-    document.getElementById('passInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') checkPass();
+    document.getElementById('passInput').addEventListener('keyup', (e) => {
+        if(e.key === 'Enter') verifyPass();
     });
 
-    initMenu();
+    render();
 </script>
 </body>
 </html>
