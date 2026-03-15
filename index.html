@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUEST MENU</title>
     <style>
-        :root { --bg: #0a0a0c; --card-bg: #161b22; --accent: #f59e0b; --text: #e6edf3; --border: #30363d; }
+        :root { --bg: #0a0a0c; --card-bg: #161b22; --accent: #f59e0b; --text: #e6edf3; --border: #30363d; --discount: #238636; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; }
         .container { max-width: 500px; margin: auto; }
         header { text-align: center; margin-bottom: 20px; }
@@ -17,7 +17,9 @@
         .img-box { width: 55px; height: 75px; background: #21262d; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         .details .name { font-weight: 600; font-size: 0.9rem; display: block; }
-        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
+        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; line-height: 1.4; }
+        .admin-price-row { display: block; font-size: 0.7rem; margin-top: 2px; }
+        .discount-tag { color: var(--discount); font-weight: bold; }
         .controls { display: flex; align-items: center; gap: 10px; }
         .btn { background: #30363d; color: white; border: 1px solid #484f58; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
         .qty { font-weight: bold; min-width: 20px; text-align: center; color: var(--accent); }
@@ -48,7 +50,7 @@
     <header><h1 onclick="openAuth()">MENU</h1><p style="font-size: 0.7rem; color: #8b949e;">Premium Koleksiyon</p></header>
     <div id="menu-list"></div>
     <div id="admin-panel">
-        <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK KASA</h3>
+        <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK KASA (MENÜ FİYATI)</h3>
         <div id="order-log" style="font-size: 0.8rem; line-height: 1.6; color:#8b949e;">Satış yok.</div>
         <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOPLAM:</span><span id="total-revenue" style="color:var(--accent);">0 TL</span></div>
@@ -71,24 +73,40 @@
 </div>
 
 <script>
-    const CONFIG = { 
-        phone: "905333875829", 
-        m: "MjYwNg==", // '2606' şifresinin Base64 hali
-        folder: "barmenu/" 
+    const CONFIG = { phone: "905333875829", m: "MjYwNg==", folder: "barmenu/" };
+
+    // Dost Fiyatları (Eski Listenden)
+    const oldPrices = {
+        'EtsuP': 320, 'Gunp': 250, 'Skag': 220, 'Roku': 190, 'Havana7': 120, 
+        'OlmecaD': 100, 'Malibu': 70, 'SmirN': 100, 'SmirR': 80, 'Skinos': 140, 
+        'JagCB': 120, 'JagO': 100, 'BaileysC': 120
     };
 
     const inventory = [
+        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420, bottle: 3200, img: 'nikka.png' },
         { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400, bottle: 3800, img: 'KiNoBiGin.png' },
-        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 320, bottle: 3800, img: 'EtsuP.png' },
-        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 270, bottle: 3200, img: 'nikka.png' },
-        { id: 'Gunp', cat: 'GIN (CİN)', name: 'Gunpowder Gin', shot: 250, bottle: 3000, img: 'gunpowder.png' },
-        { id: 'Skag', cat: 'GIN (CİN)', name: 'Skagerrak Gin', shot: 220, bottle: 2600, img: 'skagerrak.png' },
+        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350, bottle: 3800, img: 'EtsuP.png' },
+        { id: 'Gunp', cat: 'GIN (CİN)', name: 'Gunpowder Gin', shot: 270, bottle: 3000, img: 'gunpowder.png' },
+        { id: 'Skag', cat: 'GIN (CİN)', name: 'Skagerrak Gin', shot: 240, bottle: 2600, img: 'skagerrak.png' },
+        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 250, bottle: 2400, img: 'RokuGin.png' },
         { id: 'Mosaik', cat: 'GIN (CİN)', name: 'Mosaik Gin', shot: 200, bottle: 2575, img: 'MosaikGin.png' },
-        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 190, bottle: 2400, img: 'RokuGin.png' },
         { id: 'NoTen', cat: 'GIN (CİN)', name: 'Tanqueray No. Ten', shot: 180, bottle: 2000, img: 'noten.png' },
         { id: 'MalfyL', cat: 'GIN (CİN)', name: 'Malfy Limone', shot: 160, bottle: 2200, img: 'MalfyLimoneGin.png' },
+        
         { id: '1800S', cat: 'TEKİLA, ROM & VİSKİ', name: '1800 Silver Tequila', shot: 250, bottle: 3000, img: '1800.png' },
-        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 140, bottle: 1900, img: 'Skinos.png' },
+        { id: 'Havana7', cat: 'TEKİLA, ROM & VİSKİ', name: 'Havana Club 7', shot: 130, bottle: 1600, img: 'HavanaClub.png' },
+        { id: 'OlmecaD', cat: 'TEKİLA, ROM & VİSKİ', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250, img: 'OlmecaDark.png' },
+        { id: 'Ballant', cat: 'TEKİLA, ROM & VİSKİ', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
+        { id: 'Malibu', cat: 'TEKİLA, ROM & VİSKİ', name: 'Malibu Rum', shot: 80, bottle: 950, img: 'Malibu.png' },
+        { id: 'OlmecaS', cat: 'TEKİLA, ROM & VİSKİ', name: 'Olmeca Silver', shot: 80, bottle: 1100, img: 'OlmecaSilver.png' },
+
+        { id: 'SmirN', cat: 'VOTKA', name: 'Smirnoff North', shot: 110, bottle: 1300, img: 'SmirnoffNorthVotka.png' },
+        { id: 'SmirR', cat: 'VOTKA', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: 'SmirnoffVotka.png' },
+        
+        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, bottle: 1900, img: 'Skinos.png' },
+        { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 140, bottle: 1600, img: 'JagermeisterCB.png' },
+        { id: 'BaileysC', cat: 'LİKÖRLER', name: 'Baileys Chocolate', shot: 130, bottle: 1100, img: 'BaileysChoco.png' },
+        { id: 'JagO', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 120, bottle: 1350, img: 'Jagermeister.png' },
         { id: 'Triple', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 1025, img: 'Jest.png' },
         { id: 'Mancia', cat: 'LİKÖRLER', name: 'Mancia', shot: 40, bottle: 800, img: 'emoji' }
     ];
@@ -97,13 +115,19 @@
 
     function render() {
         let html = ''; let lastCat = '';
-        const sortedItems = [...inventory].sort((a,b) => (a.cat === b.cat) ? b.shot - a.shot : 0);
-        
-        sortedItems.forEach(item => {
+        inventory.forEach(item => {
             if (item.cat !== lastCat) { html += `<div class="cat-title">${item.cat}</div>`; lastCat = item.cat; }
             const img = item.img === 'emoji' ? '🍷' : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.1'">`;
-            const bPrice = isAdmin ? `<span style="color:#666"> | Şişe: ${item.bottle} TL</span>` : '';
-            html += `<div class="item"><div class="bottle-info"><div class="img-box">${img}</div><div class="details"><span class="name">${item.name}</span><span class="prices">Shot: <b style="color:var(--accent)">${item.shot} TL</b>${bPrice}</span></div></div><div class="controls"><button class="btn" onclick="qty('${item.id}',-1)">-</button><span class="qty" id="q-${item.id}">${cart[item.id]||0}</span><button class="btn" onclick="qty('${item.id}',1)">+</button></div></div>`;
+            
+            // Admin Görünümü: Çift Fiyat
+            let priceDisplay = `Shot: <b style="color:var(--accent)">${item.shot} TL</b>`;
+            if (isAdmin) {
+                const friendPrice = oldPrices[item.id];
+                const discountInfo = friendPrice ? `<br><span class="discount-tag">Dost Fiyatı: ${friendPrice} TL</span>` : '';
+                priceDisplay += `<span class="admin-price-row">Şişe: ${item.bottle} TL ${discountInfo}</span>`;
+            }
+
+            html += `<div class="item"><div class="bottle-info"><div class="img-box">${img}</div><div class="details"><span class="name">${item.name}</span><span class="prices">${priceDisplay}</span></div></div><div class="controls"><button class="btn" onclick="qty('${item.id}',-1)">-</button><span class="qty" id="q-${item.id}">${cart[item.id]||0}</span><button class="btn" onclick="qty('${item.id}',1)">+</button></div></div>`;
         });
         document.getElementById('menu-list').innerHTML = html;
         updateKasa();
@@ -117,23 +141,15 @@
     }
 
     function openAuth() { 
-        if(isAdmin) { 
-            isAdmin=false; document.getElementById('admin-panel').style.display='none'; render(); 
-        } else { 
-            document.getElementById('pass-modal').style.display='flex'; 
-            document.getElementById('passInput').focus(); 
-        } 
+        if(isAdmin) { isAdmin=false; document.getElementById('admin-panel').style.display='none'; render(); } 
+        else { document.getElementById('pass-modal').style.display='flex'; document.getElementById('passInput').focus(); } 
     }
     function closeModal() { document.getElementById('pass-modal').style.display = 'none'; document.getElementById('passInput').value = ''; }
 
     function verifyPass() {
-        const input = document.getElementById('passInput').value;
-        if (btoa(input) === CONFIG.m) {
+        if (btoa(document.getElementById('passInput').value) === CONFIG.m) {
             isAdmin = true; document.getElementById('admin-panel').style.display = 'block'; closeModal(); render();
-        } else { 
-            alert("Şifre Yanlış!"); 
-            document.getElementById('passInput').value = ''; 
-        }
+        } else { alert("Şifre Yanlış!"); closeModal(); }
     }
 
     function showOrder() {
@@ -165,11 +181,6 @@
     }
 
     function closePage(id) { document.getElementById(id).style.display = 'none'; }
-    
-    document.getElementById('passInput').addEventListener('keyup', (e) => {
-        if(e.key === 'Enter') verifyPass();
-    });
-
     render();
 </script>
 </body>
