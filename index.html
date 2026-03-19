@@ -139,6 +139,57 @@
         font-size: 1rem !important;
         font-weight: 800 !important;
     }
+       /* --- MODAL (PENCERE) ELİT REVİZYON --- */
+    #silk-modal, #dynamic-modal {
+        background: rgba(5, 7, 5, 0.98) !important;
+        backdrop-filter: blur(25px) !important;
+        border-top: 1px solid rgba(110, 231, 119, 0.2) !important;
+        padding: 30px 20px !important;
+    }
+
+    #silk-modal h2, #dynamic-modal h2 {
+        font-family: 'Cormorant Garamond', serif !important;
+        font-weight: 300 !important;
+        letter-spacing: 4px !important;
+        font-size: 1.8rem !important;
+        margin-bottom: 30px !important;
+    }
+
+    /* Kartları temizle ve fiyatları sağa yasla */
+    .v-card {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(110, 231, 119, 0.1) !important;
+        border-radius: 2px !important;
+        margin-bottom: 12px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 15px !important;
+    }
+
+    .v-card b { font-size: 0.9rem !important; letter-spacing: 1px !important; color: #fff !important; }
+    .v-card div { font-size: 0.75rem !important; color: var(--text-muted) !important; margin-top: 4px !important; }
+    .v-card span { color: var(--accent) !important; font-weight: 800 !important; font-size: 0.95rem !important; margin-left: 10px !important; }
+
+    #silk-modal button, #dynamic-modal button {
+        background: transparent !important; 
+        border: 1px solid var(--accent) !important; 
+        color: var(--accent) !important;
+        border-radius: 2px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 5px !important;
+        font-weight: 300 !important;
+        font-size: 0.8rem !important;
+        margin-top: 25px !important;
+        padding: 15px !important;
+        box-shadow: 0 0 15px rgba(110, 231, 119, 0.1) !important;
+    }
+
+    /* Seçili kart parıltısı */
+    .v-card.selected {
+        border-color: var(--accent) !important;
+        background: rgba(110, 231, 119, 0.05) !important;
+    }
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
