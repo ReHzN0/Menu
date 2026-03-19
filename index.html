@@ -72,15 +72,44 @@
         'Vodka': true, 'Gin': true, 'Malibu': true, 'Kahve': true, 'Süt': true, 'Skinos': true, 'Baileys': true
     };
 
-    const inventory = [
+   const inventory = [
+        // --- GIN (CİN) KATEGORİSİ (12 Şişe) ---
         { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420 },
         { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400 },
         { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350 },
+        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 250 },
+        { id: 'Botanist', cat: 'GIN (CİN)', name: 'The Botanist Islay', shot: 300 },
+        { id: 'Monkey47', cat: 'GIN (CİN)', name: 'Monkey 47', shot: 380 },
+        { id: 'Nordes', cat: 'GIN (CİN)', name: 'Nordes Gin', shot: 280 },
+        { id: 'Gunpowder', cat: 'GIN (CİN)', name: 'Drumshanbo Gunpowder', shot: 270 },
+        { id: 'Hendricks', cat: 'GIN (CİN)', name: 'Hendrick\'s Gin', shot: 260 },
+        { id: 'Tanqueray10', cat: 'GIN (CİN)', name: 'Tanqueray No. Ten', shot: 240 },
+        { id: 'Beefeater24', cat: 'GIN (CİN)', name: 'Beefeater 24', shot: 180 },
+        { id: 'GordonPink', cat: 'GIN (CİN)', name: 'Gordon\'s Pink Gin', shot: 150 },
+
+        // --- SHOTLAR / TEQUILA / WHISKEY (10 Şişe) ---
         { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250 },
+        { id: '1800C', cat: 'SHOTLAR', name: '1800 Coconut Tequila', shot: 260 },
+        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110, stockKey: 'OlmecaD' },
+        { id: 'OlmecaS', cat: 'SHOTLAR', name: 'Olmeca Silver', shot: 120 },
+        { id: 'PatronS', cat: 'SHOTLAR', name: 'Patron Silver', shot: 320 },
         { id: 'Havana7', cat: 'SHOTLAR', name: 'Havana Club 7', shot: 130 },
-        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110 },
+        { id: 'JackD', cat: 'SHOTLAR', name: 'Jack Daniels', shot: 180 },
+        { id: 'Chivas12', cat: 'SHOTLAR', name: 'Chivas Regal 12', shot: 200 },
+        { id: 'Absolut', cat: 'SHOTLAR', name: 'Absolut Vodka', shot: 120, stockKey: 'Vodka' },
+        { id: 'Belvedere', cat: 'SHOTLAR', name: 'Belvedere Vodka', shot: 280 },
+
+        // --- LİKÖRLER (8 Şişe) ---
         { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', shot: 80, stockKey: 'Malibu' },
         { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, stockKey: 'Skinos' },
+        { id: 'Baileys', cat: 'LİKÖRLER', name: 'Baileys Irish Cream', shot: 90, stockKey: 'Baileys' },
+        { id: 'BaileysChoc', cat: 'LİKÖRLER', name: 'Baileys Chocolate (50cl)', shot: 110 },
+        { id: 'Jagermeister', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 130 },
+        { id: 'CardinalM', cat: 'LİKÖRLER', name: 'Cardinal Melon', shot: 85 },
+        { id: 'Safari', cat: 'LİKÖRLER', name: 'Safari Exotic Liqueur', shot: 85 },
+        { id: 'Archers', cat: 'LİKÖRLER', name: 'Archers Peach', shot: 85 },
+
+        // --- KOKTEYLLER (İmza Serisi) ---
         { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk', shot: 450, sig: true,
           bases: [
               { name: 'Vodka (Standart)', cl: '5cl', key: 'Vodka' },
