@@ -8,31 +8,52 @@
     
     <style>
         :root { --bg: #0d1117; --card-bg: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; }
+        
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
-        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; }
+        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 12px; border-radius: 15px; text-align: center; font-size: 1.2rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; }
+        .cat-card:active { transform: scale(0.95); }
 
         #category-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
         .nav-item { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
-        .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; }
+        .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
-        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; }
-        .item.is-out { opacity: 0.4; filter: grayscale(1); }
+        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; transition: 0.2s; }
+        .item:hover { border-color: var(--accent); }
         .sig-badge { position: absolute; top: -8px; left: 15px; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 5px; }
+        .details .name { font-weight: 700; font-size: 0.95rem; color: var(--accent); display: block; }
+        .admin-disc { color: var(--disc); font-weight: bold; font-size: 0.7rem; }
 
+        /* Modal Design */
         #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
-        .opt-row { display: flex; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; align-items: center; cursor: pointer; }
-        .opt-row.selected { border: 1px solid var(--accent); background: rgba(162, 210, 255, 0.1); }
-        .opt-row.is-out { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+        .mod-section { margin-bottom: 20px; }
+        .mod-title { font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+        .opt-row { display: flex; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; align-items: center; cursor: pointer; border: 1px solid transparent; }
+        .opt-row.selected { border-color: var(--accent); background: rgba(162, 210, 255, 0.1); }
+        .opt-info { display: flex; flex-direction: column; }
+        .opt-name { font-size: 0.9rem; font-weight: 600; }
+        .opt-cl { font-size: 0.65rem; color: #8b949e; }
+        
+        /* Modern Control Buttons instead of dots/squares */
+        .ctrl-btn { width: 22px; height: 22px; border: 2px solid #8b949e; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+        .item-chk { background: var(--card-bg); width: 22px; height: 22px; border: 2px solid #8b949e; border-radius: 5px; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+        
+        .opt-row.selected .ctrl-btn { border-color: var(--accent); background: var(--bg); }
+        .opt-row.selected .ctrl-btn::after { content: ""; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; }
+        .opt-row.selected .item-chk { border-color: var(--accent); background: var(--accent); }
+        .opt-row.selected .item-chk::after { content: "✓"; font-size: 0.7rem; color: #0d1117; font-weight: 900; }
 
+        .item.is-out { opacity: 0.3; cursor: not-allowed; }
+
+        /* Footer */
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .stk-btn { width: 100%; padding: 15px; margin-bottom: 8px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .stk-btn.on { border-color: var(--disc); }
-        .stk-btn.off { border-color: var(--out); color: var(--out); }
+        .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
+        .order-btn { background: var(--accent); border: none; padding: 12px 25px; border-radius: 12px; font-weight: 900; cursor: pointer; color: #0d1117; }
+        .btn-main { background: var(--accent); border: none; padding: 15px; border-radius: 15px; font-weight: 900; cursor: pointer; width: 100%; color: #0d1117; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -48,7 +69,7 @@
 <div id="category-view">
     <div class="top-nav">
         <div style="text-align:center; padding:10px; font-size:0.7rem; color:var(--accent); cursor:pointer;" onclick="goHome()">← ANA SAYFA</div>
-        <div class="scroll-menu" id="nav-list">
+        <div class="scroll-menu">
             <div class="nav-item" onclick="showCategory('GIN (CİN)')" id="nav-GIN (CİN)">GINLER</div>
             <div class="nav-item" onclick="showCategory('SHOTLAR')" id="nav-SHOTLAR">SHOTLAR</div>
             <div class="nav-item" onclick="showCategory('LİKÖRLER')" id="nav-LİKÖRLER">LİKÖRLER</div>
@@ -56,142 +77,189 @@
         </div>
     </div>
     <div class="container" id="menu-list"></div>
-    <div class="footer"><div id="cart-total" style="font-size:1.5rem; font-weight:900; color:var(--accent);">0 TL</div><button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900;" onclick="sendOrder()">SİPARİŞ</button></div>
+    <div class="container" id="admin-stk" style="display:none; margin-top:20px; padding:15px; border:1px dashed var(--accent); border-radius:15px;">
+        <h4 style="margin:0 0 10px 0; color:var(--accent)">STOK AYARI</h4>
+        <div id="stock-btns"></div>
+    </div>
+
+    <div class="footer">
+        <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
+        <button class="order-btn" onclick="sendOrder()">SİPARİŞ</button>
+    </div>
 </div>
 
 <div id="custom-modal">
-    <div id="modal-content"></div>
-    <button style="width:100%; margin-top:15px; padding:16px; background:var(--accent); border:none; border-radius:12px; font-weight:900;" onclick="confirmCocktail()">SEPETE EKLE</button>
-    <button style="width:100%; background:transparent; border:none; color:#8b949e; padding:10px;" onclick="closeModal()">Vazgeç</button>
+    <div class="mod-section">
+        <h2 id="mod-name" style="margin:0; color:var(--accent)"></h2>
+        <div style="font-size:0.7rem; color:#8b949e; margin-top:3px; display:flex; align-items:center;">
+            <b style="color:white; margin-right:5px;">Temel İçerik:</b> 3cl Kahve, 8cl Süt, 5cl Baileys, 3cl Malibu
+        </div>
+    </div>
+
+    <div class="mod-section">
+        <div class="mod-title">Alkol Temeli (Biri Seçilmeli)</div>
+        <div id="base-spirit-area"></div>
+    </div>
+
+    <div class="mod-section">
+        <div class="mod-title">Eklenebilecekler (Ekstra)</div>
+        <div id="extras-area"></div>
+    </div>
+
+    <button class="btn-main" onclick="confirmCocktail()">SEPETE EKLE</button>
+    <button style="width:100%; background:transparent; border:none; color:#8b949e; padding:10px; margin-top:5px; cursor:pointer;" onclick="closeModal()">Vazgeç</button>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
-    // Stok verisi artık hem hammaddeleri hem de şişeleri kapsıyor
-    let stock = JSON.parse(localStorage.getItem('az_stk_v10')) || {
-        'Vodka': true, 'Gin': true, 'Malibu': true, 'Kahve': true, 'Süt': true, 'Skinos': true, 'Baileys': true
-    };
+    let stock = JSON.parse(localStorage.getItem('az_stk_v11')) || {'Kahve':true, 'Süt':true, 'Buz':true, 'Limon':true, 'Malibu':true, 'Baileys':true};
+    const oldPrices = {'EtsuP':320, 'Gunp':250, 'Skag':220, 'Roku':190, 'Havana7':120, 'OlmecaD':100, 'Malibu':70, 'SmirN':100, 'SmirR':80, 'Skinos':140};
 
     const inventory = [
-        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420 },
-        { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400 },
-        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350 },
-        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250 },
-        { id: 'Havana7', cat: 'SHOTLAR', name: 'Havana Club 7', shot: 130 },
-        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110 },
-        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', shot: 80, stockKey: 'Malibu' },
-        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, stockKey: 'Skinos' },
-        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk', shot: 450, sig: true,
-          bases: [
-              { name: 'Vodka (Standart)', cl: '5cl', key: 'Vodka' },
-              { name: 'Gin (Yedek Tarif)', cl: '3cl Gin + 2cl Vodka', key: 'Gin' }
-          ],
-          extras: [
-              { name: 'Baileys Chocolate', cl: '2cl', p: 40, key: 'Baileys' },
-              { name: 'Olmeca Dark Choco', cl: '2cl', p: 30, key: 'OlmecaD' },
-              { name: 'Skinos Mastic', cl: '2cl', p: 45, key: 'Skinos' },
-              { name: 'Malibu Rum', cl: '2cl', p: 35, key: 'Malibu' }
-          ]
+        // GINLER
+        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420, bottle: 3200 },
+        { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400, bottle: 3800 },
+        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350, bottle: 3800 },
+        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 250, bottle: 2400 },
+        // SHOTLAR
+        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250, bottle: 3000 },
+        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250 },
+        { id: 'SmirR', cat: 'SHOTLAR', name: 'Smirnoff Red', shot: 90, bottle: 1100 },
+        // LİKÖRLER
+        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, bottle: 1900 },
+        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', shot: 80, bottle: 950 },
+        { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 140, bottle: 1600 },
+        { id: 'JagO', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 120, bottle: 1350 },
+        // KOKTEYLLER
+        { 
+            id: 'MSilk', 
+            cat: 'KOKTEYLLER', 
+            name: 'Midnight Silk', 
+            shot: 450, 
+            sig: true,
+            bases: [
+                { name: 'Vodka (Standart)', cl: '5cl', key: 'Vodka' },
+                { name: 'Gin (Vodka Çıkarılır)', cl: '3cl Gin', key: 'Gin' }
+            ],
+            extras: [
+                { name: 'Baileys Chocolate', cl: '2cl', price: 40, key: 'Baileys' },
+                { name: 'Olmeca Dark Choco', cl: '2cl', price: 30, key: 'OlmecaD' },
+                { name: 'Malibu Rum', cl: '2cl', price: 35, key: 'Malibu' }, // Fixed Malibu Rum entry
+                { name: 'Portakal Likörü', cl: '2cl', price: 20, key: 'Triple' }
+            ]
         }
     ];
 
-    let cart = []; let isAdmin = false; let activeCocktail = null; let selBase = 0; let selExtras = [];
+    let cart = []; let total = 0; let activeCocktail = null; let selBase = 0; let selExtras = [];
 
     function showCategory(cat) {
         closeModal();
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('category-view').style.display = 'block';
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(cat === 'STOK') {
-            document.getElementById('nav-STOK').classList.add('active');
-            renderStockControl();
-        } else {
-            document.getElementById('nav-'+cat).classList.add('active');
-            renderList(cat);
-        }
+        document.getElementById('nav-'+cat).classList.add('active');
+        renderList(cat);
     }
 
     function renderList(cat) {
-        let h = '';
+        let html = '';
         inventory.filter(i => i.cat === cat).forEach(item => {
-            const isOut = item.stockKey ? !stock[item.stockKey] : false;
-            h += `
-            <div class="item ${isOut ? 'is-out' : ''}" onclick="${isOut ? '' : `clickItem('${item.id}')`}">
+            let discHtml = (isAdmin && oldPrices[item.id]) ? `<br><span class="admin-disc">Dost: ${oldPrices[item.id]} TL</span>` : '';
+            html += `
+            <div class="item" onclick="handleItemClick('${item.id}')">
                 ${item.sig ? '<div class="sig-badge">İMZA KOKTEYL</div>' : ''}
                 <div class="details">
                     <span class="name">${item.name}</span>
-                    <span style="font-size:0.75rem; color:#8b949e;">${cat === 'KOKTEYLLER' ? 'Özel Karışım' : 'Shot (5cl)'}</span>
-                    <span style="font-size:0.9rem; color:white; margin-top:4px; display:block;">${item.shot} TL ${isOut ? '(TÜKENDİ)' : ''}</span>
+                    <span style="font-size:0.9rem; color:white; margin-top:4px; display:block;">${item.shot} TL ${discHtml}</span>
                 </div>
                 <div style="background:var(--accent); color:#0d1117; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">+</div>
             </div>`;
         });
-        document.getElementById('menu-list').innerHTML = h;
+        document.getElementById('menu-list').innerHTML = html;
     }
 
-    function clickItem(id) {
+    function handleItemClick(id) {
         const item = inventory.find(i => i.id === id);
         if(item.cat === 'KOKTEYLLER') {
             activeCocktail = item;
-            // Otomatik Takas: Vodka bittiyse otomatik Gin bazına (1. index) geç
-            selBase = stock['Vodka'] ? 0 : 1;
+            // Auto-fallback Logic: If Vodka is out, force Alternative Base (1)
+            selBase = (stock['Vodka'] === false) ? 1 : 0;
             selExtras = [];
-            openModal();
+            openCocktailModal();
         } else {
-            cart.push({n: item.name, p: item.shot});
+            cart.push({ n: item.name, p: item.shot });
             updateUI();
         }
     }
 
-    function openModal() {
-        let h = `<div style="margin-bottom:20px;"><h2 style="margin:0; color:var(--accent)">${activeCocktail.name}</h2></div>`;
+    function openCocktailModal() {
+        document.getElementById('mod-name').innerText = activeCocktail.name;
         
-        h += `<div style="font-size:0.75rem; color:var(--accent); margin-bottom:10px;">ALKOL BAZI</div>`;
+        // Alkol Temeli
+        let baseHtml = '';
         activeCocktail.bases.forEach((b, idx) => {
-            const out = !stock[b.key];
-            h += `
-            <div class="opt-row ${idx === selBase ? 'selected' : ''} ${out ? 'is-out' : ''}" onclick="${out ? '' : `selectBase(${idx})`}">
-                <div><span style="display:block;">${b.name}</span><span style="font-size:0.6rem; color:#8b949e;">${b.cl} ${out ? '(STOK YOK)' : ''}</span></div>
-                <input type="radio" ${idx === selBase ? 'checked' : ''} ${out ? 'disabled' : ''}>
+            baseHtml += `
+            <div class="opt-row ${idx === selBase ? 'selected' : ''}" onclick="selectBase(${idx})">
+                <div class="opt-info"><span class="opt-name">${b.name}</span><span class="opt-cl">${b.cl}</span></div>
+                <div class="ctrl-btn"></div>
             </div>`;
         });
+        document.getElementById('base-spirit-area').innerHTML = baseHtml;
 
-        h += `<div style="font-size:0.75rem; color:var(--accent); margin-top:20px; margin-bottom:10px;">EKSTRALAR</div>`;
+        // Ekstralar
+        let extraHtml = '';
         activeCocktail.extras.forEach((e, idx) => {
             const out = stock[e.key] === false;
             const isSel = selExtras.includes(idx);
-            h += `
+            extraHtml += `
             <div class="opt-row ${isSel ? 'selected' : ''} ${out ? 'is-out' : ''}" onclick="${out ? '' : `toggleExtra(${idx})`}">
-                <div><span style="display:block;">${e.name}</span><span style="font-size:0.6rem; color:#8b949e;">${e.cl} | +${e.p} TL ${out ? '(YOK)' : ''}</span></div>
-                <input type="checkbox" ${isSel ? 'checked' : ''} ${out ? 'disabled' : ''}>
+                <div class="opt-info"><span class="opt-name">${e.name}</span><span class="opt-cl">${e.cl} | +${e.price} TL ${out ? '(TÜKENDİ)' : ''}</span></div>
+                <div class="item-chk"></div>
             </div>`;
         });
-
-        document.getElementById('modal-content').innerHTML = h;
+        document.getElementById('extras-area').innerHTML = extraHtml;
         document.getElementById('custom-modal').style.display = 'block';
     }
 
-    function selectBase(i) { selBase = i; openModal(); }
-    function toggleExtra(i) {
-        if(selExtras.includes(i)) selExtras = selExtras.filter(x => x !== i);
-        else selExtras.push(i);
-        openModal();
+    function selectBase(idx) { selBase = idx; openCocktailModal(); }
+    function toggleExtra(idx) {
+        if(selExtras.includes(idx)) selExtras = selExtras.filter(i => i !== idx);
+        else selExtras.push(idx);
+        openCocktailModal();
     }
 
     function confirmCocktail() {
-        let p = activeCocktail.shot;
-        let n = activeCocktail.bases[selBase].name;
-        selExtras.forEach(i => { p += activeCocktail.extras[i].p; n += `, +${activeCocktail.extras[i].name}`; });
-        cart.push({n: activeCocktail.name, p: p, note: n});
+        let finalPrice = activeCocktail.shot;
+        let notes = activeCocktail.bases[selBase].name;
+        
+        selExtras.forEach(idx => {
+            finalPrice += activeCocktail.extras[idx].price;
+            notes += `, +${activeCocktail.extras[idx].name}`;
+        });
+
+        cart.push({ n: activeCocktail.name, p: finalPrice, note: notes });
         updateUI(); closeModal();
     }
 
-    function renderStockControl() {
+    function updateUI() {
+        total = cart.reduce((s, i) => s + i.p, 0);
+        document.getElementById('cart-total').innerText = total + " TL";
+    }
+
+    function sendOrder() {
+        if(!cart.length) return;
+        let msg = '🍸 *YENİ SİPARİŞ*%0A';
+        cart.forEach(c => msg += `• ${c.n} (${c.note || 'Std'})%0A`);
+        window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${total} TL*`);
+        cart = []; total = 0; updateUI();
+    }
+
+    function renderAdminStock() {
         let h = `<h3 style="color:var(--accent)">MERKEZİ STOK KONTROL</h3><p style="font-size:0.7rem; color:#8b949e; margin-bottom:20px;">Kapatılan ürünler tüm menüde pasifleşir.</p>`;
         Object.keys(stock).forEach(key => {
-            h += `<div class="stk-btn ${stock[key] ? 'on' : 'off'}" onclick="toggleStock('${key}')">
-                <span>${key}</span>
-                <span>${stock[key] ? 'STOKTA VAR' : 'TÜKENDİ'}</span>
+            h += `<div class="opt-row ${stock[key] ? 'selected' : ''}" onclick="toggleStock('${key}')" style="background:var(--card-bg); margin-bottom:5px;">
+                <div class="opt-info"><span class="opt-name">${key}</span><span class="opt-cl">${stock[key] ? 'STOKTA VAR' : 'TÜKENDİ'}</span></div>
+                <div class="item-chk"></div>
             </div>`;
         });
         document.getElementById('menu-list').innerHTML = h;
@@ -199,26 +267,31 @@
 
     function toggleStock(key) {
         stock[key] = !stock[key];
-        localStorage.setItem('az_stk_v10', JSON.stringify(stock));
-        renderStockControl();
+        localStorage.setItem('az_stk_v11', JSON.stringify(stock));
+        renderAdminStock();
     }
 
     function openAuth() {
-        if(btoa(prompt("Admin:")) === CONFIG.m) {
+        const p = prompt("Yönetici:");
+        if(btoa(p) === CONFIG.m) {
             isAdmin = true;
-            document.getElementById('nav-list').innerHTML += `<div class="nav-item" onclick="showCategory('STOK')" id="nav-STOK">STOK</div>`;
-            alert("Admin Aktif!");
+            if(!document.getElementById('nav-STOK')) {
+                const stkNav = `<div class="nav-item" onclick="showCategory('STOK')" id="nav-STOK">STOK</div>`;
+                document.querySelector('.scroll-menu').innerHTML += stkNav;
+                alert("Admin ve Merkezi Stok Erişimi Aktif!");
+            }
         }
     }
 
-    function updateUI() { document.getElementById('cart-total').innerText = cart.reduce((s,i)=>s+i.p,0) + " TL"; }
-    function sendOrder() {
-        if(!cart.length) return;
-        let msg = '🍸 *SİPARİŞ*%0A';
-        cart.forEach(c => msg += `• ${c.n} (${c.note || 'Std'})%0A`);
-        window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${document.getElementById('cart-total').innerText}*`);
-        cart = []; updateUI();
+    function showCategory(cat) {
+        closeModal();
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('category-view').style.display = 'block';
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('nav-'+cat).classList.add('active');
+        if(cat === 'STOK') renderAdminStock(); else renderList(cat);
     }
+
     function goHome() { closeModal(); document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; }
     function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
 </script>
