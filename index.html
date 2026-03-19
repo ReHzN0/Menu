@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AZURE BAR V12.4</title>
+    <title>AZURE BAR V12.5 - ULTIMATE</title>
     <style>
-        :root { --bg: #0d1117; --card: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --success: #238636; --wp: #25D366; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --success: #238636; --danger: #f85149; --wp: #25D366; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; user-select: none; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; user-select: none; -webkit-user-select: none; }
 
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-        h1 { text-align: center; color: var(--accent); letter-spacing: 5px; margin: 30px 0; cursor: pointer; }
+        .container { max-width: 500px; margin: auto; padding: 20px; padding-bottom: 100px; }
+        h1 { text-align: center; color: var(--accent); letter-spacing: 6px; margin: 30px 0; cursor: pointer; text-transform: uppercase; text-shadow: 0 0 10px rgba(162, 210, 255, 0.3); }
         
-        .cat-title { font-size: 0.7rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin: 25px 0 12px; font-weight: 800; }
+        .cat-title { font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin: 30px 0 15px; font-weight: 800; opacity: 0.9; border-left: 3px solid var(--accent); padding-left: 10px; }
         
-        /* Klasik Sekme/Kart Yapısı */
-        .menu-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .item-info .name { font-weight: 700; display: block; }
-        .item-info .price { color: var(--accent); font-size: 0.9rem; font-weight: 600; }
+        /* Premium Menu Cards */
+        .menu-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .menu-item:active { transform: scale(0.97); border-color: var(--accent); }
+        .item-info .name { font-weight: 800; font-size: 1.1rem; display: block; color: var(--text); }
+        .item-info .price { color: var(--accent); font-weight: 700; font-size: 1rem; margin-top: 5px; display: block; }
+        .item-info .desc { font-size: 0.8rem; color: #8b949e; margin-top: 6px; display: block; line-height: 1.4; }
 
-        /* Geri Gelen Seçim Ekranı (Klasik ama şık) */
-        .variant-area { background: #0b0e14; border-radius: 12px; padding: 10px; margin-top: 10px; display: none; }
-        .v-row { padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        /* Variants Accordion */
+        .variant-area { background: #0b0e14; border-radius: 16px; padding: 10px; margin-top: -8px; margin-bottom: 20px; display: none; border: 1px solid var(--border); border-top: none; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .v-row { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; border-radius: 8px; }
         .v-row:last-child { border: none; }
-        .v-row.active { color: var(--accent); font-weight: 800; }
+        .v-row.active { background: rgba(162, 210, 255, 0.1); color: var(--accent); font-weight: 800; }
+        .v-row.is-out { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
 
-        /* Admin & Modal */
-        #admin-panel { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; padding: 20px; overflow-y: auto; }
-        .order-card { background: var(--card); border-left: 4px solid var(--accent); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
-        
-        #payment-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--accent); z-index: 3000; width: 90%; max-width: 350px; text-align: center; display: none; }
-        .iban-box { background: #000; padding: 15px; border-radius: 10px; margin: 15px 0; color: var(--accent); font-family: monospace; cursor: pointer; }
-        .wp-btn { background: var(--wp); color: white; padding: 12px; border-radius: 12px; display: block; text-decoration: none; font-weight: 700; margin-top: 10px; }
+        /* Admin & Modals */
+        #admin-panel { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; padding: 25px; overflow-y: auto; }
+        .order-card { background: var(--card); border-left: 4px solid var(--accent); padding: 18px; margin-bottom: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .stk-btn { padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--card); }
+
+        #payment-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid var(--accent); z-index: 3000; width: 90%; max-width: 380px; text-align: center; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .iban-box { background: #000; padding: 20px; border-radius: 15px; margin: 20px 0; color: var(--accent); font-family: 'Courier New', monospace; font-size: 0.9rem; cursor: pointer; border: 1px dashed var(--accent); }
+        .wp-btn { background: var(--wp); color: white; padding: 16px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -43,94 +49,132 @@
     <div class="menu-item" onclick="toggleVariants()">
         <div class="item-info">
             <span class="name">MIDNIGHT SILK</span>
+            <span class="desc">Kahve, Süt ve Baileys'in İpeksi Uyumu</span>
             <span class="price">450 - 600 TL</span>
         </div>
-        <div id="arrow">▼</div>
+        <div id="arrow" style="transition: 0.3s; color: var(--accent); font-weight: 900;">▼</div>
     </div>
     
     <div id="variant-area" class="variant-area">
-        </div>
+        <div id="variant-list"></div>
+        <button onclick="orderNow()" id="order-btn" style="width:100%; padding:20px; background:var(--accent); color:#0d1117; border:none; border-radius:12px; margin-top:10px; font-weight:900; font-size:1rem; cursor:pointer;">SİPARİŞİ TAMAMLA</button>
+    </div>
 
     <div class="cat-title">PREMİUM GİNLER</div>
     <div id="gin-list"></div>
 </div>
 
 <div id="admin-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="color:var(--accent)">Barmen Paneli</h2>
-        <button onclick="closeAdmin()">Kapat</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2 style="color:var(--accent); margin:0;">Barmen Paneli</h2>
+        <button onclick="closeAdmin()" style="background:none; border:1px solid var(--border); color:white; padding:10px 20px; border-radius:10px;">Kapat</button>
     </div>
+    
+    <div class="cat-title" style="margin-top:0;">Canlı Siparişler</div>
     <div id="admin-orders"></div>
+
+    <div class="cat-title">Stok ve Maliyet Kontrolü</div>
+    <div id="admin-stock"></div>
 </div>
 
 <div id="payment-modal">
-    <h3>Sipariş Alındı!</h3>
+    <h2 style="margin:0; color:var(--accent);">Sipariş Alındı 🍸</h2>
+    <p style="font-size:0.9rem; opacity:0.7; margin-top:10px;">Hazırlanmaya başlaması için ödemeyi tamamlayabilirsiniz.</p>
     <div class="iban-box" onclick="copyIban()">TR00 0000 0000 0000 0000 0000 00</div>
-    <a href="#" id="wp-link" class="wp-btn">WhatsApp'tan Yaz</a>
-    <p onclick="location.reload()" style="cursor:pointer; opacity:0.5; margin-top:15px;">Kapat</p>
+    <a href="#" id="wp-link" class="wp-btn">WhatsApp'tan Bildir</a>
+    <p onclick="location.reload()" style="cursor:pointer; opacity:0.5; margin-top:20px; font-size:0.8rem;">Vazgeç ve Menüye Dön</p>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", pass: "MjYwNg==" };
-    const variants = [
-        { id: 'v1', name: 'Classic Silk', p: 450, rec: '5cl Vodka, 5cl Baileys, 3cl Malibu' },
-        { id: 'v2', name: 'Botanical Silk', p: 480, rec: '5cl Gin, 5cl Baileys, 3cl Malibu' },
-        { id: 'v3', name: 'Aged Silk', p: 500, rec: '5cl Vodka, 5cl Baileys, 5cl Havana 7' },
-        { id: 'v4', name: 'Double Choco', p: 600, rec: 'Classic + Baileys & Olmeca Choco' }
-    ];
-    const gins = [{name:'Nikka Coffey', p:420}, {name:'Ki No Bi', p:400}, {name:'Etsu Pacific', p:350}, {name:'Roku Gin', p:250}];
+    
+    // Stok Durumu
+    let stock = JSON.parse(localStorage.getItem('az_stk_v12_5')) || { 'Vodka': true, 'Gin': true, 'Malibu': true, 'Havana7': true, 'Baileys': true, 'BChoco': true, 'OlmecaD': true };
 
-    let selected = 'v1';
+    // Reçeteler ve Varyasyonlar
+    const variants = [
+        { id: 'v1', name: 'Classic Silk', p: 450, d: 420, desc: '5cl Vodka + 3cl Malibu', rec: '3cl Kahve, 8cl Süt, 5cl Baileys, 5cl Vodka, 3cl Malibu', dep: ['Vodka','Malibu','Baileys'] },
+        { id: 'v2', name: 'Botanical Silk', p: 480, d: 450, desc: '5cl Gin + 3cl Malibu', rec: '3cl Kahve, 8cl Süt, 5cl Baileys, 5cl Gin, 3cl Malibu', dep: ['Gin','Malibu','Baileys'] },
+        { id: 'v3', name: 'Aged Silk', p: 500, d: 480, desc: '5cl Vodka + 5cl Havana 7', rec: '3cl Kahve, 8cl Süt, 5cl Baileys, 5cl Vodka, 5cl Havana 7 (Malibu Yok)', dep: ['Vodka','Havana7','Baileys'] },
+        { id: 'v4', name: 'Double Choco', p: 600, d: 550, desc: 'Classic + Baileys & Olmeca Choco', rec: 'Classic + 4cl Baileys Choco (50cl Şişe!) + 6cl Olmeca Dark', dep: ['Vodka','Malibu','Baileys','BChoco','OlmecaD'] }
+    ];
+
+    const gins = [{name:'Nikka Coffey', p:420}, {name:'Ki No Bi Kyoto', p:400}, {name:'Etsu Pacific', p:350}, {name:'Roku Gin', p:250}];
+
+    let selectedVariant = 'v1';
 
     function init() {
+        // Gin Listesi
         let gH = '';
         gins.forEach(g => gH += `<div class="menu-item"><div class="item-info"><span class="name">${g.name}</span><span class="price">${g.p} TL</span></div></div>`);
         document.getElementById('gin-list').innerHTML = gH;
+        renderVariants();
+    }
 
+    function renderVariants() {
         let vH = '';
-        variants.forEach(v => vH += `<div class="v-row" onclick="selectV('${v.id}')"><span>${v.name}</span><span>${v.p} TL</span></div>`);
-        vH += `<button onclick="orderNow()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:8px; margin-top:10px; font-weight:800;">SİPARİŞ VER</button>`;
-        document.getElementById('variant-area').innerHTML = vH;
-    }
-
-    function toggleVariants() { 
-        const el = document.getElementById('variant-area');
-        el.style.display = el.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function selectV(id) { 
-        selected = id; 
-        document.querySelectorAll('.v-row').forEach((r, i) => {
-            r.classList.toggle('active', variants[i].id === id);
+        variants.forEach(v => {
+            const isOut = v.dep.some(d => !stock[d]);
+            vH += `
+            <div class="v-row ${selectedVariant === v.id ? 'active' : ''} ${isOut ? 'is-out' : ''}" onclick="${isOut ? '' : `selectV('${v.id}')`}">
+                <div>
+                    <span style="display:block;">${v.name} ${isOut ? '⚠️' : ''}</span>
+                    <small style="opacity:0.6; font-size:0.7rem;">${v.desc}</small>
+                </div>
+                <span>${isOut ? 'TÜKENDİ' : v.p + ' TL'}</span>
+            </div>`;
         });
+        document.getElementById('variant-list').innerHTML = vH;
+    }
+
+    function selectV(id) { selectedVariant = id; renderVariants(); }
+
+    function toggleVariants() {
+        const area = document.getElementById('variant-area');
+        const arrow = document.getElementById('arrow');
+        const isOpen = area.style.display === 'block';
+        area.style.display = isOpen ? 'none' : 'block';
+        arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
     }
 
     function orderNow() {
-        const v = variants.find(x => x.id === selected);
+        const v = variants.find(x => x.id === selectedVariant);
         let orders = JSON.parse(localStorage.getItem('az_orders')) || [];
         orders.push({ name: v.name, rec: v.rec, time: new Date().toLocaleTimeString() });
         localStorage.setItem('az_orders', JSON.stringify(orders));
 
         document.getElementById('payment-modal').style.display = 'block';
-        document.getElementById('wp-link').href = `https://wa.me/${CONFIG.phone}?text=Sipariş: ${v.name}`;
+        document.getElementById('wp-link').href = `https://wa.me/${CONFIG.phone}?text=Sipariş verdim: ${v.name}`;
     }
 
     function askAdmin() {
-        if(btoa(prompt("Şifre:")) === CONFIG.pass) {
+        if(btoa(prompt("Sistem Erişim Kodu:")) === CONFIG.pass) {
             document.getElementById('admin-panel').style.display = 'block';
             renderAdmin();
         }
     }
 
     function renderAdmin() {
+        // Siparişler
         let orders = JSON.parse(localStorage.getItem('az_orders')) || [];
-        let h = '';
-        orders.reverse().forEach(o => h += `<div class="order-card"><b>${o.name}</b><br><small>${o.rec}</small><br><small>${o.time}</small></div>`);
-        document.getElementById('admin-orders').innerHTML = h || 'Sipariş yok.';
+        let oH = '';
+        orders.reverse().forEach(o => oH += `<div class="order-card"><b>${o.name}</b> <small style="float:right; opacity:0.5;">${o.time}</small><br><div style="margin-top:10px; font-size:0.8rem; color:var(--accent); border-top:1px solid var(--border); padding-top:5px;">Reçete: ${o.rec}</div></div>`);
+        document.getElementById('admin-orders').innerHTML = oH || '<p>Sipariş bekleniyor...</p>';
+
+        // Stok
+        let sH = '';
+        Object.keys(stock).forEach(key => {
+            sH += `<div class="stk-btn" onclick="toggleStock('${key}')">
+                <span>${key}</span>
+                <span style="color:${stock[key] ? 'var(--success)' : 'var(--danger)'}; font-weight:900;">${stock[key] ? 'VAR' : 'YOK'}</span>
+            </div>`;
+        });
+        document.getElementById('admin-stock').innerHTML = sH;
     }
 
+    function toggleStock(k) { stock[k] = !stock[k]; localStorage.setItem('az_stk_v12_5', JSON.stringify(stock)); renderAdmin(); renderVariants(); }
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function copyIban() { navigator.clipboard.writeText("TR00 0000 0000 0000 0000 0000 00"); alert("Kopyalandı!"); }
+    function copyIban() { navigator.clipboard.writeText("TR00 0000 0000 0000 0000 0000 00"); alert("IBAN Kopyalandı!"); }
 
     init();
 </script>
