@@ -1,0 +1,15 @@
+{
+  "name": "AZURE BAR",
+  "short_name": "AZURE",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#050705",
+  "theme_color": "#6ee777",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
