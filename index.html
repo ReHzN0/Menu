@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AZURE MENU V12.3</title>
+    <title>AZURE MENU V12.4</title>
     <style>
         :root { --bg: #0d1117; --card: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; user-select: none; -webkit-user-select: none; }
         
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
         .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; }
@@ -14,15 +16,25 @@
         #category-view, #admin-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
-        .nav-item { padding: 10px 22px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; transition: 0.3s; }
+        
+        .nav-item { padding: 10px 22px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; }
+        /* Mavi Sekme Fix */
         .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
-        .item { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; }
-        .item.is-out { opacity: 0.4; filter: grayscale(1); }
-        .item-img { font-size: 1.8rem; margin-right: 15px; }
+        
+        /* Modern Kart Tasarımı (Fotoğraflı!) */
+        .item { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; position: relative; }
+        .item:active { transform: scale(0.97); border-color: var(--accent); }
+        .item.is-out { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
 
+        /* Fotoğraf Alanı */
+        .item-img-box { width: 60px; height: 60px; background: #000; border-radius: 12px; margin-right: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border); }
+        .item-img-box img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Admin & Modals */
         .admin-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; }
+        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); max-height: 85vh; overflow-y: auto; }
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
     </style>
 </head>
@@ -64,51 +76,57 @@
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
-    let stock = JSON.parse(localStorage.getItem('az_stk_v12_3')) || {};
-    let prices = JSON.parse(localStorage.getItem('az_prc_v12_3')) || {};
+    let stock = JSON.parse(localStorage.getItem('az_stk_v12_4')) || {};
+    let prices = JSON.parse(localStorage.getItem('az_prc_v12_4')) || {};
+
+    // 1. Resim Dosya Yolu (Eğer resimler bir klasördeyse örn: 'img/' yap, boşsa aynı klasör)
+    const IMG_PATH = 'img/'; 
 
     const inventory = [
-        // GİNLER (Botanist Çıktı, Mosaik Geldi) -
-        { id: 'gin1', cat: 'GINLER', name: 'Nikka Coffey Gin', img: '🇯🇵' },
-        { id: 'gin2', cat: 'GINLER', name: 'Ki No Bi Kyoto Gin', img: '⛩️' },
-        { id: 'gin3', cat: 'GINLER', name: 'Etsu Gin', img: '🌊' },
-        { id: 'gin4', cat: 'GINLER', name: 'Roku Gin', img: '🌸' },
-        { id: 'gin5', cat: 'GINLER', name: 'Drumshanbo Gunpowder', img: '🍀' },
-        { id: 'gin6', cat: 'GINLER', name: 'Skagerrak Gin', img: '⚓' },
-        { id: 'gin7', cat: 'GINLER', name: 'Malfy Limone', img: '🍋' },
-        { id: 'gin8', cat: 'GINLER', name: 'Malfy Original', img: '🇮🇹' },
-        { id: 'gin9', cat: 'GINLER', name: 'Malfy Rose', img: '🌹' },
-        { id: 'gin10', cat: 'GINLER', name: 'Tanqueray', img: '🍸' },
-        { id: 'gin11', cat: 'GINLER', name: 'Tanqueray No. Ten', img: '🔟' },
-        { id: 'gin12', cat: 'GINLER', name: 'Bombay Sapphire', img: '💎' },
-        { id: 'gin13', cat: 'GINLER', name: 'Beefeater Pink', img: '🍓' },
-        { id: 'gin14', cat: 'GINLER', name: 'Mosaik Gin', img: '🧩' },
+        // --- GİNLER (Senin listedeki tam sıra ve PNG isimleri) ---
+        { id: 'gin1', cat: 'GINLER', name: 'Nikka Coffey Gin', img: 'nikka.png' },
+        { id: 'gin2', cat: 'GINLER', name: 'Ki No Bi Kyoto Gin', img: 'KiNoBiGin.png' },
+        { id: 'gin3', cat: 'GINLER', name: 'Etsu Gin', img: 'EtsuP.png' },
+        { id: 'gin4', cat: 'GINLER', name: 'Roku Gin', img: 'RokuGin.png' },
+        { id: 'gin5', cat: 'GINLER', name: 'Drumshanbo Gunpowder', img: 'gunpowder.png' },
+        { id: 'gin6', cat: 'GINLER', name: 'Skagerrak Gin', img: 'skagerrak.png' },
+        { id: 'gin7', cat: 'GINLER', name: 'Malfy Limone', img: 'MalfyLimoneGin.png' },
+        { id: 'gin8', cat: 'GINLER', name: 'Malfy Original', img: 'MalfyGin.png' },
+        { id: 'gin9', cat: 'GINLER', name: 'Malfy Rose', img: 'MalfyRosaGin.png' },
+        { id: 'gin10', cat: 'GINLER', name: 'Tanqueray Gin', img: 'TanquerayGin.png' },
+        { id: 'gin11', cat: 'GINLER', name: 'Tanqueray No. Ten', img: 'noten.png' },
+        { id: 'gin12', cat: 'GINLER', name: 'Bombay Sapphire', img: 'BombaySapphireGin.png' },
+        { id: 'gin13', cat: 'GINLER', name: 'Beefeater Pink', img: 'BeefeaterPinkGin.png' },
+        { id: 'gin14', cat: 'GINLER', name: 'Mosaik Gin', img: 'MosaikGin.png' },
 
-        // SHOTLAR
-        { id: 'shot1', cat: 'SHOTLAR', name: '1800 Silver Tekila', img: '🌵' },
-        { id: 'shot2', cat: 'SHOTLAR', name: 'Havana Club Rom', img: '🇨🇺' },
-        { id: 'shot3', cat: 'SHOTLAR', name: 'Smirnoff Red', img: '🇷🇺' },
-        { id: 'shot4', cat: 'SHOTLAR', name: 'Smirnoff North', img: '❄️' },
-        { id: 'shot5', cat: 'SHOTLAR', name: 'Nemiroff', img: '⚔️' },
-        { id: 'shot6', cat: 'SHOTLAR', name: 'Ballantines', img: '🥃' },
-        { id: 'shot7', cat: 'SHOTLAR', name: 'Olmeca Tekila Silver', img: '🗿' },
-        { id: 'shot8', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', img: '🍫' },
+        // --- SHOTLAR ---
+        { id: 'shot1', cat: 'SHOTLAR', name: '1800 Silver Tekila', img: '1800.png' },
+        { id: 'shot2', cat: 'SHOTLAR', name: 'Havana Club Rom', img: 'HavanaClub.png' },
+        { id: 'shot3', cat: 'SHOTLAR', name: 'Smirnoff Red', img: 'SmirnoffVotka.png' },
+        { id: 'shot4', cat: 'SHOTLAR', name: 'Smirnoff North', img: 'SmirnoffNorthVotka.png' },
+        { id: 'shot5', cat: 'SHOTLAR', name: 'Nemiroff', img: 'Nemiroff.png' },
+        { id: 'shot6', cat: 'SHOTLAR', name: 'Ballantines', img: 'Ballentines.png' },
+        { id: 'shot7', cat: 'SHOTLAR', name: 'Olmeca Tekila Silver', img: 'OlmecaSilver.png' },
+        { id: 'shot8', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', img: 'OlmecaDark.png' },
 
-        // LİKÖRLER
-        { id: 'lik1', cat: 'LİKÖRLER', name: 'Malibu', img: '🥥' },
-        { id: 'lik2', cat: 'LİKÖRLER', name: 'Baileys', img: '🥛' },
-        { id: 'lik3', cat: 'LİKÖRLER', name: 'Baileys Choco', img: '🍩' },
-        { id: 'lik4', cat: 'LİKÖRLER', name: 'Jest', img: '✨' },
-        { id: 'lik5', cat: 'LİKÖRLER', name: 'Mancia', img: '🌿' },
-        { id: 'lik6', cat: 'LİKÖRLER', name: 'Skinos', img: '🌲' },
-        { id: 'lik7', cat: 'LİKÖRLER', name: 'Jager', img: '🦌' },
-        { id: 'lik8', cat: 'LİKÖRLER', name: 'Jager Cold Brew', img: '☕' }
+        // --- LİKÖRLER ---
+        { id: 'lik1', cat: 'LİKÖRLER', name: 'Malibu', img: 'Malibu.png' },
+        { id: 'lik2', cat: 'LİKÖRLER', name: 'Baileys', img: 'Baileys.png' },
+        { id: 'lik3', cat: 'LİKÖRLER', name: 'Baileys Choco', img: 'BaileysChoco.png' },
+        { id: 'lik4', cat: 'LİKÖRLER', name: 'Jest', img: 'Jest.png' },
+        { id: 'lik5', cat: 'LİKÖRLER', name: 'Mancia (Belirtilmedi)', img: 'placeholder.png' },
+        { id: 'lik6', cat: 'LİKÖRLER', name: 'Skinos', img: 'Skinos.png' },
+        { id: 'lik7', cat: 'LİKÖRLER', name: 'Jägermeister', img: 'Jagermeister.png' },
+        { id: 'lik8', cat: 'LİKÖRLER', name: 'Jager Cold Brew', img: 'JagermeisterCB.png' }
     ];
 
+    // Varsayılan fiyat başlatma (Hata vermemesi için)
     inventory.forEach(i => {
         if(stock[i.id] === undefined) stock[i.id] = true;
         if(!prices[i.id]) prices[i.id] = { normal: 200, discount: 150 };
     });
+
+    let cart = [];
 
     function showCategory(cat) {
         document.getElementById('home-screen').style.display = 'none';
@@ -125,7 +143,7 @@
             const isOut = !stock[item.id];
             h += `<div class="item ${isOut ? 'is-out' : ''}" onclick="${isOut ? '' : `addToCart('${item.id}')`}">
                 <div style="display:flex; align-items:center;">
-                    <div class="item-img">${item.img}</div>
+                    <div class="item-img-box"><img src="${IMG_PATH + item.img}" onerror="this.src='https://via.placeholder.com/60/000?text=AZURE'"></div>
                     <div><span class="name">${item.name}</span><br><small>${prices[item.id].normal} TL</small></div>
                 </div>
                 <div style="background:var(--accent); color:#000; padding:5px 12px; border-radius:10px; font-weight:900;">+</div>
@@ -150,13 +168,8 @@
                 const isAv = stock[item.id];
                 h += `<div class="admin-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <b>${item.img} ${item.name}</b>
-                        <button onclick="toggleStock('${item.id}', '${mode}')" style="background:${isAv ? 'var(--disc)' : 'var(--out)'}; border:none; color:white; padding:5px 15px; border-radius:10px;">${isAv ? 'STOKTA' : 'YOK'}</button>
-                    </div>
-                    <div style="margin-top:10px; font-size:0.8rem; display:flex; gap:10px;">
-                        <span>Normal: ${prices[item.id].normal} TL</span>
-                        <span>Dost: ${prices[item.id].discount} TL</span>
-                        <button onclick="editItem('${item.id}', '${mode}')" style="background:none; border:1px solid var(--border); color:var(--accent); padding:2px 8px; border-radius:5px;">Düzenle</button>
+                        <b style="display:flex; align-items:center;"><img src="${IMG_PATH + item.img}" width="30" height="30" style="object-fit:contain; margin-right:10px;"> ${item.name}</b>
+                        <button onclick="toggleStock('${item.id}', '${mode}')" style="background:${isAv ? 'var(--disc)' : 'var(--out)'}; border:none; color:white; padding:5px 15px; border-radius:10px; cursor:pointer;">${isAv ? 'STOKTA' : 'YOK'}</button>
                     </div>
                 </div>`;
             });
@@ -164,21 +177,16 @@
         document.getElementById('admin-list').innerHTML = h;
     }
 
-    function toggleStock(id, mode) { stock[id] = !stock[id]; localStorage.setItem('az_stk_v12_3', JSON.stringify(stock)); showAdmin(mode); }
-    function editItem(id, mode) {
-        const n = prompt("Normal Fiyat:", prices[id].normal);
-        const d = prompt("Dost Fiyatı (İndirimli):", prices[id].discount);
-        if(n && d) {
-            prices[id].normal = parseInt(n);
-            prices[id].discount = parseInt(d);
-            localStorage.setItem('az_prc_v12_3', JSON.stringify(prices));
-            showAdmin(mode);
-        }
+    function toggleStock(id, mode) {
+        stock[id] = !stock[id];
+        localStorage.setItem('az_stk_v12_4', JSON.stringify(stock));
+        showAdmin(mode);
     }
 
-    function openAuth() { if(btoa(prompt("Admin:")) === CONFIG.m) { document.getElementById('admin-entry').style.display = 'block'; alert("Hoş geldin Boss."); } }
+    function openAuth() { if(btoa(prompt("Admin:")) === CONFIG.m) { document.getElementById('admin-entry').style.display = 'block'; alert("Sisteme Hoş Geldin."); } }
     function goHome() { document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; document.getElementById('admin-view').style.display='none'; }
-    function addToCart(id) { /* sepet mantığı */ }
+    function addToCart(id) { /* Sepet mantığı */ }
+    function sendOrder() { /* WhatsApp mantığı */ }
 </script>
 </body>
 </html>
