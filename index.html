@@ -16,19 +16,20 @@
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
         .scroll-menu::-webkit-scrollbar { display: none; }
+        
         .nav-item { padding: 10px 22px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; transition: 0.3s; }
+        /* Mavi Sekme Düzenlemesi */
         .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
         .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; }
         .item.is-out { opacity: 0.4; filter: grayscale(1); }
         
-        /* Admin Kart Modu */
         .admin-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; }
+        .price-info { font-size: 0.8rem; color: #8b949e; margin-top: 5px; }
         .admin-controls { display: flex; gap: 8px; margin-top: 12px; }
-        .admin-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 0.75rem; }
+        .admin-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
 
-        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
     </style>
 </head>
@@ -36,21 +37,19 @@
 
 <div id="home-screen">
     <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:10px; margin-bottom:40px; cursor:pointer;">AZURE</h1>
-    <div class="cat-card" onclick="showCategory('GIN (CİN)')">GINLER</div>
+    <div class="cat-card" onclick="showCategory('GINLER')">GINLER</div>
     <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
     <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
-    <div class="cat-card" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
     <div id="admin-entry" style="display:none;" class="cat-card" onclick="showAdmin('ORDERS')">YÖNETİM PANELİ</div>
 </div>
 
 <div id="category-view">
     <div class="top-nav">
         <div style="text-align:center; padding:10px; font-size:0.7rem; color:var(--accent); cursor:pointer;" onclick="goHome()">← ANA SAYFA</div>
-        <div class="scroll-menu" id="nav-list">
-            <div class="nav-item active" onclick="showCategory('GIN (CİN)')">GINLER</div>
+        <div class="scroll-menu" id="user-nav">
+            <div class="nav-item" onclick="showCategory('GINLER')">GINLER</div>
             <div class="nav-item" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
             <div class="nav-item" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
-            <div class="nav-item" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
         </div>
     </div>
     <div class="container" id="menu-list"></div>
@@ -61,12 +60,11 @@
     <div class="top-nav">
         <div style="text-align:center; padding:10px; font-size:0.7rem; color:var(--accent); cursor:pointer;" onclick="goHome()">← ANA SAYFA</div>
         <div class="scroll-menu" id="admin-nav">
-            <div class="nav-item active" onclick="showAdmin('ORDERS')">SİPARİŞLER</div>
-            <div class="nav-item" onclick="showAdmin('GIN (CİN)')">GINLER</div>
+            <div class="nav-item" onclick="showAdmin('ORDERS')">SİPARİŞLER</div>
+            <div class="nav-item" onclick="showAdmin('GINLER')">GINLER</div>
             <div class="nav-item" onclick="showAdmin('SHOTLAR')">SHOTLAR</div>
             <div class="nav-item" onclick="showAdmin('LİKÖRLER')">LİKÖRLER</div>
             <div class="nav-item" onclick="showAdmin('MIX')">İÇECEKLER</div>
-            <div class="nav-item" onclick="showAdmin('GARN')">GARNİTÜRLER</div>
         </div>
     </div>
     <div class="container" id="admin-list"></div>
@@ -75,44 +73,74 @@
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
     
-    // 31+ Şişe ve Malzeme Stoğu
-    let stock = JSON.parse(localStorage.getItem('az_stk_v11')) || {
-        'Nikka':true,'KiNoBi':true,'EtsuP':true,'Roku':true,'Botanist':true,'Monkey47':true,'Nordes':true,'Gunpowder':true,'Hendricks':true,'Tanqueray10':true,'Beefeater24':true,'GordonPink':true,
-        '1800S':true,'1800C':true,'OlmecaD':true,'OlmecaS':true,'PatronS':true,'Havana7':true,'JackD':true,'Chivas12':true,'Vodka':true,'Belvedere':true,
-        'Malibu':true,'Skinos':true,'Baileys':true,'BaileysChoc':true,'Jagermeister':true,'CardinalM':true,'Safari':true,'Archers':true,
-        'Cola':true,'Tonic':true,'Soda':true,'Nane':true,'Limon':true,'Lime':true
-    };
+    // 30 Şişe İçin Dinamik Stok
+    let stock = JSON.parse(localStorage.getItem('az_stk_v12')) || {};
+    let prices = JSON.parse(localStorage.getItem('az_prc_v12')) || {};
 
     const inventory = [
-        // Ginler
-        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420 },
-        { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400 },
-        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350 },
-        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 250 },
-        { id: 'Botanist', cat: 'GIN (CİN)', name: 'The Botanist Islay', shot: 300 },
-        // ... (Diğer 31 şişe buraya dizili varsayalım, yer kaplamasın diye kısalttım ama kodda tam çalışır)
-        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250 },
-        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110 },
-        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', shot: 80 },
-        // Mikser ve Garnitürler (Sadece Admin Panelinde Görünür)
-        { id: 'Cola', cat: 'MIX', name: 'Coca Cola / Zero', shot: 0 },
-        { id: 'Tonic', cat: 'MIX', name: 'Schweppes Tonik', shot: 0 },
-        { id: 'Nane', cat: 'GARN', name: 'Taze Nane Yaprakları', shot: 0 },
-        { id: 'Lime', cat: 'GARN', name: 'Taze Lime Dilimleri', shot: 0 }
+        // GİNLER (14)
+        { id: 'gin1', cat: 'GINLER', name: 'Nikka Coffey Gin' },
+        { id: 'gin2', cat: 'GINLER', name: 'Ki No Bi Kyoto Gin' },
+        { id: 'gin3', cat: 'GINLER', name: 'Etsu Gin' },
+        { id: 'gin4', cat: 'GINLER', name: 'Roku Gin' },
+        { id: 'gin5', cat: 'GINLER', name: 'Drumshanbo Gunpowder' },
+        { id: 'gin6', cat: 'GINLER', name: 'Skagerrak Gin' },
+        { id: 'gin7', cat: 'GINLER', name: 'Malfy Limone' },
+        { id: 'gin8', cat: 'GINLER', name: 'Malfy Original' },
+        { id: 'gin9', cat: 'GINLER', name: 'Malfy Rose' },
+        { id: 'gin10', cat: 'GINLER', name: 'Tanqueray' },
+        { id: 'gin11', cat: 'GINLER', name: 'Tanqueray No. Ten' },
+        { id: 'gin12', cat: 'GINLER', name: 'Bombay Sapphire' },
+        { id: 'gin13', cat: 'GINLER', name: 'Beefeater Pink' },
+        { id: 'gin14', cat: 'GINLER', name: 'The Botanist' },
+
+        // SHOTLAR (8)
+        { id: 'shot1', cat: 'SHOTLAR', name: '1800 Silver Tequila' },
+        { id: 'shot2', cat: 'SHOTLAR', name: 'Havana Club Rom' },
+        { id: 'shot3', cat: 'SHOTLAR', name: 'Smirnoff Red' },
+        { id: 'shot4', cat: 'SHOTLAR', name: 'Smirnoff North' },
+        { id: 'shot5', cat: 'SHOTLAR', name: 'Nemiroff' },
+        { id: 'shot6', cat: 'SHOTLAR', name: 'Ballantines' },
+        { id: 'shot7', cat: 'SHOTLAR', name: 'Olmeca Silver' },
+        { id: 'shot8', cat: 'SHOTLAR', name: 'Olmeca Dark Choco' },
+
+        // LİKÖRLER (8)
+        { id: 'lik1', cat: 'LİKÖRLER', name: 'Malibu' },
+        { id: 'lik2', cat: 'LİKÖRLER', name: 'Baileys' },
+        { id: 'lik3', cat: 'LİKÖRLER', name: 'Baileys Chocolate' },
+        { id: 'lik4', cat: 'LİKÖRLER', name: 'Jest' },
+        { id: 'lik5', cat: 'LİKÖRLER', name: 'Mancia' },
+        { id: 'lik6', cat: 'LİKÖRLER', name: 'Skinos' },
+        { id: 'lik7', cat: 'LİKÖRLER', name: 'Jägermeister' },
+        { id: 'lik8', cat: 'LİKÖRLER', name: 'Jager Cold Brew' }
     ];
 
-    let cart = []; let isAdmin = false;
+    // Varsayılan stok ve fiyat başlatma
+    inventory.forEach(i => {
+        if(stock[i.id] === undefined) stock[i.id] = true;
+        if(!prices[i.id]) prices[i.id] = { normal: 150, discount: 120 };
+    });
+
+    let cart = [];
+
+    function updateActiveTab(containerId, activeText) {
+        document.querySelectorAll(`#${containerId} .nav-item`).forEach(item => {
+            if(item.innerText === activeText) item.classList.add('active');
+            else item.classList.remove('active');
+        });
+    }
 
     function showCategory(cat) {
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('admin-view').style.display = 'none';
         document.getElementById('category-view').style.display = 'block';
+        updateActiveTab('user-nav', cat);
         
         let h = '';
         inventory.filter(i => i.cat === cat).forEach(item => {
             const isOut = !stock[item.id];
             h += `<div class="item ${isOut ? 'is-out' : ''}" onclick="${isOut ? '' : `addToCart('${item.id}')`}">
-                <div><span class="name">${item.name}</span><br><small>${item.shot} TL</small></div>
+                <div><span class="name">${item.name}</span><br><small>${prices[item.id].normal} TL</small></div>
                 <div style="background:var(--accent); color:#000; padding:5px 12px; border-radius:10px; font-weight:900;">+</div>
             </div>`;
         });
@@ -123,23 +151,22 @@
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('category-view').style.display = 'none';
         document.getElementById('admin-view').style.display = 'block';
+        updateActiveTab('admin-nav', mode);
         
         let h = '';
-        if(mode === 'ORDERS') {
-            h = '<h3>Canlı Siparişler (Yakında)</h3>';
-        } else {
+        if(mode === 'ORDERS') { h = '<div style="text-align:center; padding:50px;">Henüz yeni sipariş yok.</div>'; }
+        else {
             inventory.filter(i => i.cat === mode).forEach(item => {
-                const isAvailable = stock[item.id];
+                const isAv = stock[item.id];
                 h += `<div class="admin-card">
-                    <div style="display:flex; justify-content:space-between;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
                         <b>${item.name}</b>
-                        <span style="color:${isAvailable ? 'var(--disc)' : 'var(--out)'}">${isAvailable ? 'STOKTA' : 'TÜKENDİ'}</span>
+                        <span style="font-size:0.7rem; color:${isAv ? 'var(--disc)' : 'var(--out)'}">${isAv ? '● STOKTA' : '○ TÜKENDİ'}</span>
                     </div>
+                    <div class="price-info">Normal: ${prices[item.id].normal} TL | Dost: ${prices[item.id].discount} TL</div>
                     <div class="admin-controls">
-                        <button class="admin-btn" style="background:${isAvailable ? 'var(--out)' : 'var(--disc)'}" onclick="toggleStock('${item.id}', '${mode}')">
-                            ${isAvailable ? 'Stok Kapat' : 'Stok Aç'}
-                        </button>
-                        <button class="admin-btn" style="background:var(--border)" onclick="editPrice('${item.id}')">Fiyat Düzenle</button>
+                        <button class="admin-btn" style="background:${isAv ? 'var(--out)' : 'var(--disc)'}" onclick="toggleStock('${item.id}', '${mode}')">${isAv ? 'Kapat' : 'Aç'}</button>
+                        <button class="admin-btn" style="background:var(--border)" onclick="editItem('${item.id}', '${mode}')">Fiyat Düzenle</button>
                     </div>
                 </div>`;
             });
@@ -147,30 +174,39 @@
         document.getElementById('admin-list').innerHTML = h;
     }
 
+    function editItem(id, mode) {
+        const n = prompt("Normal Fiyat:", prices[id].normal);
+        const d = prompt("Dost Fiyatı:", prices[id].discount);
+        if(n && d) {
+            prices[id].normal = parseInt(n);
+            prices[id].discount = parseInt(d);
+            localStorage.setItem('az_prc_v12', JSON.stringify(prices));
+            showAdmin(mode);
+        }
+    }
+
     function toggleStock(id, mode) {
         stock[id] = !stock[id];
-        localStorage.setItem('az_stk_v11', JSON.stringify(stock));
+        localStorage.setItem('az_stk_v12', JSON.stringify(stock));
         showAdmin(mode);
     }
 
     function openAuth() {
         if(btoa(prompt("Admin:")) === CONFIG.m) {
-            isAdmin = true;
             document.getElementById('admin-entry').style.display = 'block';
-            alert("Sistem Yetkisi Verildi!");
+            alert("Azure Sisteme Hoş Geldin.");
         }
+    }
+
+    function addToCart(id) {
+        cart.push({n: inventory.find(i=>i.id===id).name, p: prices[id].normal});
+        document.getElementById('cart-total').innerText = cart.reduce((s,i)=>s+i.p,0) + " TL";
     }
 
     function goHome() { 
         document.getElementById('home-screen').style.display='flex'; 
         document.getElementById('category-view').style.display='none'; 
         document.getElementById('admin-view').style.display='none'; 
-    }
-
-    function addToCart(id) {
-        const item = inventory.find(i => i.id === id);
-        cart.push({n: item.name, p: item.shot});
-        document.getElementById('cart-total').innerText = cart.reduce((s,i)=>s+i.p,0) + " TL";
     }
 </script>
 </body>
