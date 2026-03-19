@@ -10,32 +10,34 @@
         
         /* Home Screen */
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
-        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 30px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; }
-        
-        /* Top Nav & Category */
+        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 30px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .cat-card:active { transform: scale(0.95); }
+
+        /* Navigation */
         #category-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
-        .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; }
+        .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
         .nav-item { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
         .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; }
 
-        /* Items & Cards */
+        /* Cards */
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
         .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; position: relative; }
-        .signature-tag { position: absolute; top: -8px; left: 15px; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 5px; }
+        .sig-badge { position: absolute; top: -8px; left: 15px; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 5px; }
         .details .name { font-weight: 700; font-size: 1rem; color: var(--accent); }
         .details .desc { font-size: 0.7rem; color: #8b949e; display: block; margin-top: 2px; }
 
         /* Customization Drawer */
-        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
+        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 1px solid var(--accent); }
         .opt-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
-        .opt-row.out { opacity: 0.4; pointer-events: none; }
-        .out-text { color: var(--out); font-size: 0.65rem; font-weight: bold; }
+        .opt-row.is-out { opacity: 0.4; }
+        .out-label { color: var(--out); font-size: 0.6rem; font-weight: 900; margin-left: 5px; }
 
         /* Admin */
-        .stock-toggle { padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; cursor: pointer; margin: 3px; display: inline-block; border: 1px solid var(--border); }
-        .stock-toggle.on { background: #238636; color: white; }
-        .stock-toggle.off { background: var(--out); color: white; }
+        .admin-controls { padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent); margin-top: 20px; }
+        .stk-btn { padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; cursor: pointer; margin: 3px; border: 1px solid var(--border); display: inline-block; }
+        .stk-btn.on { background: #238636; color: white; }
+        .stk-btn.off { background: var(--out); color: white; }
 
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
@@ -44,11 +46,11 @@
 <body>
 
 <div id="home-screen">
-    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:5px;">AZURE</h1>
+    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:5px; margin-bottom:30px;">AZURE</h1>
     <div class="cat-card" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
     <div class="cat-card" onclick="showCategory('GIN (CİN)')">GINLER</div>
-    <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
     <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
+    <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
 </div>
 
 <div id="category-view">
@@ -57,152 +59,147 @@
         <div class="scroll-menu">
             <div class="nav-item" onclick="showCategory('KOKTEYLLER')" id="nav-KOKTEYLLER">KOKTEYLLER</div>
             <div class="nav-item" onclick="showCategory('GIN (CİN)')" id="nav-GIN (CİN)">GINLER</div>
-            <div class="nav-item" onclick="showCategory('SHOTLAR')" id="nav-SHOTLAR">SHOTLAR</div>
             <div class="nav-item" onclick="showCategory('LİKÖRLER')" id="nav-LİKÖRLER">LİKÖRLER</div>
+            <div class="nav-item" onclick="showCategory('SHOTLAR')" id="nav-SHOTLAR">SHOTLAR</div>
         </div>
     </div>
     <div class="container" id="menu-list"></div>
-    <div class="container" id="admin-stock" style="display:none; margin-top:20px; border-top:1px dashed var(--accent); padding-top:20px;">
-        <h4 style="color:var(--accent)">📦 STOK YÖNETİMİ</h4>
-        <div id="stock-controls"></div>
+    
+    <div class="container" id="admin-panel" style="display:none;">
+        <div class="admin-controls">
+            <h4 style="margin:0 0 10px 0; color:var(--accent)">STOK DURUMU</h4>
+            <div id="stock-list"></div>
+        </div>
     </div>
+
     <div class="footer">
-        <div><div style="font-size: 0.6rem;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
-        <button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="confirmOrder()">SİPARİŞ</button>
+        <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
+        <button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="sendOrder()">SİPARİŞ VER</button>
     </div>
 </div>
 
 <div id="custom-modal">
-    <h3 id="modal-title" style="margin-top:0; color:var(--accent)"></h3>
-    <div id="options-list"></div>
-    <button style="width:100%; margin-top:20px; padding:15px; background:var(--accent); border:none; border-radius:15px; font-weight:bold;" onclick="addToCart()">SEPETE EKLE</button>
-    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e;" onclick="closeModal()">İptal</button>
+    <h3 id="modal-item-name" style="margin:0 0 15px 0; color:var(--accent)"></h3>
+    <div id="options-area"></div>
+    <button style="width:100%; margin-top:20px; padding:16px; background:var(--accent); border:none; border-radius:15px; font-weight:bold;" onclick="pushToCart()">SEPETE EKLE</button>
+    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e;" onclick="closeModal()">Vazgeç</button>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
     
-    // Stok Durumu
-    let stock = JSON.parse(localStorage.getItem('bar_stock')) || {
-        'Nane': true, 'Kahve': true, 'Süt': true, 'Limon': true, 'Buz': true, 'Çikolata': true
+    // Stok verisi (Tarayıcıda saklanır)
+    let stock = JSON.parse(localStorage.getItem('azure_stock')) || {
+        'Nane': true, 'Limon': true, 'Kahve': true, 'Süt': true, 'Buz': true, 'Taze Meyve': true
     };
 
     const inventory = [
-        { id: 'BlueVelvet', cat: 'KOKTEYLLER', name: 'Blue Velvet (Signature)', price: 450, desc: 'Baileys, Vodka, Malibu, Süt ve Özel Kahve Karışımı', sig: true, opts: ['Süt', 'Kahve', 'Nane'] },
+        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk (Signature)', price: 450, desc: '5cl Vodka, 5cl Baileys, 3cl Malibu, 3cl Kahve & Süt', sig: true, opts: ['Kahve', 'Süt', 'Nane'] },
         { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', price: 400 },
-        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', price: 350 },
-        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', price: 250 },
-        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', price: 160 }
+        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', price: 80 },
+        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', price: 160 },
+        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', price: 250 }
     ];
 
-    let cart = []; let total = 0; let isAdmin = false; let currentCat = 'KOKTEYLLER'; let pendingItem = null;
+    let cart = []; let total = 0; let isAdmin = false; let activeItem = null;
 
     function showCategory(cat) {
-        currentCat = cat;
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('category-view').style.display = 'block';
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById('nav-'+cat).classList.add('active');
-        renderItems();
+        renderList(cat);
     }
 
-    function renderItems() {
+    function renderList(cat) {
         let html = '';
-        const items = inventory.filter(i => i.cat === currentCat);
-        items.forEach(item => {
+        inventory.filter(i => i.cat === cat).forEach(item => {
             html += `
-            <div class="item" onclick="handleItemClick('${item.id}')">
-                ${item.sig ? '<div class="signature-tag">YAZARIN SEÇİMİ</div>' : ''}
+            <div class="item" onclick="itemAction('${item.id}')">
+                ${item.sig ? '<div class="sig-badge">İMZA KOKTEYL</div>' : ''}
                 <div class="details">
                     <span class="name">${item.name}</span>
-                    <span class="desc">${item.desc || 'Premium Seçki'}</span>
-                    <span style="font-size:0.8rem; color:white; margin-top:5px; display:block;">${item.price} TL</span>
+                    <span class="desc">${item.desc || 'Premium Seçim'}</span>
+                    <span style="font-size:0.85rem; color:white; margin-top:5px; display:block;">${item.price} TL</span>
                 </div>
-                <div style="color:var(--accent); font-size:1.5rem;">+</div>
+                <div style="color:var(--accent); font-size:1.4rem; font-weight:bold;">+</div>
             </div>`;
         });
         document.getElementById('menu-list').innerHTML = html;
-        if(isAdmin) renderAdminStock();
+        if(isAdmin) renderAdmin();
     }
 
-    function handleItemClick(id) {
+    function itemAction(id) {
         const item = inventory.find(i => i.id === id);
         if(item.cat === 'KOKTEYLLER') {
-            pendingItem = {...item, selectedOpts: []};
-            openCustomModal(item);
+            activeItem = {...item, selected: []};
+            document.getElementById('modal-item-name').innerText = item.name;
+            let optsHtml = '';
+            item.opts.forEach(o => {
+                const out = !stock[o];
+                optsHtml += `
+                <div class="opt-row ${out ? 'is-out' : ''}">
+                    <span>${o} ${out ? '<span class="out-label">YOK</span>' : ''}</span>
+                    <input type="checkbox" ${out ? 'disabled' : ''} onchange="toggleOpt('${o}')">
+                </div>`;
+            });
+            document.getElementById('options-area').innerHTML = optsHtml;
+            document.getElementById('custom-modal').style.display = 'block';
         } else {
             cart.push({name: item.name, price: item.price});
-            updateTotal();
+            updateUI();
         }
     }
 
-    function openCustomModal(item) {
-        document.getElementById('modal-title').innerText = item.name;
-        let optHtml = '';
-        item.opts.forEach(opt => {
-            const isOut = !stock[opt];
-            optHtml += `
-            <div class="opt-row ${isOut ? 'out' : ''}">
-                <span>${opt} ${isOut ? '<span class="out-text">(STOKTA YOK)</span>' : ''}</span>
-                <input type="checkbox" ${isOut ? 'disabled' : ''} onchange="toggleOpt('${opt}')">
-            </div>`;
-        });
-        document.getElementById('options-list').innerHTML = optHtml;
-        document.getElementById('custom-modal').style.display = 'block';
+    function toggleOpt(o) {
+        const i = activeItem.selected.indexOf(o);
+        if(i > -1) activeItem.selected.splice(i, 1);
+        else activeItem.selected.push(o);
     }
 
-    function toggleOpt(opt) {
-        const idx = pendingItem.selectedOpts.indexOf(opt);
-        if(idx > -1) pendingItem.selectedOpts.splice(idx, 1);
-        else pendingItem.selectedOpts.push(opt);
-    }
-
-    function addToCart() {
-        cart.push({name: pendingItem.name, price: pendingItem.price, opts: [...pendingItem.selectedOpts]});
-        updateTotal();
+    function pushToCart() {
+        cart.push({name: activeItem.name, price: activeItem.price, notes: activeItem.selected.join(', ')});
+        updateUI();
         closeModal();
     }
 
-    function updateTotal() {
+    function updateUI() {
         total = cart.reduce((s, i) => s + i.price, 0);
         document.getElementById('cart-total').innerText = total + " TL";
     }
 
-    function renderAdminStock() {
-        let html = '';
-        Object.keys(stock).forEach(key => {
-            html += `<div class="stock-toggle ${stock[key]?'on':'off'}" onclick="toggleStock('${key}')">${key}</div>`;
+    function renderAdmin() {
+        let h = '';
+        Object.keys(stock).forEach(k => {
+            h += `<div class="stk-btn ${stock[k]?'on':'off'}" onclick="toggleStk('${k}')">${k}</div>`;
         });
-        document.getElementById('stock-controls').innerHTML = html;
-        document.getElementById('admin-stock').style.display = 'block';
+        document.getElementById('stock-list').innerHTML = h;
+        document.getElementById('admin-panel').style.display = 'block';
     }
 
-    function toggleStock(key) {
-        stock[key] = !stock[key];
-        localStorage.setItem('bar_stock', JSON.stringify(stock));
-        renderAdminStock();
-        if(currentCat === 'KOKTEYLLER') renderItems();
+    function toggleStk(k) {
+        stock[k] = !stock[k];
+        localStorage.setItem('azure_stock', JSON.stringify(stock));
+        renderAdmin();
+        const activeCat = document.querySelector('.nav-item.active').innerText;
+        if(activeCat === 'KOKTEYLLER') renderList('KOKTEYLLER');
     }
 
-    function confirmOrder() {
-        if(cart.length === 0) return;
+    function sendOrder() {
+        if(!cart.length) return;
         let msg = '🍸 *YENİ SİPARİŞ*%0A';
-        cart.forEach(i => {
-            msg += `• ${i.name} ${i.opts ? '('+i.opts.join(', ')+')' : ''}%0A`;
-        });
+        cart.forEach(c => msg += `• ${c.name} ${c.notes ? '['+c.notes+']' : ''}%0A`);
         window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${total} TL*`);
-        cart = []; total = 0; updateTotal();
+        cart = []; total = 0; updateUI();
     }
 
     function openAuth() {
-        const p = prompt("Şifre:");
-        if(btoa(p) === CONFIG.m) { isAdmin = true; renderItems(); }
+        const p = prompt("Yönetici Şifresi:");
+        if(btoa(p) === CONFIG.m) { isAdmin = true; renderAdmin(); }
     }
 
-    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
     function goHome() { document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; }
-
-    renderItems();
+    function closeModal() { document.getElementById('custom-modal').style.display='none'; }
 </script>
 </body>
 </html>
