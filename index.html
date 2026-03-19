@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAR MENU</title>
+    <title>MENU</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍸</text></svg>">
+    
     <style>
         :root { --bg: #0d1117; --card-bg: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         
-        /* Giriş Ekranı */
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        
+        /* Home Screen */
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
         .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 12px; border-radius: 15px; text-align: center; font-size: 1.2rem; font-weight: 900; cursor: pointer; transition: 0.2s; border: none; }
+        .cat-card:hover { filter: brightness(1.1); }
         .cat-card:active { transform: scale(0.96); }
 
-        /* Kategori Görünümü */
+        /* Navigation */
         #category-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
         .nav-item { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
         .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
-        /* Ürün Kartları */
+        /* Cards */
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
-        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; position: relative; cursor: pointer; transition: 0.2s; }
+        .item:hover { border-color: var(--accent); }
         .sig-badge { position: absolute; top: -8px; left: 15px; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 5px; }
         .details .name { font-weight: 700; font-size: 0.95rem; color: var(--accent); display: block; }
         .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
         .admin-disc { color: var(--disc); font-weight: bold; font-size: 0.7rem; }
 
-        /* Customization */
-        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); }
-        .opt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
-        .opt-row.is-out { opacity: 0.3; }
+        /* Modal */
+        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); box-sizing: border-box; }
+        .opt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; }
+        .opt-row.is-out { opacity: 0.3; cursor: not-allowed; }
+        .opt-row input { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
 
         /* Footer */
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
@@ -42,7 +48,7 @@
 <body>
 
 <div id="home-screen">
-    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:10px; margin-bottom:40px;">MENU</h1>
+    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:10px; margin-bottom:40px; cursor:pointer;">MENU</h1>
     <div class="cat-card" onclick="showCategory('GIN (CİN)')">GINLER</div>
     <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
     <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
@@ -60,6 +66,7 @@
         </div>
     </div>
     <div class="container" id="menu-list"></div>
+    
     <div class="container" id="admin-stk" style="display:none; margin-top:20px; padding:15px; border:1px dashed var(--accent); border-radius:15px;">
         <h4 style="margin:0 0 10px 0; color:var(--accent)">STOK AYARI</h4>
         <div id="stock-btns"></div>
@@ -74,13 +81,13 @@
 <div id="custom-modal">
     <h3 id="mod-name" style="margin:0 0 15px 0; color:var(--accent)"></h3>
     <div id="opts-area"></div>
-    <button style="width:100%; margin-top:20px; padding:16px; background:var(--accent); border:none; border-radius:12px; font-weight:bold; color:#0d1117;" onclick="addCocktail()">SEPETE EKLE</button>
+    <button style="width:100%; margin-top:20px; padding:16px; background:var(--accent); border:none; border-radius:12px; font-weight:bold; color:#0d1117; cursor:pointer;" onclick="addCocktail()">SEPETE EKLE</button>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
-    let stock = JSON.parse(localStorage.getItem('az_stk')) || {'Nane':true, 'Limon':true, 'Kahve':true, 'Süt':true, 'Buz':true};
-    const oldPrices = {'EtsuP':320, 'Gunp':250, 'Skag':220, 'Roku':190, 'Havana7':120, 'OlmecaD':100, 'Malibu':70, 'SmirN':100, 'SmirR':80, 'Skinos':140};
+    let stock = JSON.parse(localStorage.getItem('az_stk')) || {'Kahve':true, 'Süt':true, 'Buz':true, 'Limon':true};
+    const oldPrices = {'EtsuP':320, 'Gunp':250, 'Skag':220, 'Roku':190, 'Havana7':120, 'OlmecaD':100, 'Malibu':70, 'Skinos':140};
 
     const inventory = [
         // GINLER
@@ -97,10 +104,9 @@
         { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250, bottle: 3000 },
         { id: 'Havana7', cat: 'SHOTLAR', name: 'Havana Club 7', shot: 130, bottle: 1600 },
         { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250 },
-        { id: 'OlmecaS', cat: 'SHOTLAR', name: 'Olmeca Silver', shot: 80, bottle: 1100 },
+        { id: 'Ballant', cat: 'SHOTLAR', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350 },
         { id: 'SmirN', cat: 'SHOTLAR', name: 'Smirnoff North', shot: 110, bottle: 1300 },
         { id: 'SmirR', cat: 'SHOTLAR', name: 'Smirnoff Red', shot: 90, bottle: 1100 },
-        { id: 'Ballant', cat: 'SHOTLAR', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350 },
         // LİKÖRLER
         { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, bottle: 1900 },
         { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 140, bottle: 1600 },
@@ -109,12 +115,15 @@
         { id: 'BaileysC', cat: 'LİKÖRLER', name: 'Baileys Chocolate', shot: 130, bottle: 1100 },
         { id: 'Triple', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 1025 },
         // KOKTEYLLER
-        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk (Signature)', shot: 450, sig: true, opts: ['Kahve', 'Süt', 'Nane'] }
+        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk (Signature)', shot: 450, sig: true, opts: ['Kahve', 'Süt'] }
     ];
 
     let cart = []; let total = 0; let isAdmin = false; let activeItem = null;
 
+    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+
     function showCategory(cat) {
+        closeModal(); // Kategori değişince açık modalları kapatır
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('category-view').style.display = 'block';
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -136,7 +145,7 @@
                     <span class="prices">${pDesc} ${discHtml}</span>
                     <span style="font-size:0.9rem; color:white; margin-top:4px; display:block;">${item.shot} TL</span>
                 </div>
-                <div style="color:var(--accent); font-size:1.5rem;">+</div>
+                <div style="color:var(--accent); font-size:1.5rem; font-weight:bold;">+</div>
             </div>`;
         });
         document.getElementById('menu-list').innerHTML = html;
@@ -151,7 +160,10 @@
             let oH = '';
             item.opts.forEach(o => {
                 const out = !stock[o];
-                oH += `<div class="opt-row ${out?'is-out':''}"><span>${o} ${out?'(YOK)':''}</span><input type="checkbox" ${out?'disabled':''} onchange="tagOpt('${o}')"></div>`;
+                oH += `<div class="opt-row ${out?'is-out':''}" onclick="${out?'':'this.querySelector(\'input\').click()'}">
+                        <span>${o} ${out?'(YOK)':''}</span>
+                        <input type="checkbox" ${out?'disabled':''} onchange="tagOpt('${o}')" onclick="event.stopPropagation()">
+                       </div>`;
             });
             document.getElementById('opts-area').innerHTML = oH;
             document.getElementById('custom-modal').style.display = 'block';
@@ -168,7 +180,7 @@
 
     function addCocktail() {
         cart.push({n: activeItem.name, p: activeItem.shot, note: activeItem.sel.join(', ')});
-        upd(); document.getElementById('custom-modal').style.display = 'none';
+        upd(); closeModal();
     }
 
     function upd() {
@@ -185,14 +197,27 @@
     }
 
     function renderAdmin() {
-        let h = ''; Object.keys(stock).forEach(k => h += `<button onclick="tglS('${k}')" style="background:${stock[k]?'#238636':'#f85149'}; color:white; border:none; padding:5px 10px; margin:3px; border-radius:5px; font-size:0.7rem;">${k}</button>`);
+        let h = ''; Object.keys(stock).forEach(k => h += `<button onclick="tglS('${k}')" style="background:${stock[k]?'#238636':'#f85149'}; color:white; border:none; padding:8px 12px; margin:3px; border-radius:8px; font-size:0.7rem; cursor:pointer;">${k}</button>`);
         document.getElementById('stock-btns').innerHTML = h;
         document.getElementById('admin-stk').style.display = 'block';
     }
 
-    function tglS(k) { stock[k]=!stock[k]; localStorage.setItem('az_stk', JSON.stringify(stock)); renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); }
-    function openAuth() { if(btoa(prompt("Şifre:")) === CONFIG.m) { isAdmin = true; if(document.getElementById('category-view').style.display==='block') renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); } }
-    function goHome() { document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; }
+    function tglS(k) { stock[k]=!stock[k]; localStorage.setItem('az_stk', JSON.stringify(stock)); renderAdmin(); renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); }
+    
+    function openAuth() { 
+        let pass = prompt("Şifre:"); 
+        if(pass && btoa(pass) === CONFIG.m) { 
+            isAdmin = true; 
+            if(document.getElementById('category-view').style.display==='block') renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); 
+            alert("Admin Erişimi Açıldı!");
+        } 
+    }
+
+    function goHome() { 
+        closeModal();
+        document.getElementById('home-screen').style.display='flex'; 
+        document.getElementById('category-view').style.display='none'; 
+    }
 </script>
 </body>
 </html>
