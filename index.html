@@ -86,6 +86,33 @@
 
     #cart-total { font-size: 1.1rem !important; }
     .order-confirm-btn { padding: 10px 18px !important; font-size: 0.85rem !important; }
+           /* Midnight Silk varyasyonları için çakışma önleyici */
+    .v-card {
+        padding: 15px !important;
+        gap: 10px !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    .v-card > div:first-of-type {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    .v-card b {
+        white-space: normal !important;
+        word-break: break-word !important;
+        display: block !important;
+        font-size: 0.95rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .v-card span {
+        flex-shrink: 0 !important;
+        font-size: 1rem !important;
+        font-weight: 800 !important;
+    }
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
