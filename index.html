@@ -3,102 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZURE BAR</title>
+    <title>BAR MENU</title>
     <style>
-        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; }
+        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         
-        /* Home Screen */
+        /* Giriş Ekranı */
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
-        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 30px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; transition: 0.2s; }
-        .cat-card:active { transform: scale(0.95); }
+        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 12px; border-radius: 15px; text-align: center; font-size: 1.2rem; font-weight: 900; cursor: pointer; transition: 0.2s; border: none; }
+        .cat-card:active { transform: scale(0.96); }
 
-        /* Navigation */
+        /* Kategori Görünümü */
         #category-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
         .nav-item { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
-        .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; }
+        .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
-        /* Cards */
+        /* Ürün Kartları */
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
         .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; position: relative; }
         .sig-badge { position: absolute; top: -8px; left: 15px; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 5px; }
-        .details .name { font-weight: 700; font-size: 1rem; color: var(--accent); }
-        .details .desc { font-size: 0.7rem; color: #8b949e; display: block; margin-top: 2px; }
+        .details .name { font-weight: 700; font-size: 0.95rem; color: var(--accent); display: block; }
+        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
+        .admin-disc { color: var(--disc); font-weight: bold; font-size: 0.7rem; }
 
-        /* Customization Drawer */
-        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 1px solid var(--accent); }
-        .opt-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
-        .opt-row.is-out { opacity: 0.4; }
-        .out-label { color: var(--out); font-size: 0.6rem; font-weight: 900; margin-left: 5px; }
+        /* Customization */
+        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); }
+        .opt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .opt-row.is-out { opacity: 0.3; }
 
-        /* Admin */
-        .admin-controls { padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent); margin-top: 20px; }
-        .stk-btn { padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; cursor: pointer; margin: 3px; border: 1px solid var(--border); display: inline-block; }
-        .stk-btn.on { background: #238636; color: white; }
-        .stk-btn.off { background: var(--out); color: white; }
-
+        /* Footer */
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
+        .order-btn { background: var(--accent); border: none; padding: 12px 25px; border-radius: 12px; font-weight: 900; cursor: pointer; color: #0d1117; }
     </style>
 </head>
 <body>
 
 <div id="home-screen">
-    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:5px; margin-bottom:30px;">AZURE</h1>
-    <div class="cat-card" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
+    <h1 onclick="openAuth()" style="color:var(--accent); letter-spacing:10px; margin-bottom:40px;">MENU</h1>
     <div class="cat-card" onclick="showCategory('GIN (CİN)')">GINLER</div>
-    <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
     <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
+    <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
+    <div class="cat-card" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
 </div>
 
 <div id="category-view">
     <div class="top-nav">
         <div style="text-align:center; padding:10px; font-size:0.7rem; color:var(--accent); cursor:pointer;" onclick="goHome()">← ANA SAYFA</div>
         <div class="scroll-menu">
-            <div class="nav-item" onclick="showCategory('KOKTEYLLER')" id="nav-KOKTEYLLER">KOKTEYLLER</div>
             <div class="nav-item" onclick="showCategory('GIN (CİN)')" id="nav-GIN (CİN)">GINLER</div>
-            <div class="nav-item" onclick="showCategory('LİKÖRLER')" id="nav-LİKÖRLER">LİKÖRLER</div>
             <div class="nav-item" onclick="showCategory('SHOTLAR')" id="nav-SHOTLAR">SHOTLAR</div>
+            <div class="nav-item" onclick="showCategory('LİKÖRLER')" id="nav-LİKÖRLER">LİKÖRLER</div>
+            <div class="nav-item" onclick="showCategory('KOKTEYLLER')" id="nav-KOKTEYLLER">KOKTEYLLER</div>
         </div>
     </div>
     <div class="container" id="menu-list"></div>
-    
-    <div class="container" id="admin-panel" style="display:none;">
-        <div class="admin-controls">
-            <h4 style="margin:0 0 10px 0; color:var(--accent)">STOK DURUMU</h4>
-            <div id="stock-list"></div>
-        </div>
+    <div class="container" id="admin-stk" style="display:none; margin-top:20px; padding:15px; border:1px dashed var(--accent); border-radius:15px;">
+        <h4 style="margin:0 0 10px 0; color:var(--accent)">STOK AYARI</h4>
+        <div id="stock-btns"></div>
     </div>
 
     <div class="footer">
         <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
-        <button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="sendOrder()">SİPARİŞ VER</button>
+        <button class="order-btn" onclick="sendOrder()">SİPARİŞ</button>
     </div>
 </div>
 
 <div id="custom-modal">
-    <h3 id="modal-item-name" style="margin:0 0 15px 0; color:var(--accent)"></h3>
-    <div id="options-area"></div>
-    <button style="width:100%; margin-top:20px; padding:16px; background:var(--accent); border:none; border-radius:15px; font-weight:bold;" onclick="pushToCart()">SEPETE EKLE</button>
-    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e;" onclick="closeModal()">Vazgeç</button>
+    <h3 id="mod-name" style="margin:0 0 15px 0; color:var(--accent)"></h3>
+    <div id="opts-area"></div>
+    <button style="width:100%; margin-top:20px; padding:16px; background:var(--accent); border:none; border-radius:12px; font-weight:bold; color:#0d1117;" onclick="addCocktail()">SEPETE EKLE</button>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
-    
-    // Stok verisi (Tarayıcıda saklanır)
-    let stock = JSON.parse(localStorage.getItem('azure_stock')) || {
-        'Nane': true, 'Limon': true, 'Kahve': true, 'Süt': true, 'Buz': true, 'Taze Meyve': true
-    };
+    let stock = JSON.parse(localStorage.getItem('az_stk')) || {'Nane':true, 'Limon':true, 'Kahve':true, 'Süt':true, 'Buz':true};
+    const oldPrices = {'EtsuP':320, 'Gunp':250, 'Skag':220, 'Roku':190, 'Havana7':120, 'OlmecaD':100, 'Malibu':70, 'SmirN':100, 'SmirR':80, 'Skinos':140};
 
     const inventory = [
-        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk (Signature)', price: 450, desc: '5cl Vodka, 5cl Baileys, 3cl Malibu, 3cl Kahve & Süt', sig: true, opts: ['Kahve', 'Süt', 'Nane'] },
-        { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', price: 400 },
-        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', price: 80 },
-        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', price: 160 },
-        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', price: 250 }
+        // GINLER
+        { id: 'Nikka', cat: 'GIN (CİN)', name: 'Nikka Coffey Gin', shot: 420, bottle: 3200 },
+        { id: 'KiNoBi', cat: 'GIN (CİN)', name: 'Ki No Bi Kyoto Gin', shot: 400, bottle: 3800 },
+        { id: 'EtsuP', cat: 'GIN (CİN)', name: 'Etsu Pacific Ocean', shot: 350, bottle: 3800 },
+        { id: 'Gunp', cat: 'GIN (CİN)', name: 'Gunpowder Gin', shot: 270, bottle: 3000 },
+        { id: 'Skag', cat: 'GIN (CİN)', name: 'Skagerrak Gin', shot: 240, bottle: 2600 },
+        { id: 'Roku', cat: 'GIN (CİN)', name: 'Roku Gin', shot: 250, bottle: 2400 },
+        { id: 'Mosaik', cat: 'GIN (CİN)', name: 'Mosaik Gin', shot: 200, bottle: 2575 },
+        { id: 'NoTen', cat: 'GIN (CİN)', name: 'Tanqueray No. Ten', shot: 180, bottle: 2000 },
+        { id: 'MalfyL', cat: 'GIN (CİN)', name: 'Malfy Limone', shot: 160, bottle: 2200 },
+        // SHOTLAR
+        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250, bottle: 3000 },
+        { id: 'Havana7', cat: 'SHOTLAR', name: 'Havana Club 7', shot: 130, bottle: 1600 },
+        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250 },
+        { id: 'OlmecaS', cat: 'SHOTLAR', name: 'Olmeca Silver', shot: 80, bottle: 1100 },
+        { id: 'SmirN', cat: 'SHOTLAR', name: 'Smirnoff North', shot: 110, bottle: 1300 },
+        { id: 'SmirR', cat: 'SHOTLAR', name: 'Smirnoff Red', shot: 90, bottle: 1100 },
+        { id: 'Ballant', cat: 'SHOTLAR', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350 },
+        // LİKÖRLER
+        { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, bottle: 1900 },
+        { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 140, bottle: 1600 },
+        { id: 'JagO', cat: 'LİKÖRLER', name: 'Jägermeister', shot: 120, bottle: 1350 },
+        { id: 'Malibu', cat: 'LİKÖRLER', name: 'Malibu Rum', shot: 80, bottle: 950 },
+        { id: 'BaileysC', cat: 'LİKÖRLER', name: 'Baileys Chocolate', shot: 130, bottle: 1100 },
+        { id: 'Triple', cat: 'LİKÖRLER', name: 'Jest Triple Sec', shot: 40, bottle: 1025 },
+        // KOKTEYLLER
+        { id: 'MSilk', cat: 'KOKTEYLLER', name: 'Midnight Silk (Signature)', shot: 450, sig: true, opts: ['Kahve', 'Süt', 'Nane'] }
     ];
 
     let cart = []; let total = 0; let isAdmin = false; let activeItem = null;
@@ -114,92 +125,74 @@
     function renderList(cat) {
         let html = '';
         inventory.filter(i => i.cat === cat).forEach(item => {
+            let pDesc = isAdmin ? `Şişe: ${item.bottle || '-'} TL` : `Shot (5cl)`;
+            let discHtml = (isAdmin && oldPrices[item.id]) ? `<br><span class="admin-disc">Dost: ${oldPrices[item.id]} TL</span>` : '';
+            
             html += `
-            <div class="item" onclick="itemAction('${item.id}')">
+            <div class="item" onclick="clickItem('${item.id}')">
                 ${item.sig ? '<div class="sig-badge">İMZA KOKTEYL</div>' : ''}
                 <div class="details">
                     <span class="name">${item.name}</span>
-                    <span class="desc">${item.desc || 'Premium Seçim'}</span>
-                    <span style="font-size:0.85rem; color:white; margin-top:5px; display:block;">${item.price} TL</span>
+                    <span class="prices">${pDesc} ${discHtml}</span>
+                    <span style="font-size:0.9rem; color:white; margin-top:4px; display:block;">${item.shot} TL</span>
                 </div>
-                <div style="color:var(--accent); font-size:1.4rem; font-weight:bold;">+</div>
+                <div style="color:var(--accent); font-size:1.5rem;">+</div>
             </div>`;
         });
         document.getElementById('menu-list').innerHTML = html;
         if(isAdmin) renderAdmin();
     }
 
-    function itemAction(id) {
+    function clickItem(id) {
         const item = inventory.find(i => i.id === id);
         if(item.cat === 'KOKTEYLLER') {
-            activeItem = {...item, selected: []};
-            document.getElementById('modal-item-name').innerText = item.name;
-            let optsHtml = '';
+            activeItem = {...item, sel: []};
+            document.getElementById('mod-name').innerText = item.name;
+            let oH = '';
             item.opts.forEach(o => {
                 const out = !stock[o];
-                optsHtml += `
-                <div class="opt-row ${out ? 'is-out' : ''}">
-                    <span>${o} ${out ? '<span class="out-label">YOK</span>' : ''}</span>
-                    <input type="checkbox" ${out ? 'disabled' : ''} onchange="toggleOpt('${o}')">
-                </div>`;
+                oH += `<div class="opt-row ${out?'is-out':''}"><span>${o} ${out?'(YOK)':''}</span><input type="checkbox" ${out?'disabled':''} onchange="tagOpt('${o}')"></div>`;
             });
-            document.getElementById('options-area').innerHTML = optsHtml;
+            document.getElementById('opts-area').innerHTML = oH;
             document.getElementById('custom-modal').style.display = 'block';
         } else {
-            cart.push({name: item.name, price: item.price});
-            updateUI();
+            cart.push({n: item.name, p: item.shot});
+            upd();
         }
     }
 
-    function toggleOpt(o) {
-        const i = activeItem.selected.indexOf(o);
-        if(i > -1) activeItem.selected.splice(i, 1);
-        else activeItem.selected.push(o);
+    function tagOpt(o) {
+        const i = activeItem.sel.indexOf(o);
+        if(i > -1) activeItem.sel.splice(i, 1); else activeItem.sel.push(o);
     }
 
-    function pushToCart() {
-        cart.push({name: activeItem.name, price: activeItem.price, notes: activeItem.selected.join(', ')});
-        updateUI();
-        closeModal();
+    function addCocktail() {
+        cart.push({n: activeItem.name, p: activeItem.shot, note: activeItem.sel.join(', ')});
+        upd(); document.getElementById('custom-modal').style.display = 'none';
     }
 
-    function updateUI() {
-        total = cart.reduce((s, i) => s + i.price, 0);
+    function upd() {
+        total = cart.reduce((s, i) => s + i.p, 0);
         document.getElementById('cart-total').innerText = total + " TL";
-    }
-
-    function renderAdmin() {
-        let h = '';
-        Object.keys(stock).forEach(k => {
-            h += `<div class="stk-btn ${stock[k]?'on':'off'}" onclick="toggleStk('${k}')">${k}</div>`;
-        });
-        document.getElementById('stock-list').innerHTML = h;
-        document.getElementById('admin-panel').style.display = 'block';
-    }
-
-    function toggleStk(k) {
-        stock[k] = !stock[k];
-        localStorage.setItem('azure_stock', JSON.stringify(stock));
-        renderAdmin();
-        const activeCat = document.querySelector('.nav-item.active').innerText;
-        if(activeCat === 'KOKTEYLLER') renderList('KOKTEYLLER');
     }
 
     function sendOrder() {
         if(!cart.length) return;
-        let msg = '🍸 *YENİ SİPARİŞ*%0A';
-        cart.forEach(c => msg += `• ${c.name} ${c.notes ? '['+c.notes+']' : ''}%0A`);
+        let msg = '🍸 *SİPARİŞ*%0A';
+        cart.forEach(c => msg += `• ${c.n} ${c.note ? '['+c.note+']' : ''}%0A`);
         window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${total} TL*`);
-        cart = []; total = 0; updateUI();
+        cart = []; total = 0; upd();
     }
 
-    function openAuth() {
-        const p = prompt("Yönetici Şifresi:");
-        if(btoa(p) === CONFIG.m) { isAdmin = true; renderAdmin(); }
+    function renderAdmin() {
+        let h = ''; Object.keys(stock).forEach(k => h += `<button onclick="tglS('${k}')" style="background:${stock[k]?'#238636':'#f85149'}; color:white; border:none; padding:5px 10px; margin:3px; border-radius:5px; font-size:0.7rem;">${k}</button>`);
+        document.getElementById('stock-btns').innerHTML = h;
+        document.getElementById('admin-stk').style.display = 'block';
     }
 
+    function tglS(k) { stock[k]=!stock[k]; localStorage.setItem('az_stk', JSON.stringify(stock)); renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); }
+    function openAuth() { if(btoa(prompt("Şifre:")) === CONFIG.m) { isAdmin = true; if(document.getElementById('category-view').style.display==='block') renderList(document.querySelector('.nav-item.active').id.replace('nav-','')); } }
     function goHome() { document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; }
-    function closeModal() { document.getElementById('custom-modal').style.display='none'; }
 </script>
 </body>
 </html>
