@@ -3,79 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUEST MENU</title>
+    <title>BAR MENU</title>
     <style>
-        :root { --bg: #0a0a0c; --card-bg: #161b22; --accent: #f59e0b; --text: #e6edf3; --border: #30363d; --discount: #238636; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; }
-        .container { max-width: 500px; margin: auto; }
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { color: var(--accent); letter-spacing: 4px; cursor: pointer; font-weight: 900; }
-        .mode-btn { position: fixed; top: 10px; right: 10px; background: #21262d; color: #8b949e; padding: 8px 12px; border-radius: 8px; font-size: 0.65rem; border: 1px solid var(--border); z-index: 3000; cursor: pointer; }
-        .cat-title { font-size: 0.85rem; color: var(--accent); margin: 25px 0 12px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
-        .cat-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .img-box { width: 55px; height: 75px; background: #21262d; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        :root { 
+            --bg: #0d1117; 
+            --card-bg: #161b22; 
+            --accent: #a2d2ff; /* Bebek Mavisi */
+            --text: #e6edf3; 
+            --border: #30363d; 
+            --discount: #238636; 
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* Ana Giriş Ekranı */
+        #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
+        .logo-area { text-align: center; margin-bottom: 40px; cursor: pointer; }
+        .logo-area h1 { font-size: 2.5rem; letter-spacing: 8px; color: var(--accent); margin: 0; font-weight: 900; }
+        .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 35px; margin-bottom: 20px; border-radius: 20px; text-align: center; font-size: 1.5rem; font-weight: 900; cursor: pointer; transition: transform 0.2s; box-shadow: 0 10px 20px rgba(162, 210, 255, 0.2); }
+        .cat-card:active { transform: scale(0.95); }
+
+        /* Kategori Sayfası */
+        #category-view { display: none; padding-top: 130px; padding-bottom: 120px; }
+        .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(15px); z-index: 2000; border-bottom: 1px solid var(--border); padding-top: 15px; }
+        .nav-title { text-align: center; font-size: 0.8rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 10px; cursor: pointer; }
+        .scroll-menu { display: flex; overflow-x: auto; padding: 10px 20px; gap: 10px; scrollbar-width: none; }
+        .scroll-menu::-webkit-scrollbar { display: none; }
+        .nav-item { padding: 8px 20px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; }
+        .nav-item.active { background: var(--accent); color: #0d1117; border-color: var(--accent); font-weight: bold; }
+
+        /* Ürün Listesi */
+        .container { max-width: 500px; margin: auto; padding: 0 20px; }
+        .info-bar { background: rgba(162, 210, 255, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 12px; font-size: 0.75rem; text-align: center; margin-bottom: 20px; }
+        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .img-box { width: 60px; height: 80px; background: #21262d; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .details .name { font-weight: 600; font-size: 0.9rem; display: block; }
-        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; line-height: 1.4; }
-        .admin-price-row { display: block; font-size: 0.7rem; margin-top: 2px; }
-        .discount-tag { color: var(--discount); font-weight: bold; }
-        .controls { display: flex; align-items: center; gap: 10px; }
-        .btn { background: #30363d; color: white; border: 1px solid #484f58; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .details { flex: 1; padding: 0 15px; }
+        .details .name { font-weight: 600; font-size: 0.95rem; display: block; }
+        .details .prices { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
+        .controls { display: flex; align-items: center; gap: 12px; }
+        .btn { background: #30363d; color: white; border: 1px solid #484f58; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; }
         .qty { font-weight: bold; min-width: 20px; text-align: center; color: var(--accent); }
-        #pass-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
-        .modal-card { background: var(--card-bg); padding: 30px; border-radius: 25px; border: 1px solid var(--accent); text-align: center; width: 280px; }
-        .modal-card input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; text-align: center; font-size: 1.5rem; letter-spacing: 5px; }
+
+        /* Alt Bar & Paneller */
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .total-amount { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
-        #admin-panel { margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent); display: none; }
-        .full-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; padding: 20px; overflow-y: auto; }
+        .order-btn { background: var(--accent); border: none; padding: 12px 20px; border-radius: 12px; font-weight: 900; cursor: pointer; color: #0d1117; }
+        
+        #pass-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
+        .modal-card { background: var(--card-bg); padding: 30px; border-radius: 25px; border: 1px solid var(--accent); text-align: center; width: 280px; }
+        .modal-card input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; text-align: center; font-size: 1.5rem; letter-spacing: 5px; outline: none; }
+        .full-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 3000; display: none; padding: 20px; overflow-y: auto; }
         .receipt-card { max-width: 450px; margin: 40px auto; background: #161b22; padding: 25px; border-radius: 24px; border: 1px solid var(--border); }
+        .admin-tag { color: var(--discount); font-size: 0.7rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="mode-btn" onclick="openAuth()">MOD DEĞİŞTİR</div>
+<div id="home-screen">
+    <div class="logo-area" onclick="openAuth()">
+        <h1>MENU</h1>
+        <p style="font-size: 0.7rem; color: #8b949e; margin-top: 5px;">PREMIUM BAR EXPERIENCE</p>
+    </div>
+    <div class="cat-card" onclick="showCategory('GIN (CİN)')">GINLER</div>
+    <div class="cat-card" onclick="showCategory('SHOTLAR')">SHOTLAR</div>
+    <div class="cat-card" onclick="showCategory('LİKÖRLER')">LİKÖRLER</div>
+    <div class="cat-card" onclick="showCategory('KOKTEYLLER')">KOKTEYLLER</div>
+    <p style="font-size: 0.6rem; color: #484f58; margin-top: 20px;">v4.0 Baby Blue Edition</p>
+</div>
+
+<div id="category-view">
+    <div class="top-nav">
+        <div class="nav-title" onclick="goHome()">BAR MENU</div>
+        <div class="scroll-menu" id="nav-scroll">
+            <div class="nav-item" onclick="showCategory('GIN (CİN)')" id="nav-GIN (CİN)">GINLER</div>
+            <div class="nav-item" onclick="showCategory('SHOTLAR')" id="nav-SHOTLAR">SHOTLAR</div>
+            <div class="nav-item" onclick="showCategory('LİKÖRLER')" id="nav-LİKÖRLER">LİKÖRLER</div>
+            <div class="nav-item" onclick="showCategory('KOKTEYLLER')" id="nav-KOKTEYLLER">KOKTEYLLER</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="info-bar">💡 Bilgi: Tüm shot servislerimiz <b>5cl</b> olarak sunulmaktadır.</div>
+        <div id="menu-list"></div>
+        <div id="admin-panel" style="display:none; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 20px; border: 1px dashed var(--accent);">
+            <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK KASA</h3>
+            <div id="order-log" style="font-size: 0.8rem; line-height: 1.6; color:#8b949e;">Satış yok.</div>
+            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+            <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOPLAM:</span><span id="total-revenue" style="color:var(--accent);">0 TL</span></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
+        <button class="order-btn" onclick="showOrder()">SİPARİŞ VER</button>
+    </div>
+</div>
 
 <div id="pass-modal">
     <div class="modal-card">
-        <div style="color:var(--accent); font-weight:900;">YÖNETİCİ GİRİŞİ</div>
+        <div style="color:var(--accent); font-weight:900;">ADMİN GİRİŞİ</div>
         <input type="password" id="passInput" placeholder="••••" maxlength="4" inputmode="numeric">
-        <button onclick="verifyPass()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">ONAYLA</button>
-        <p style="margin-top:15px; font-size:0.7rem; color:#8b949e; cursor:pointer;" onclick="closeModal()">Vazgeç</p>
+        <button onclick="verifyPass()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer; color:#0d1117;">GİRİŞ YAP</button>
+        <p style="margin-top:15px; font-size:0.7rem; color:#8b949e; cursor:pointer;" onclick="closeModal()">Kapat</p>
     </div>
-</div>
-
-<div class="container">
-    <header><h1 onclick="openAuth()">MENU</h1><p style="font-size: 0.7rem; color: #8b949e;">Premium Koleksiyon</p></header>
-    <div id="menu-list"></div>
-    <div id="admin-panel">
-        <h3 style="color:var(--accent); margin-top:0;">📊 GÜNLÜK KASA (MENÜ FİYATI)</h3>
-        <div id="order-log" style="font-size: 0.8rem; line-height: 1.6; color:#8b949e;">Satış yok.</div>
-        <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-        <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOPLAM:</span><span id="total-revenue" style="color:var(--accent);">0 TL</span></div>
-    </div>
-</div>
-
-<div class="footer">
-    <div><div style="font-size: 0.6rem; color:#8b949e;">TOPLAM</div><div class="total-amount" id="cart-total">0 TL</div></div>
-    <button style="background:var(--accent); border:none; padding:12px 20px; border-radius:12px; font-weight:900; cursor:pointer;" onclick="showOrder()">SİPARİŞ VER</button>
 </div>
 
 <div id="receipt-page" class="full-page">
     <div class="receipt-card">
-        <h2 style="color:var(--accent); text-align:center;">ÖZET</h2>
+        <h2 style="color:var(--accent); text-align:center;">SİPARİŞ ÖZETİ</h2>
         <div id="receipt-list"></div>
         <div style="font-size: 2rem; color: var(--accent); text-align: center; margin: 20px 0; font-weight: 900;" id="receipt-sum">0 TL</div>
         <button id="wa-send" style="width:100%; padding:18px; border-radius:15px; background:#25D366; border:none; color:white; font-weight:bold; cursor:pointer;">WHATSAPP'A GÖNDER</button>
-        <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e; cursor:pointer;" onclick="closePage('receipt-page')">Geri Dön</button>
+        <button style="width:100%; margin-top:10px; background:transparent; border:none; color:#8b949e; cursor:pointer;" onclick="closePage('receipt-page')">Vazgeç</button>
     </div>
 </div>
 
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==", folder: "barmenu/" };
 
-    // Dost Fiyatları (Eski Listenden)
     const oldPrices = {
         'EtsuP': 320, 'Gunp': 250, 'Skag': 220, 'Roku': 190, 'Havana7': 120, 
         'OlmecaD': 100, 'Malibu': 70, 'SmirN': 100, 'SmirR': 80, 'Skinos': 140, 
@@ -93,15 +138,13 @@
         { id: 'NoTen', cat: 'GIN (CİN)', name: 'Tanqueray No. Ten', shot: 180, bottle: 2000, img: 'noten.png' },
         { id: 'MalfyL', cat: 'GIN (CİN)', name: 'Malfy Limone', shot: 160, bottle: 2200, img: 'MalfyLimoneGin.png' },
         
-        { id: '1800S', cat: 'TEKİLA, ROM & VİSKİ', name: '1800 Silver Tequila', shot: 250, bottle: 3000, img: '1800.png' },
-        { id: 'Havana7', cat: 'TEKİLA, ROM & VİSKİ', name: 'Havana Club 7', shot: 130, bottle: 1600, img: 'HavanaClub.png' },
-        { id: 'OlmecaD', cat: 'TEKİLA, ROM & VİSKİ', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250, img: 'OlmecaDark.png' },
-        { id: 'Ballant', cat: 'TEKİLA, ROM & VİSKİ', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
-        { id: 'Malibu', cat: 'TEKİLA, ROM & VİSKİ', name: 'Malibu Rum', shot: 80, bottle: 950, img: 'Malibu.png' },
-        { id: 'OlmecaS', cat: 'TEKİLA, ROM & VİSKİ', name: 'Olmeca Silver', shot: 80, bottle: 1100, img: 'OlmecaSilver.png' },
-
-        { id: 'SmirN', cat: 'VOTKA', name: 'Smirnoff North', shot: 110, bottle: 1300, img: 'SmirnoffNorthVotka.png' },
-        { id: 'SmirR', cat: 'VOTKA', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: 'SmirnoffVotka.png' },
+        { id: '1800S', cat: 'SHOTLAR', name: '1800 Silver Tequila', shot: 250, bottle: 3000, img: '1800.png' },
+        { id: 'Havana7', cat: 'SHOTLAR', name: 'Havana Club 7', shot: 130, bottle: 1600, img: 'HavanaClub.png' },
+        { id: 'OlmecaD', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', shot: 110, bottle: 1250, img: 'OlmecaDark.png' },
+        { id: 'Ballant', cat: 'SHOTLAR', name: 'Ballantine\'s Finest', shot: 100, bottle: 1350, img: 'Ballentines.png' },
+        { id: 'Malibu', cat: 'SHOTLAR', name: 'Malibu Rum', shot: 80, bottle: 950, img: 'Malibu.png' },
+        { id: 'SmirN', cat: 'SHOTLAR', name: 'Smirnoff North', shot: 110, bottle: 1300, img: 'SmirnoffNorthVotka.png' },
+        { id: 'SmirR', cat: 'SHOTLAR', name: 'Smirnoff Red', shot: 90, bottle: 1100, img: 'SmirnoffVotka.png' },
         
         { id: 'Skinos', cat: 'LİKÖRLER', name: 'Skinos Mastic', shot: 160, bottle: 1900, img: 'Skinos.png' },
         { id: 'JagCB', cat: 'LİKÖRLER', name: 'Jägermeister Cold Brew', shot: 140, bottle: 1600, img: 'JagermeisterCB.png' },
@@ -111,23 +154,57 @@
         { id: 'Mancia', cat: 'LİKÖRLER', name: 'Mancia', shot: 40, bottle: 800, img: 'emoji' }
     ];
 
-    let cart = {}; let total = 0; let isAdmin = false;
+    let cart = {}; let total = 0; let isAdmin = false; let currentCat = 'GIN (CİN)';
 
-    function render() {
-        let html = ''; let lastCat = '';
-        inventory.forEach(item => {
-            if (item.cat !== lastCat) { html += `<div class="cat-title">${item.cat}</div>`; lastCat = item.cat; }
+    function goHome() {
+        document.getElementById('home-screen').style.display = 'flex';
+        document.getElementById('category-view').style.display = 'none';
+    }
+
+    function showCategory(cat) {
+        currentCat = cat;
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('category-view').style.display = 'block';
+        
+        // Navigasyon Aktifliği
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        const activeNav = document.getElementById(`nav-${cat}`);
+        if(activeNav) activeNav.classList.add('active');
+        
+        renderItems();
+    }
+
+    function renderItems() {
+        let html = '';
+        const items = inventory.filter(i => i.cat === currentCat);
+        
+        if (items.length === 0) {
+            html = `<div style="text-align:center; padding:50px; color:#484f58;">Henüz ürün eklenmedi.</div>`;
+        }
+
+        items.forEach(item => {
             const img = item.img === 'emoji' ? '🍷' : `<img src="${CONFIG.folder + item.img}" onerror="this.style.opacity='0.1'">`;
             
-            // Admin Görünümü: Çift Fiyat
-            let priceDisplay = `Shot: <b style="color:var(--accent)">${item.shot} TL</b>`;
+            let priceHTML = `Shot (5cl): <b style="color:var(--accent)">${item.shot} TL</b>`;
             if (isAdmin) {
-                const friendPrice = oldPrices[item.id];
-                const discountInfo = friendPrice ? `<br><span class="discount-tag">Dost Fiyatı: ${friendPrice} TL</span>` : '';
-                priceDisplay += `<span class="admin-price-row">Şişe: ${item.bottle} TL ${discountInfo}</span>`;
+                const friend = oldPrices[item.id];
+                const disc = friend ? `<br><span class="admin-tag">Dost: ${friend} TL</span>` : '';
+                priceHTML += `<br><span style="font-size:0.65rem; color:#666">Şişe: ${item.bottle} TL ${disc}</span>`;
             }
 
-            html += `<div class="item"><div class="bottle-info"><div class="img-box">${img}</div><div class="details"><span class="name">${item.name}</span><span class="prices">${priceDisplay}</span></div></div><div class="controls"><button class="btn" onclick="qty('${item.id}',-1)">-</button><span class="qty" id="q-${item.id}">${cart[item.id]||0}</span><button class="btn" onclick="qty('${item.id}',1)">+</button></div></div>`;
+            html += `
+            <div class="item">
+                <div class="img-box">${img}</div>
+                <div class="details">
+                    <span class="name">${item.name}</span>
+                    <span class="prices">${priceHTML}</span>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="qty('${item.id}',-1)">-</button>
+                    <span class="qty" id="q-${item.id}">${cart[item.id]||0}</span>
+                    <button class="btn" onclick="qty('${item.id}',1)">+</button>
+                </div>
+            </div>`;
         });
         document.getElementById('menu-list').innerHTML = html;
         updateKasa();
@@ -140,29 +217,36 @@
         document.getElementById('cart-total').innerText = total + " TL";
     }
 
-    function openAuth() { 
-        if(isAdmin) { isAdmin=false; document.getElementById('admin-panel').style.display='none'; render(); } 
-        else { document.getElementById('pass-modal').style.display='flex'; document.getElementById('passInput').focus(); } 
-    }
+    function openAuth() { document.getElementById('pass-modal').style.display='flex'; document.getElementById('passInput').focus(); }
     function closeModal() { document.getElementById('pass-modal').style.display = 'none'; document.getElementById('passInput').value = ''; }
 
     function verifyPass() {
         if (btoa(document.getElementById('passInput').value) === CONFIG.m) {
-            isAdmin = true; document.getElementById('admin-panel').style.display = 'block'; closeModal(); render();
-        } else { alert("Şifre Yanlış!"); closeModal(); }
+            isAdmin = true; 
+            document.getElementById('admin-panel').style.display = 'block'; 
+            closeModal(); 
+            if(document.getElementById('category-view').style.display === 'block') renderItems();
+            else showCategory('GIN (CİN)');
+        } else { alert("Hatalı!"); closeModal(); }
     }
 
     function showOrder() {
         if (total === 0) return;
         let listHtml = ''; let msg = '🍸 *YENİ SİPARİŞ*%0A';
-        inventory.forEach(i => { if(cart[i.id]>0) { listHtml += `<div class="receipt-item"><span>${cart[i.id]}x ${i.name}</span><span>${cart[i.id]*i.shot} TL</span></div>`; msg += `• ${cart[i.id]}x ${i.name}%0A`; }});
+        inventory.forEach(i => { 
+            if(cart[i.id]>0) { 
+                listHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>${cart[i.id]}x ${i.name}</span><span>${cart[i.id]*i.shot} TL</span></div>`; 
+                msg += `• ${cart[i.id]}x ${i.name}%0A`; 
+            }
+        });
         document.getElementById('receipt-list').innerHTML = listHtml;
         document.getElementById('receipt-sum').innerText = total + " TL";
         document.getElementById('receipt-page').style.display = 'block';
         document.getElementById('wa-send').onclick = () => {
             window.open(`https://wa.me/${CONFIG.phone}?text=${msg}%0A*TOPLAM: ${total} TL*`);
-            logOrder(); closePage('receipt-page'); cart = {}; total = 0; render();
+            logOrder(); closePage('receipt-page'); cart = {}; total = 0; 
             document.getElementById('cart-total').innerText = "0 TL";
+            renderItems();
         };
     }
 
@@ -175,13 +259,12 @@
     function updateKasa() {
         const history = JSON.parse(localStorage.getItem('barLog') || '[]');
         const logDiv = document.getElementById('order-log');
-        if(history.length === 0) { logDiv.innerText = "Satış yok."; return; }
-        let sum = 0; logDiv.innerHTML = history.map(o => { sum += o.total; return `<div>[${o.time}] Satış: ${o.total} TL</div>`; }).join('');
+        let sum = 0; 
+        logDiv.innerHTML = history.length ? history.map(o => { sum += o.total; return `<div>[${o.time}] ${o.total} TL</div>`; }).join('') : "Satış yok.";
         document.getElementById('total-revenue').innerText = sum + " TL";
     }
 
     function closePage(id) { document.getElementById(id).style.display = 'none'; }
-    render();
 </script>
 </body>
 </html>
