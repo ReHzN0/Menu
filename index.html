@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AZURE MENU V12.4</title>
+    <title>AZURE MENU V12.5</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍸</text></svg>">
     <style>
-        :root { --bg: #0d1117; --card: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; }
+        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #a2d2ff; --text: #e6edf3; --border: #30363d; --out: #f85149; --disc: #238636; --wp: #25D366; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; user-select: none; -webkit-user-select: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; user-select: none; -webkit-user-select: none; overflow-x: hidden; }
         
         #home-screen { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
         .cat-card { width: 100%; max-width: 350px; background: var(--accent); color: #0d1117; padding: 25px; margin-bottom: 15px; border-radius: 20px; text-align: center; font-size: 1.3rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; }
@@ -16,25 +16,28 @@
         #category-view, #admin-view { display: none; padding-top: 130px; padding-bottom: 120px; }
         .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid var(--border); }
         .scroll-menu { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
-        
-        .nav-item { padding: 10px 22px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; }
-        /* Mavi Sekme Fix */
+        .scroll-menu::-webkit-scrollbar { display: none; }
+        .nav-item { padding: 10px 22px; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #8b949e; transition: 0.3s; }
         .nav-item.active { background: var(--accent); color: #0d1117; font-weight: bold; border-color: var(--accent); }
 
         .container { max-width: 500px; margin: auto; padding: 0 15px; }
+        .item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; }
+        .item.is-out { opacity: 0.4; filter: grayscale(1); }
         
-        /* Modern Kart Tasarımı (Fotoğraflı!) */
-        .item { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; position: relative; }
-        .item:active { transform: scale(0.97); border-color: var(--accent); }
-        .item.is-out { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
-
         /* Fotoğraf Alanı */
         .item-img-box { width: 60px; height: 60px; background: #000; border-radius: 12px; margin-right: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border); }
         .item-img-box img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Admin & Modals */
-        .admin-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; }
-        #custom-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 25px; border-top: 2px solid var(--accent); max-height: 85vh; overflow-y: auto; }
+        /* Admin & Modal */
+        .admin-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; margin-bottom: 12px; }
+        .order-card { background: var(--card-bg); border-left: 4px solid var(--accent); padding: 15px; margin-bottom: 10px; border-radius: 4px; }
+        
+        #payment-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--accent); z-index: 3000; width: 90%; max-width: 350px; text-align: center; display: none; }
+        .iban-box { background: #000; padding: 15px; border-radius: 10px; margin: 15px 0; color: var(--accent); font-family: monospace; font-size: 0.9rem; border: 1px dashed var(--accent); cursor: pointer; }
+        
+        /* Yeni Yumuşak WhatsApp Butonu */
+        .wp-btn { width: 50px; height: 50px; background: var(--wp); border-radius: 15px; position: absolute; right: 20px; bottom: 20px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
         .footer { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 460px; background: rgba(22, 27, 34, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-radius: 20px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
     </style>
 </head>
@@ -58,7 +61,7 @@
         </div>
     </div>
     <div class="container" id="menu-list"></div>
-    <div class="footer"><div id="cart-total" style="font-size:1.5rem; font-weight:900; color:var(--accent);">0 TL</div><button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900;" onclick="sendOrder()">SİPARİŞ</button></div>
+    <div class="footer"><div id="cart-total" style="font-size:1.5rem; font-weight:900; color:var(--accent);">0 TL</div><button style="background:var(--accent); border:none; padding:12px 25px; border-radius:12px; font-weight:900;" onclick="sendOrder()" id="order-btn">SİPARİŞ VER</button></div>
 </div>
 
 <div id="admin-view">
@@ -69,74 +72,81 @@
             <div class="nav-item" onclick="showAdmin('GINLER')">GINLER</div>
             <div class="nav-item" onclick="showAdmin('SHOTLAR')">SHOTLAR</div>
             <div class="nav-item" onclick="showAdmin('LİKÖRLER')">LİKÖRLER</div>
+            <div class="nav-item" onclick="showAdmin('STOK')" style="border-color:var(--danger); color:var(--danger);">STOK</div>
         </div>
     </div>
     <div class="container" id="admin-list"></div>
 </div>
 
+<div id="payment-modal">
+    <h3 style="margin:0; color:var(--accent);">Sipariş Alındı!</h3>
+    <p style="font-size:0.8rem; opacity:0.7;">Hazırlanmaya başlaması için ödemeyi yapabilirsiniz.</p>
+    <div class="iban-box" onclick="copyIban()">TR00 0000 0000 0000 0000 0000 00</div>
+    <a href="#" id="wp-link" class="wp-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.984-.365-1.739-.757-2.874-2.522-2.961-2.638-.086-.115-.718-.954-.718-1.815 0-.861.452-1.283.613-1.456.161-.173.351-.216.468-.216s.233 0 .334.004c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.115-.087.188-.173.289l-.26.304c-.087.101-.177.211-.077.383.1.173.444.733.953 1.185.656.584 1.209.765 1.382.852.173.087.274.072.375-.043.101-.115.433-.505.548-.678.115-.173.231-.144.39-.087.159.058 1.011.477 1.184.563.173.087.289.13.332.202.045.072.045.419-.1.824z"/></svg>
+    </a>
+    <p onclick="location.reload()" style="cursor:pointer; font-size:0.8rem; opacity:0.5; margin-top:20px;">Kapat</p>
+</div>
+
 <script>
     const CONFIG = { phone: "905333875829", m: "MjYwNg==" };
-    let stock = JSON.parse(localStorage.getItem('az_stk_v12_4')) || {};
-    let prices = JSON.parse(localStorage.getItem('az_prc_v12_4')) || {};
+    
+    // PNG Dosya Yolu (HTML ile aynı klasördeyse boş bırak, 'img/' içindeyse img/ yap)
+    const IMG_PATH = ''; 
 
-    // 1. Resim Dosya Yolu (Eğer resimler bir klasördeyse örn: 'img/' yap, boşsa aynı klasör)
-    const IMG_PATH = 'img/'; 
+    let stock = JSON.parse(localStorage.getItem('az_stk_v12_5')) || {};
+    let prices = JSON.parse(localStorage.getItem('az_prc_v12_5')) || {};
+    let cart = [];
 
+    // --- SENİN PNG LİSTENİN TAM VE EKSİKSİZ HALİ ---
     const inventory = [
-        // --- GİNLER (Senin listedeki tam sıra ve PNG isimleri) ---
+        // Ginler (Milimetrik PNG Senkronizasyonu)
         { id: 'gin1', cat: 'GINLER', name: 'Nikka Coffey Gin', img: 'nikka.png' },
         { id: 'gin2', cat: 'GINLER', name: 'Ki No Bi Kyoto Gin', img: 'KiNoBiGin.png' },
-        { id: 'gin3', cat: 'GINLER', name: 'Etsu Gin', img: 'EtsuP.png' },
+        { id: 'gin3', cat: 'GINLER', name: 'Etsu Pacific Ocean', img: 'EtsuP.png' },
         { id: 'gin4', cat: 'GINLER', name: 'Roku Gin', img: 'RokuGin.png' },
         { id: 'gin5', cat: 'GINLER', name: 'Drumshanbo Gunpowder', img: 'gunpowder.png' },
         { id: 'gin6', cat: 'GINLER', name: 'Skagerrak Gin', img: 'skagerrak.png' },
         { id: 'gin7', cat: 'GINLER', name: 'Malfy Limone', img: 'MalfyLimoneGin.png' },
         { id: 'gin8', cat: 'GINLER', name: 'Malfy Original', img: 'MalfyGin.png' },
-        { id: 'gin9', cat: 'GINLER', name: 'Malfy Rose', img: 'MalfyRosaGin.png' },
+        { id: 'gin9', cat: 'GINLER', name: 'Malfy Rosa', img: 'MalfyRosaGin.png' },
         { id: 'gin10', cat: 'GINLER', name: 'Tanqueray Gin', img: 'TanquerayGin.png' },
         { id: 'gin11', cat: 'GINLER', name: 'Tanqueray No. Ten', img: 'noten.png' },
         { id: 'gin12', cat: 'GINLER', name: 'Bombay Sapphire', img: 'BombaySapphireGin.png' },
         { id: 'gin13', cat: 'GINLER', name: 'Beefeater Pink', img: 'BeefeaterPinkGin.png' },
         { id: 'gin14', cat: 'GINLER', name: 'Mosaik Gin', img: 'MosaikGin.png' },
 
-        // --- SHOTLAR ---
-        { id: 'shot1', cat: 'SHOTLAR', name: '1800 Silver Tekila', img: '1800.png' },
-        { id: 'shot2', cat: 'SHOTLAR', name: 'Havana Club Rom', img: 'HavanaClub.png' },
+        // Shotlar
+        { id: 'shot1', cat: 'SHOTLAR', name: '1800 Silver', img: '1800.png' },
+        { id: 'shot2', cat: 'SHOTLAR', name: 'Havana Club 7', img: 'HavanaClub.png' },
         { id: 'shot3', cat: 'SHOTLAR', name: 'Smirnoff Red', img: 'SmirnoffVotka.png' },
         { id: 'shot4', cat: 'SHOTLAR', name: 'Smirnoff North', img: 'SmirnoffNorthVotka.png' },
-        { id: 'shot5', cat: 'SHOTLAR', name: 'Nemiroff', img: 'Nemiroff.png' },
+        { id: 'shot5', cat: 'SHOTLAR', name: 'Nemiroff Votka', img: 'Nemiroff.png' },
         { id: 'shot6', cat: 'SHOTLAR', name: 'Ballantines', img: 'Ballentines.png' },
-        { id: 'shot7', cat: 'SHOTLAR', name: 'Olmeca Tekila Silver', img: 'OlmecaSilver.png' },
+        { id: 'shot7', cat: 'SHOTLAR', name: 'Olmeca Silver', img: 'OlmecaSilver.png' },
         { id: 'shot8', cat: 'SHOTLAR', name: 'Olmeca Dark Choco', img: 'OlmecaDark.png' },
 
-        // --- LİKÖRLER ---
-        { id: 'lik1', cat: 'LİKÖRLER', name: 'Malibu', img: 'Malibu.png' },
-        { id: 'lik2', cat: 'LİKÖRLER', name: 'Baileys', img: 'Baileys.png' },
+        // Likörler
+        { id: 'lik1', cat: 'LİKÖRLER', name: 'Malibu Rum', img: 'Malibu.png' },
+        { id: 'lik2', cat: 'LİKÖRLER', name: 'Baileys Cream', img: 'Baileys.png' },
         { id: 'lik3', cat: 'LİKÖRLER', name: 'Baileys Choco', img: 'BaileysChoco.png' },
         { id: 'lik4', cat: 'LİKÖRLER', name: 'Jest', img: 'Jest.png' },
-        { id: 'lik5', cat: 'LİKÖRLER', name: 'Mancia (Belirtilmedi)', img: 'placeholder.png' },
-        { id: 'lik6', cat: 'LİKÖRLER', name: 'Skinos', img: 'Skinos.png' },
-        { id: 'lik7', cat: 'LİKÖRLER', name: 'Jägermeister', img: 'Jagermeister.png' },
-        { id: 'lik8', cat: 'LİKÖRLER', name: 'Jager Cold Brew', img: 'JagermeisterCB.png' }
+        { id: 'lik5', cat: 'LİKÖRLER', name: 'Skinos Mastic', img: 'Skinos.png' },
+        { id: 'lik6', cat: 'LİKÖRLER', name: 'Jägermeister', img: 'Jagermeister.png' },
+        { id: 'lik7', cat: 'LİKÖRLER', name: 'Jager Cold Brew', img: 'JagermeisterCB.png' },
+        { id: 'lik8', cat: 'LİKÖRLER', name: 'Japon Votka (Eksik Belirtildi)', img: 'placeholder.png' } // Listende adını belirtmediğin şişe
     ];
 
-    // Varsayılan fiyat başlatma (Hata vermemesi için)
     inventory.forEach(i => {
         if(stock[i.id] === undefined) stock[i.id] = true;
-        if(!prices[i.id]) prices[i.id] = { normal: 200, discount: 150 };
+        if(!prices[i.id]) prices[i.id] = { normal: 0, discount: 0 };
     });
-
-    let cart = [];
 
     function showCategory(cat) {
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('admin-view').style.display = 'none';
         document.getElementById('category-view').style.display = 'block';
-        
-        // Mavi Sekme Fix
-        document.querySelectorAll('#user-nav .nav-item').forEach(n => {
-            n.classList.toggle('active', n.innerText === cat);
-        });
+        document.querySelectorAll('#user-nav .nav-item').forEach(n => n.classList.toggle('active', n.innerText === cat));
         
         let h = '';
         inventory.filter(i => i.cat === cat).forEach(item => {
@@ -152,41 +162,72 @@
         document.getElementById('menu-list').innerHTML = h;
     }
 
+    function addToCart(id) {
+        cart.push(inventory.find(i=>i.id===id));
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        document.getElementById('cart-total').innerText = cart.reduce((s,i)=>s+prices[i.id].normal,0) + " TL";
+    }
+
+    function sendOrder() {
+        if(cart.length === 0) return alert("Sepet boş Boss!");
+        
+        let msg = '';
+        cart.forEach(c => msg += `• ${c.name} (${prices[c.id].normal} TL)%0A`);
+        const total = cart.reduce((s,i)=>s+prices[i.id].normal,0);
+
+        // 1. WhatsApp Mesajını hazırla
+        document.getElementById('wp-link').href = `https://wa.me/${CONFIG.phone}?text=*YENİ SİPARİŞ*%0A-----------------%0A${msg}-----------------%0A*TOPLAM: ${total} TL*`;
+        
+        // 2. Siparişi tarayıcı hafızasına (admin paneli için) kaydet
+        let currentOrders = JSON.parse(localStorage.getItem('az_orders')) || [];
+        currentOrders.push({
+            details: msg.replaceAll('%0A','<br>').replaceAll('*',''),
+            total: total + ' TL',
+            time: new Date().toLocaleTimeString()
+        });
+        localStorage.setItem('az_orders', JSON.stringify(currentOrders));
+
+        // 3. IBAN Modalını göster (WhatsApp'a zorunlu atmadan)
+        document.getElementById('payment-modal').style.display = 'block';
+        cart = []; // Sepeti temizle
+        updateCartUI();
+    }
+
     function showAdmin(mode) {
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('category-view').style.display = 'none';
         document.getElementById('admin-view').style.display = 'block';
-        
-        document.querySelectorAll('#admin-nav .nav-item').forEach(n => {
-            n.classList.toggle('active', n.innerText === mode);
-        });
+        document.querySelectorAll('#admin-nav .nav-item').forEach(n => n.classList.toggle('active', n.innerText === mode));
         
         let h = '';
-        if(mode === 'ORDERS') { h = '<div style="text-align:center; padding:50px;">Sipariş bekleniyor...</div>'; }
-        else {
-            inventory.filter(i => i.cat === mode).forEach(item => {
-                const isAv = stock[item.id];
-                h += `<div class="admin-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <b style="display:flex; align-items:center;"><img src="${IMG_PATH + item.img}" width="30" height="30" style="object-fit:contain; margin-right:10px;"> ${item.name}</b>
-                        <button onclick="toggleStock('${item.id}', '${mode}')" style="background:${isAv ? 'var(--disc)' : 'var(--out)'}; border:none; color:white; padding:5px 15px; border-radius:10px; cursor:pointer;">${isAv ? 'STOKTA' : 'YOK'}</button>
-                    </div>
+        if(mode === 'ORDERS') {
+            let orders = JSON.parse(localStorage.getItem('az_orders')) || [];
+            orders.reverse().forEach(o => {
+                h += `<div class="order-card">
+                    <b>${o.details}</b><br>
+                    <small>Zaman: ${o.time}</small>
+                </div>`;
+            });
+            h = h || '<p>Sipariş yok Boss.</p>';
+        } else if(mode === 'STOK') {
+            h += `<h3 style="color:var(--danger)">MERKEZİ STOK</h3>`;
+            Object.keys(stock).forEach(key => {
+                h += `<div class="menu-item" onclick="toggleStock('${key}')">
+                    <span>${key}</span>
+                    <span style="color:${stock[key] ? 'var(--disc)' : 'var(--out)'}; font-weight:900;">${stock[key] ? 'VAR' : 'YOK'}</span>
                 </div>`;
             });
         }
         document.getElementById('admin-list').innerHTML = h;
     }
 
-    function toggleStock(id, mode) {
-        stock[id] = !stock[id];
-        localStorage.setItem('az_stk_v12_4', JSON.stringify(stock));
-        showAdmin(mode);
-    }
-
-    function openAuth() { if(btoa(prompt("Admin:")) === CONFIG.m) { document.getElementById('admin-entry').style.display = 'block'; alert("Sisteme Hoş Geldin."); } }
+    function openAuth() { if(btoa(prompt("Admin:")) === CONFIG.m) document.getElementById('admin-entry').style.display = 'block'; }
     function goHome() { document.getElementById('home-screen').style.display='flex'; document.getElementById('category-view').style.display='none'; document.getElementById('admin-view').style.display='none'; }
-    function addToCart(id) { /* Sepet mantığı */ }
-    function sendOrder() { /* WhatsApp mantığı */ }
+    function toggleStock(key) { stock[key]=!stock[key]; localStorage.setItem('az_stk_v12_5', JSON.stringify(stock)); showAdmin('STOK'); }
+    function copyIban() { navigator.clipboard.writeText("TR00 0000 0000 0000 0000 0000 00"); alert("IBAN Kopyalandı!"); }
 </script>
 </body>
 </html>
