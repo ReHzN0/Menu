@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6ee777">
-<link rel="apple-touch-icon" href="icon.png">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AZURE BAR</title>
@@ -29,62 +21,6 @@
     --success: #2ed573; 
     --wp: #25D366; 
 }
-@media (max-width: 600px) {
-    
-    #home-screen { background: radial-gradient(circle at 50% 30%, #0d1a0d 0%, var(--bg) 85%) !important; padding: 0 20px; }
-    h1 { font-size: 2.1rem !important; letter-spacing: 18px !important; margin-bottom: 65px !important; font-weight: 300 !important; text-shadow: 0 0 20px rgba(110, 231, 119, 0.3) !important; padding-left: 18px; text-align: center; width: 100%; }
-
-   
-    .cat-card { width: 78% !important; background: transparent !important; border: 1px solid rgba(110, 231, 119, 0.2) !important; padding: 16px !important; font-size: 0.8rem !important; letter-spacing: 5px !important; backdrop-filter: blur(5px); margin-bottom: 22px !important; border-radius: 2px !important; box-shadow: none !important; color: var(--accent) !important; }
-    .cat-card:active { background: rgba(110, 231, 119, 0.05) !important; border-color: var(--accent) !important; transform: scale(0.97); }
-
-    
-    .item { padding: 15px 18px !important; gap: 12px !important; }
-    .item-left { display: flex !important; align-items: center !important; flex: 1 !important; min-width: 0 !important; }
-    .item-img { width: 45px !important; height: 45px !important; flex-shrink: 0 !important; }
-    .info-box { flex: 1 !important; min-width: 0 !important; display: flex !important; flex-direction: column !important; }
-    
-   
-    .info-box b { font-size: 0.95rem !important; line-height: 1.2 !important; white-space: normal !important; word-wrap: break-word !important; display: block !important; }
-    
-   
-    .info-box span { font-size: 0.85rem !important; white-space: nowrap !important; flex-shrink: 0 !important; margin-left: 5px !important; }
-
-   
-    .v-card { padding: 15px !important; gap: 10px !important; justify-content: space-between !important; background: transparent !important; border: 1px solid rgba(110, 231, 119, 0.15) !important; border-radius: 2px !important; width: 100% !important; max-width: none !important; box-sizing: border-box !important; }
-    .v-card > div:first-child { flex: 1 !important; min-width: 0 !important; padding-right: 10px !important; }
-    
-  
-    .v-card b { font-size: 0.95rem !important; white-space: normal !important; word-break: break-word !important; display: block !important; letter-spacing: 1px !important; }
-    
-
-    .v-card div { font-size: 0.75rem !important; line-height: 1.3 !important; white-space: normal !important; word-wrap: break-word !important; }
-    
- 
-    .v-card span { font-size: 1rem !important; font-weight: 800 !important; color: var(--accent) !important; flex-shrink: 0 !important; white-space: nowrap !important; }
-
-    
-    .footer { background: rgba(5, 7, 5, 0.95) !important; border: 1px solid rgba(110, 231, 119, 0.1) !important; bottom: 25px !important; width: 88% !important; padding: 14px 22px !important; border-radius: 4px !important; }
-    
-    #silk-modal button, #dynamic-modal button { 
-        background: transparent !important; 
-        border: 1px solid var(--accent) !important; 
-        color: var(--accent) !important; 
-        border-radius: 2px !important; 
-        font-size: 0.8rem !important; 
-        padding: 15px !important; 
-        margin-top: 20px !important; 
-        letter-spacing: 4px !important; 
-        font-weight: 300 !important; 
-    }
-}
-
-   
-    .v-card.selected {
-        border-color: var(--accent) !important;
-        background: rgba(110, 231, 119, 0.05) !important;
-    }
-}
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
 body { background: var(--bg); color: var(--text); margin: 0; user-select: none; -webkit-user-select: none; overflow-x: hidden; }
@@ -97,16 +33,7 @@ body { background: var(--bg); color: var(--text); margin: 0; user-select: none; 
 h1 { font-family: 'Cormorant Garamond', serif; font-size: 4.8rem; letter-spacing: 24px; color: var(--accent); margin-bottom: 50px; text-transform: uppercase; font-weight: 300; cursor: pointer; text-shadow: 0 0 10px rgba(110, 231, 119, 0.4), 0 0 25px var(--white-glow); padding-left: 24px; }
 
 .cat-card{width:85%;max-width:380px;background:var(--card);padding:25px;margin-bottom:20px;border-radius:4px;text-align:center;font-size:1.1rem;font-weight:400;cursor:pointer;transition:0.5s cubic-bezier(0.2,1,0.3,1);border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 15px 45px rgba(0,0,0,0.4);letter-spacing:5px;color:var(--accent);text-shadow:0 0 12px var(--white-glow);}
-.item{background:linear-gradient(145deg,rgba(15,20,15,0.85),rgba(5,7,5,0.95));border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:0.3s;}
-.item:active{transform:scale(0.98);background:rgba(110,231,119,0.05);}
-.item.is-out{opacity:0.2;filter:grayscale(1);pointer-events:none;}
-.item-left{display:flex;align-items:center;gap:15px;flex:1;min-width:0;}
-.item-img{width:55px;height:55px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.03);padding:5px;flex-shrink:0;}
-.info-box{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
-.info-box b{display:block;font-size:1.05rem;color:#fff;letter-spacing:0.5px;white-space:normal;word-break:break-word;line-height:1.2;}
-.info-box span{color:var(--accent);font-weight:800;font-size:0.95rem;text-shadow:0 0 10px rgba(110,231,119,0.3);white-space:nowrap;}
-.add-btn{background:rgba(110,231,119,0.05);width:40px;height:40px;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);flex-shrink:0;transition:0.2s;}
-.item:active .add-btn{background:var(--accent);color:#000;}
+.item{background:linear-gradient(145deg,rgba(15,20,15,0.85),rgba(5,7,5,0.95));border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:0.3s;}
 .v-card{max-width:400px;margin:0 auto 15px auto;border:1px solid var(--border);background:rgba(255,255,255,0.02);border-radius:8px;padding:22px;cursor:pointer;position:relative;display:flex;align-items:center;gap:15px;transition:0.2s;}
 .cat-card:active { transform: scale(0.96); border-color: var(--accent); box-shadow: 0 0 30px rgba(110, 231, 119, 0.15); background: rgba(110, 231, 119, 0.05); }
 
@@ -117,12 +44,28 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 4.8rem; letter-spacing
 .nav-item { padding: 12px 24px; border-radius: 2px; border: 1px solid var(--border); background: var(--card); white-space: nowrap; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; transition: 0.3s; letter-spacing: 1.5px; }
 .nav-item.active { background: var(--accent); color: #000; font-weight: 800; border-color: var(--accent); box-shadow: 0 0 20px rgba(110, 231, 119, 0.3); }
 
+.item { background: linear-gradient(145deg, rgba(15,20,15,0.85), rgba(5,7,5,0.95)); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.3s; }
+.item:active { transform: scale(0.98); background: rgba(110, 231, 119, 0.05); }
+.item.is-out { opacity: 0.2; filter: grayscale(1); pointer-events: none; }
+
+.item-left { display: flex; align-items: center; gap: 20px; }
+.item-img { width: 60px; height: 60px; object-fit: contain; border-radius: 8px; background: rgba(255,255,255,0.03); padding: 5px; flex-shrink: 0; }
+.info-box b { display: block; font-size: 1.1rem; margin-bottom: 6px; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
+.info-box span { color: var(--accent); font-weight: 800; font-size: 1.05rem; text-shadow: 0 0 10px var(--white-glow); }
+
+.add-btn { background: rgba(110, 231, 119, 0.05); width: 42px; height: 42px; border-radius: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); transition: 0.2s; }
+.item:active .add-btn { background: var(--accent); }
+.item:active .add-btn svg { stroke: #000; }
+
 #silk-modal, #dynamic-modal, #recipe-modal { position: fixed; bottom: 0; left: 0; width: 100%; background: #070907; border-radius: 30px 30px 0 0; z-index: 5000; display: none; padding: 35px 25px; border-top: 1px solid var(--border); box-shadow: 0 -20px 60px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
 #recipe-modal { z-index: 8000; bottom: auto; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 400px; border-radius: 12px; border: 1px solid var(--accent); }
 
-.v-card { border: 1px solid var(--border); background: rgba(255,255,255,0.02); border-radius: 8px; padding: 22px; margin-bottom: 15px; cursor: pointer; position: relative; display: flex; align-items: center; gap: 15px; transition: 0.2s; }
+.v-card { border: 1px solid var(--border); background: rgba(255,255,255,0.02); border-radius: 8px; padding: 18px 20px; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: 0.2s; width: 100%; box-sizing: border-box; }
 .v-card.selected { border-color: var(--accent); background: rgba(110, 231, 119, 0.08); }
-.v-price { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 800; font-size: 1.1rem; text-shadow: 0 0 8px var(--white-glow); }
+.v-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.v-card-info b { font-size: 1rem; color: #fff; white-space: normal; word-break: break-word; line-height: 1.2; margin-bottom: 4px; }
+.v-card-info small { color: var(--text-muted); font-size: 0.8rem; line-height: 1.4; white-space: normal; }
+.v-price { flex-shrink: 0; color: var(--accent); font-weight: 800; font-size: 1.1rem; text-shadow: 0 0 8px var(--white-glow); white-space: nowrap; margin-left: 10px; }
 
 .payment-container { max-width: 400px; margin: auto; padding: 20px; text-align: center; }
 .iban-box { background: rgba(0,0,0,0.5); padding: 30px; border-radius: 8px; margin: 30px 0; color: var(--accent); font-family: monospace; font-size: 1.1rem; border: 1px dashed var(--accent); cursor: pointer; text-shadow: 0 0 10px var(--white-glow); }
@@ -137,6 +80,105 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 4.8rem; letter-spacing
 .mng-item { background: var(--card); padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); }
 .order-card { background: var(--card); border: 1px solid var(--border); border-left: 6px solid var(--accent); padding: 20px; margin-bottom: 15px; border-radius: 8px; }
 .clear-btn { width: 100%; background: rgba(255, 71, 87, 0.1); color: var(--danger); border: 1px solid var(--danger); padding: 18px; border-radius: 8px; font-weight: 900; margin-top: 20px; cursor: pointer; }
+/* --- MOBİL MASTER KOD (TAŞMA VE ÇAKIŞMA ÖNLEYİCİ) --- */
+@media (max-width: 600px) {
+    /* 1. Modal ve Başlık: PC şıklığını mobilde yayıyoruz */
+    #silk-modal, #dynamic-modal, #recipe-modal {
+        background: rgba(5, 7, 5, 0.98) !important;
+        backdrop-filter: blur(25px) !important;
+        border-top: 1px solid rgba(110, 231, 119, 0.2) !important;
+        padding: 30px 20px !important;
+    }
+
+    #silk-modal h2, #dynamic-modal h2 {
+        font-family: 'Cormorant Garamond', serif !important;
+        font-weight: 300 !important;
+        letter-spacing: 4px !important;
+        font-size: 1.8rem !important;
+        margin-bottom: 30px !important;
+    }
+
+    /* 2. Varyasyon Kartları (.v-card): ESNEK VE TAŞMAZ YAPILIYOR */
+    .v-card {
+        padding: 15px 18px !important;
+        gap: 12px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border-radius: 4px !important;
+        background: transparent !important;
+        margin-bottom: 12px !important;
+        border: 1px solid rgba(110, 231, 119, 0.15) !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    /* Sol Metin Bloğu: flex: 1 ile kalanı alır, min-width: 0 ile taşmaz */
+    .v-card-info {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .v-card-info b {
+        font-size: 0.9rem !important;
+        letter-spacing: 1.5px !important;
+        color: #fff !important;
+        white-space: normal !important;
+        word-break: break-word !important; /* İsmi taşırırsa aşağı kırar */
+        margin-bottom: 5px !important;
+    }
+
+    .v-card-info small {
+        font-size: 0.75rem !important;
+        color: var(--text-muted) !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important; /* Reçeteyi aşağı kırar */
+        margin-bottom: 3px !important;
+    }
+
+    /* Uyarı Metni (Danger) */
+    .v-card-info small:last-of-type {
+        color: var(--danger) !important;
+        margin-top: 6px !important;
+        font-weight: 800 !important;
+    }
+
+    /* Sağ Fiyat Bloğu: flex-shrink: 0 ile asla küçülmez ve sağda sabit kalır */
+    .v-price {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important; /* Fiyatı asla aşağı kırmaz */
+        text-align: right !important;
+        font-weight: 800 !important;
+        color: var(--accent) !important;
+        font-size: 1rem !important;
+        text-shadow: 0 0 8px rgba(110, 231, 119, 0.3) !important;
+        margin-left: 10px !important;
+        align-self: center !important; /* Fiyatı dikeyde ortalar */
+    }
+
+    /* 3. Sepete Ekle Butonları (Şeffaf Stil): PC havası */
+    #silk-modal button, #dynamic-modal button {
+        background: transparent !important;
+        border: 1px solid var(--accent) !important;
+        color: var(--accent) !important;
+        border-radius: 2px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 4px !important;
+        font-weight: 300 !important;
+        font-size: 0.8rem !important;
+        margin-top: 25px !important;
+        padding: 15px !important;
+    }
+
+    /* Seçili kart parıltısı */
+    .v-card.selected {
+        border-color: var(--accent) !important;
+        background: rgba(110, 231, 119, 0.05) !important;
+    }
+}
 </style>
 </head>
 <body>
@@ -275,23 +317,23 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 4.8rem; letter-spacing
         { id: 'ic11', key: 'ic_limonsuyu', cat: 'ICECEKLER', name: 'Taze Limon Suyu', n: 20, d: 15, b: 0 },
 
         // GARNİTÜRLER (PNG İHTİYACI YOK)
-        { id: 'gr1', key: 'gr_limon', cat: 'GARNITUR', name: 'Limon', n: 0, d: 0, b: 0 },
-        { id: 'gr2', key: 'gr_lime', cat: 'GARNITUR', name: 'Lime', n: 0, d: 0, b: 0 },
-        { id: 'gr3', key: 'gr_nane', cat: 'GARNITUR', name: 'Nane', n: 0, d: 0, b: 0 },
-        { id: 'gr4', key: 'gr_portakal', cat: 'GARNITUR', name: 'Portakal', n: 0, d: 0, b: 0 },
-        { id: 'gr5', key: 'gr_salatalik', cat: 'GARNITUR', name: 'Salatalık', n: 0, d: 0, b: 0 },
-        { id: 'gr6', key: 'gr_kakao', cat: 'GARNITUR', name: 'Kakao Tozu', n: 0, d: 0, b: 0 },
-        { id: 'gr7', key: 'gr_cikolata', cat: 'GARNITUR', name: 'Çikolata Sosu', n: 0, d: 0, b: 0 },
-        { id: 'gr8', key: 'gr_biberiye', cat: 'GARNITUR', name: 'Biberiye', n: 0, d: 0, b: 0 },
-        { id: 'gr9', key: 'gr_zeytin', cat: 'GARNITUR', name: 'Zeytin', n: 0, d: 0, b: 0 }
+        { id: 'gr1', key: 'gr_limon', cat: 'GARNITURLER', name: 'Limon', n: 0, d: 0, b: 0 },
+        { id: 'gr2', key: 'gr_lime', cat: 'GARNITURLER', name: 'Lime', n: 0, d: 0, b: 0 },
+        { id: 'gr3', key: 'gr_nane', cat: 'GARNITURLER', name: 'Nane', n: 0, d: 0, b: 0 },
+        { id: 'gr4', key: 'gr_portakal', cat: 'GARNITURLER', name: 'Portakal', n: 0, d: 0, b: 0 },
+        { id: 'gr5', key: 'gr_salatalik', cat: 'GARNITURLER', name: 'Salatalık', n: 0, d: 0, b: 0 },
+        { id: 'gr6', key: 'gr_kakao', cat: 'GARNITURLER', name: 'Kakao Tozu', n: 0, d: 0, b: 0 },
+        { id: 'gr7', key: 'gr_cikolata', cat: 'GARNITURLER', name: 'Çikolata Sosu', n: 0, d: 0, b: 0 },
+        { id: 'gr8', key: 'gr_biberiye', cat: 'GARNITURLER', name: 'Biberiye', n: 0, d: 0, b: 0 },
+        { id: 'gr9', key: 'gr_zeytin', cat: 'GARNITURLER', name: 'Zeytin', n: 0, d: 0, b: 0 }
     ];
 
     const silkVariants = [
-        { id: 'v1', key: 'v1', cat: 'KOKTEYLLER', name: 'Classic Silk', desc: '3cl Kahve + 8cl Süt + 5cl Baileys + 5cl Vodka + 3cl Malibu', n: 270, d: 230, b: 0, mixers: ['ic_kahve', 'ic_sut'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
-        { id: 'v2', key: 'v2', cat: 'KOKTEYLLER', name: 'Botanical Silk', desc: 'Vodka yerine 5cl Gin eklendi', n: 310, d: 270, b: 0, mixers: ['ic_kahve', 'ic_sut'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Gin, 3cl Malibu, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
-        { id: 'v3', key: 'v3', cat: 'KOKTEYLLER', name: 'Aged Silk', desc: 'Malibu yerine 5cl Havana Club 7 eklendi', n: 340, d: 300, b: 0, mixers: ['ic_kahve', 'ic_sut'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 5cl Havana Club 7, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
-        { id: 'v4', key: 'v4', cat: 'KOKTEYLLER', name: 'Choco-Vibe', desc: 'Ekstra 4cl Baileys Chocolate eklendi', n: 360, d: 320, b: 0, mixers: ['ic_kahve', 'ic_sut'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 4cl Baileys Chocolate, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
-        { id: 'v5', key: 'v5', cat: 'KOKTEYLLER', name: 'Double Choco', desc: '4cl Baileys Chocolate + 6cl Olmeca Dark eklendi', n: 480, d: 440, b: 0, mixers: ['ic_kahve', 'ic_sut'], garns: ['gr_kakao', 'gr_cikolata'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 4cl Baileys Chocolate, 6cl Olmeca Dark, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." }
+        { id: 'v1', key: 'v1', cat: 'KOKTEYLLER', name: 'Classic Silk', desc: '3cl Kahve + 8cl Süt + 5cl Baileys + 5cl Vodka + 3cl Malibu', n: 270, d: 230, b: 0, mixers: ['ic_kahve', 'ic_sut', 'Malibu', 'Baileys', 'SmirRed'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
+        { id: 'v2', key: 'v2', cat: 'KOKTEYLLER', name: 'Botanical Silk', desc: 'Vodka yerine 5cl Gin eklendi', n: 310, d: 270, b: 0, mixers: ['ic_kahve', 'ic_sut', 'Malibu', 'Baileys'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Gin, 3cl Malibu, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
+        { id: 'v3', key: 'v3', cat: 'KOKTEYLLER', name: 'Aged Silk', desc: 'Malibu yerine 5cl Havana Club 7 eklendi', n: 340, d: 300, b: 0, mixers: ['ic_kahve', 'ic_sut', 'HavanaClub', 'Baileys', 'SmirRed'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 5cl Havana Club 7, 5cl Baileys, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
+        { id: 'v4', key: 'v4', cat: 'KOKTEYLLER', name: 'Choco-Vibe', desc: 'Ekstra 4cl Baileys Chocolate eklendi', n: 360, d: 320, b: 0, mixers: ['ic_kahve', 'ic_sut', 'Malibu', 'Baileys', 'BaileysC', 'SmirRed'], garns: ['gr_kakao'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 4cl Baileys Chocolate, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." },
+        { id: 'v5', key: 'v5', cat: 'KOKTEYLLER', name: 'Double Choco', desc: '4cl Baileys Chocolate + 6cl Olmeca Dark eklendi', n: 480, d: 440, b: 0, mixers: ['ic_kahve', 'ic_sut', 'Malibu', 'Baileys', 'BaileysC', 'OlmecaD', 'SmirRed'], garns: ['gr_kakao', 'gr_cikolata'], rec: "1. Shaker'a bol buz ekle.<br>2. <b>5cl Vodka, 3cl Malibu, 5cl Baileys, 4cl Baileys Chocolate, 6cl Olmeca Dark, 8cl Süt ve 3cl Kahve</b> ekle.<br>3. 10-15 saniye sertçe çalkala.<br>4. Önceden buz doldurduğun bardağa süzerek servis et." }
     ];
 
     const dynamicCocktails = [
@@ -300,9 +342,9 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 4.8rem; letter-spacing
     ];
 
     const standardCocktails = [
-        { id: 'sc1', key: 'sc_espmartini', cat: 'KOKTEYLLER', name: 'Espresso Martini (Jager)', desc: '4cl Votka + 2cl Jager CB + Kahve', n: 180, d: 140, b: 0, mixers: ['ic_kahve', 'ic_surup'], garns: [], rec: "1. Shaker'da <b>4cl Votka, 2cl Jager Cold Brew, 1 shot sert kahve ve 1cl şeker şurubunu</b> bol buzla sertçe salla.<br>2. Bardağa süz." },
-        { id: 'sc2', key: 'sc_whiterussian', cat: 'KOKTEYLLER', name: 'White Russian', desc: '4cl Votka + 2cl Baileys + Süt', n: 160, d: 120, b: 0, mixers: ['ic_sut'], garns: [], rec: "1. Bardağa buzları koy.<br>2. <b>4cl Votka ve 2cl Baileys</b> ekle.<br>3. En son üzerine sütü gezdir (karıştırmadan servis et)." },
-        { id: 'sc3', key: 'sc_longisland', cat: 'KOKTEYLLER', name: 'Long Island Iced Tea', desc: '5 Çeşit Beyaz Alkol + Kola', n: 240, d: 200, b: 0, mixers: ['ic_limonsuyu', 'ic_surup', 'ic_kola'], garns: ['gr_limon', 'gr_nane'], rec: "1. Uzun bardağı (Highball) ağzına kadar buzla doldur.<br>2. <b>1.5cl Votka, 1.5cl Cin, 1.5cl Beyaz Rom, 1.5cl Tekila, 1.5cl Triple Sec (Jest), 2.5cl Limon Suyu, 1-1.5cl Şeker Şurubu</b> ekle.<br>3. Alttan üste nazikçe karıştır.<br>4. Kalanını kola ile tamamla. Limon/nane ile süsle." }
+        { id: 'sc1', key: 'sc_espmartini', cat: 'KOKTEYLLER', name: 'Espresso Martini (Jager)', desc: '4cl Votka + 2cl Jager CB + Kahve', n: 180, d: 140, b: 0, mixers: ['ic_kahve', 'ic_surup', 'SmirRed', 'JagerCB'], garns: [], rec: "1. Shaker'da <b>4cl Votka, 2cl Jager Cold Brew, 1 shot sert kahve ve 1cl şeker şurubunu</b> bol buzla sertçe salla.<br>2. Bardağa süz." },
+        { id: 'sc2', key: 'sc_whiterussian', cat: 'KOKTEYLLER', name: 'White Russian', desc: '4cl Votka + 2cl Baileys + Süt', n: 160, d: 120, b: 0, mixers: ['ic_sut', 'SmirRed', 'Baileys'], garns: [], rec: "1. Bardağa buzları koy.<br>2. <b>4cl Votka ve 2cl Baileys</b> ekle.<br>3. En son üzerine sütü gezdir (karıştırmadan servis et)." },
+        { id: 'sc3', key: 'sc_longisland', cat: 'KOKTEYLLER', name: 'Long Island Iced Tea', desc: '5 Çeşit Beyaz Alkol + Kola', n: 240, d: 200, b: 0, mixers: ['ic_limonsuyu', 'ic_surup', 'ic_kola', 'SmirRed', '1800', 'HavanaClub'], garns: ['gr_limon', 'gr_nane'], rec: "1. Uzun bardağı (Highball) ağzına kadar buzla doldur.<br>2. <b>1.5cl Votka, 1.5cl Cin, 1.5cl Beyaz Rom, 1.5cl Tekila, 1.5cl Triple Sec (Jest), 2.5cl Limon Suyu, 1-1.5cl Şeker Şurubu</b> ekle.<br>3. Alttan üste nazikçe karıştır.<br>4. Kalanını kola ile tamamla. Limon/nane ile süsle." }
     ];
 
     inventory.forEach(i => { if(stock[i.key] === undefined) stock[i.key] = true; if(i.cat !== 'GARNITURLER' && !priceList[i.id]) priceList[i.id] = { n: i.n, d: i.d, b: i.b }; });
@@ -420,6 +462,18 @@ function addStandardCocktail(id){let sc=standardCocktails.find(x=>x.id===id);let
 function confirmSilkOrder(){const v=silkVariants.find(x=>x.id===selectedSilk);let mg=getMissingGarns(v.garns);if(mg)azureAlert(`Bilgi: ${mg} stoklarda yok. Kokteyl botanik olmadan eklendi.`);cart.push({id:v.id,name:v.name,tempPrice:priceList[v.id].n,isSilk:true,desc:v.desc,rec:v.rec,missingGarns:mg});updateUI();closeSilk();}
 
     function updateUI() { document.getElementById('cart-total').innerText = cart.reduce((s, i) => s + (i.tempPrice || priceList[i.id].n), 0) + " TL"; }
+    function addToCart(id) {
+        let item = inventory.find(i => i.id === id);
+        if(item) {
+            cart.push({
+                id: item.id,
+                name: item.name,
+                tempPrice: priceList[item.id].n,
+                isSilk: false
+            });
+            updateUI();
+        }
+    }
 
     function sendOrder() {
         if(cart.length === 0) return alert("Sepet boş Boss!");
@@ -443,7 +497,7 @@ function confirmSilkOrder(){const v=silkVariants.find(x=>x.id===selectedSilk);le
 
     function showAdmin(tab) {
         document.getElementById('admin-panel').style.display = 'block';
-        document.querySelectorAll('#admin-panel .nav-item').forEach(n => { n.classList.remove('active'); if(n.innerText.includes(tab.split('-')[1] || tab)) n.classList.add('active'); });
+        document.querySelectorAll('#admin-panel .nav-item').forEach(n => { n.classList.remove('active'); if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(tab)) n.classList.add('active'); });
 
         let h = '';
         if(tab === 'ORDERS') {
@@ -465,7 +519,7 @@ function confirmSilkOrder(){const v=silkVariants.find(x=>x.id===selectedSilk);le
                 h += `<div class="mng-item"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1;"><b>${item.name}</b>${item.desc ? `<small style="display:block; color:var(--text-muted); margin-top:4px;">${item.desc}</small>` : ''}</div><button onclick="toggleStock('${item.key}', '${tab}')" style="background:${stock[item.key] ? 'var(--success)' : 'transparent'}; border:1px solid ${stock[item.key] ? 'var(--success)' : 'var(--danger)'}; color:${stock[item.key] ? '#000' : 'var(--danger)'}; padding:8px 15px; border-radius:12px; font-weight:800; cursor:pointer; margin-left:10px;">${stock[item.key] ? 'VAR' : 'YOK'}</button></div>${pHTML}</div>`;
             });
         } else {
-            let catMap={'STK-GİN':'GINLER','STK-SHOT':'SHOTLAR','STK-LIKOR':'LİKÖRLER','STK-GARNITUR':'BOTANİKLER','STK-ICECEK':'ICECEKLER'};
+            let catMap={'STK-GİN':'GINLER','STK-SHOT':'SHOTLAR','STK-LIKOR':'LİKÖRLER','STK-GARNITUR':'GARNITURLER','STK-ICECEK':'ICECEKLER'};
             inventory.filter(i => i.cat === catMap[tab]).sort((a,b) => (priceList[b.id]?.n || 0) - (priceList[a.id]?.n || 0)).forEach(item => {
                 let pData = (catMap[tab] !== 'GARNITURLER' && priceList[item.id]) ? `<div style="display:flex; gap:15px; font-size:0.85rem; margin-top:10px; color:var(--text-muted);"><span>Tek: ${priceList[item.id].n} TL</span><span>İndirimli: ${priceList[item.id].d} TL</span>${priceList[item.id].b > 0 ? `<span style="color:var(--accent);">Şişe: ${priceList[item.id].b} TL</span>` : ''}</div>` : '';
                 h += `<div class="mng-item"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1;"><b>${item.name}</b></div><button onclick="toggleStock('${item.key}', '${tab}')" style="background:${stock[item.key] ? 'var(--success)' : 'transparent'}; border:1px solid ${stock[item.key] ? 'var(--success)' : 'var(--danger)'}; color:${stock[item.key] ? '#000' : 'var(--danger)'}; padding:8px 15px; border-radius:12px; font-weight:800; cursor:pointer; margin-left:10px;">${stock[item.key] ? 'VAR' : 'YOK'}</button></div>${pData}</div>`;
